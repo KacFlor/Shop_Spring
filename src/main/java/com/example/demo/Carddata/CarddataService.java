@@ -13,5 +13,5 @@ public class CarddataService {
 
     }
 
-    public List<Carddata> getCarddata() {return List;}
+    public List<Carddata> getCarddata() {return List.of();}
 }

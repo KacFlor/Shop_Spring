@@ -13,5 +13,5 @@ public class ShipmentService {
 
     }
 
-    public List<Shipment> getShipment() {return List;}
+    public List<Shipment> getShipment() {return List.of();}
 }

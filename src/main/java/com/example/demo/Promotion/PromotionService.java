@@ -13,5 +13,5 @@ public class PromotionService {
 
     }
 
-    public List<Promotion> getPromotion() {return List;}
+    public List<Promotion> getPromotion() {return List.of();}
 }

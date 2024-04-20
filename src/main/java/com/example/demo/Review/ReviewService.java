@@ -13,5 +13,5 @@ public class ReviewService {
 
     }
 
-    public List<Review> getReview() {return List;}
+    public List<Review> getReview() {return List.of();}
 }

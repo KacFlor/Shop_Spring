@@ -13,5 +13,5 @@ public class WishlistService {
 
     }
 
-    public List<Wishlist> getWishlist() {return List;}
+    public List<Wishlist> getWishlist() {return List.of();}
 }

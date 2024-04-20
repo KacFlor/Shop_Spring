@@ -13,5 +13,5 @@ public class UserService {
 
     }
 
-    public List<User> getUser() {return List;}
+    public List<User> getUser() {return List.of();}
 }

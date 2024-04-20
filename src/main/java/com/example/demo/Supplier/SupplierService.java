@@ -13,5 +13,5 @@ public class SupplierService {
 
     }
 
-    public List<Supplier> getSupplier() {return List;}
+    public List<Supplier> getSupplier() {return List.of();}
 }

@@ -13,5 +13,5 @@ public class PaymentService {
 
     }
 
-    public List<Payment> getPayment() {return List;}
+    public List<Payment> getPayment() {return List.of();}
 }

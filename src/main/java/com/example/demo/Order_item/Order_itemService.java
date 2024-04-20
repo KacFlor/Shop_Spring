@@ -13,5 +13,5 @@ public class Order_itemService {
 
     }
 
-    public List<Order_item> getOrder_item() {return List;}
+    public List<Order_item> getOrder_item() {return List.of();}
 }
