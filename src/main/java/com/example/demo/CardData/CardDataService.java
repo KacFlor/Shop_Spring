@@ -1,4 +1,4 @@
-package com.example.demo.Carddata;
+package com.example.demo.CardData;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -6,12 +6,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CarddataService {
+public class CardDataService {
 
     @Autowired
-    public CarddataService() {
+    public CardDataService() {
 
     }
 
-    public List<Carddata> getCarddata() {return List.of();}
+    public List<CardData> getCardData() {return List.of();}
 }

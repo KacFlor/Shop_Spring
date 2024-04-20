@@ -1,7 +1,9 @@
-package com.example.demo.Supplier;
+package com.example.demo.CardData;
 
 import jakarta.persistence.Entity;
+
 import jakarta.persistence.Table;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,16 +11,16 @@ import lombok.Setter;
 @Table
 @Getter
 @Setter
-public class Supplier {
+public class CardData {
 
     private Integer id;
-    private String name;
+    private String cardNum;
 
-    public Supplier() {
+    public CardData() {
     }
 
-    public Supplier(Integer id, String name) {
+    public CardData(Integer id, String cardNum) {
         this.id = id;
-        this.name = name;
+        this.cardNum = cardNum;
     }
 }

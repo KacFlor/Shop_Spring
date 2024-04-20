@@ -1,13 +1,13 @@
-package com.example.demo.Order_item;
+package com.example.demo.OrderItem;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class Order_itemConfig {
+public class OrderItemConfig {
 
-    public Order_itemConfig(){
+    public OrderItemConfig(){
 
     }
 

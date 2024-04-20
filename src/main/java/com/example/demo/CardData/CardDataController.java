@@ -1,4 +1,4 @@
-package com.example.demo.Carddata;
+package com.example.demo.CardData;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,14 +10,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(
         path = {"carddata"}
 )
-public class CarddataController {
-    private final CarddataService carddataService;
+public class CardDataController {
+    private final CardDataService cardDataService;
 
     @Autowired
-    public CarddataController(CarddataService carddataService) {
-        this.carddataService = carddataService;
+    public CardDataController(CardDataService cardDataService) {
+        this.cardDataService = cardDataService;
     }
 
     @GetMapping
-    public List<Carddata> getCarddata() {return this.carddataService.getCarddata();}
+    public List<CardData> getCardData() {return this.cardDataService.getCardData();}
+
 }

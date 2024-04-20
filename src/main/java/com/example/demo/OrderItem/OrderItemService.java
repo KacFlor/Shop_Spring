@@ -1,4 +1,4 @@
-package com.example.demo.Order_item;
+package com.example.demo.OrderItem;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -6,12 +6,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class Order_itemService {
+public class OrderItemService {
 
     @Autowired
-    public Order_itemService() {
+    public OrderItemService() {
 
     }
 
-    public List<Order_item> getOrder_item() {return List.of();}
+    public List<OrderItem> getOrderItem() {return List.of();}
 }

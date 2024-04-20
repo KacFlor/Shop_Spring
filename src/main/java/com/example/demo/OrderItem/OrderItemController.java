@@ -1,4 +1,4 @@
-package com.example.demo.Payment;
+package com.example.demo.OrderItem;
 
 import java.util.List;
 
@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(
         path = {"order"}
 )
-public class PaymentController {
-    private final PaymentService paymentService;
+public class OrderItemController {
+    private final OrderItemService orderItemService;
 
     @Autowired
-    public PaymentController(PaymentService paymentService) {
-        this.paymentService = paymentService;
+    public OrderItemController(OrderItemService orderItemService) {
+        this.orderItemService = orderItemService;
     }
 
     @GetMapping
-    public List<Payment> getPayment() {return this.paymentService.getPayment();}
+    public List<OrderItem> getOrderItem() {return this.orderItemService.getOrderItem();}
 }

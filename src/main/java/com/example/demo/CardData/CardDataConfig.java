@@ -1,13 +1,13 @@
-package com.example.demo.Carddata;
+package com.example.demo.CardData;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class CarddataConfig {
+public class CardDataConfig {
 
-    public CarddataConfig(){
+    public CardDataConfig(){
 
     }
 
