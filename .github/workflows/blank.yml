@@ -25,6 +25,23 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      # Runs a single command using the runners shell
-      - name: Build
+      # Sets up Java version
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: 21
+
+      # Sets up Maven version
+      - name: Set up Maven
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+          maven-version: 3.9.6
+
+      # Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Build with Maven
+      - name: Build with Maven
         run: mvn clean install
