@@ -28,9 +28,8 @@ jobs:
         run: |
           mvn -N io.takari:maven:0.7.7:wrapper -Dmaven=3.9.6
           chmod +x mvnw
-          ./mvnw org.apache.maven.plugins:maven-dependency-plugin:3.1.2:get -Dartifact=org.apache.maven.plugins:maven-compiler-plugin:3.11.1
+          ./mvnw org.apache.maven.plugins:maven-dependency-plugin:3.1.2:get -Dartifact=org.apache.maven.plugins:maven-compiler-plugin:3.11.0
           ./mvnw org.apache.maven.plugins:maven-dependency-plugin:3.1.2:tree
-          sed -i 's/3.11.0/3.11.1/g' pom.xml
 
       # Build with Maven
       - name: Build with Maven
