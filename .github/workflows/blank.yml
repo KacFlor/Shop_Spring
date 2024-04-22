@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [ "CI-integration-1" ]
+  pull_request:
+    branches: [ "CI-integration-1" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '21'
+
+      - name: Change Maven Compiler Plugin version
+        run: |
+          sed -i 's/<version>3.11.0<\/version>/<version>3.11.7<\/version>/' pom.xml
+
+      - name: Build with Maven
+        run: mvn clean install
