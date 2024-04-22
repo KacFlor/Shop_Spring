@@ -15,7 +15,6 @@ public class CardData extends BaseEntity{
     @Column(name = "cardNum")
     @NotBlank
     private String cardNum;
-dsadasfea
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")
     private Customer customer;
