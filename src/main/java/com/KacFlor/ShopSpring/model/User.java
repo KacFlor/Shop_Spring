@@ -11,6 +11,10 @@ import lombok.Setter;
 @Setter
 public class User extends BaseEntity {
 
+    @Column(name = "role")
+    @NotBlank
+    private String role;
+
     @Column(name = "login")
     @NotBlank
     private String login;
@@ -25,8 +29,10 @@ public class User extends BaseEntity {
     public User() {
     }
 
-    public User(String login, String password) {
+    public User(String role, String login, String password, Customer customer) {
+        this.role = role;
         this.login = login;
         this.password = password;
+        this.customer = customer;
     }
 }
