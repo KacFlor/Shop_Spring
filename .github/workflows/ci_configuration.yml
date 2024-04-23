@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ "CI-integration-1", "main", "Security-1-object-model" ]
+    branches: [ "CI-integration-1", "main", "security-1-object-model" ]
   pull_request:
-    branches: [ "CI-integration-1", "main", "Security-1-object-model" ]
+    branches: [ "CI-integration-1", "main", "security-1-object-model" ]
   workflow_dispatch:
 
 jobs:
