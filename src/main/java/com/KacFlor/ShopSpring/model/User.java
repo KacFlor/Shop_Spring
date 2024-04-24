@@ -2,7 +2,9 @@ package com.KacFlor.ShopSpring.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,16 +18,9 @@ import java.util.List;
 @Table(name = "users")
 @Getter
 @Setter
-public class User extends BaseEntity implements UserDetails {
-
-    public enum Role {
-        ADMIN, USER;
-    }
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role")
-    private Role Role;
-
+@AllArgsConstructor
+@NoArgsConstructor
+public class User extends BaseEntity implements UserDetails{
 
     @Column(name = "login")
     @NotBlank
@@ -38,48 +33,42 @@ public class User extends BaseEntity implements UserDetails {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Customer customer;
 
+    @Enumerated
+    @Column(name = "role")
+    private Role role;
+
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(Role.name()));
+    public Collection<? extends GrantedAuthority> getAuthorities(){
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override
-    public String getPassword() {
+    public String getPassword(){
         return password;
     }
 
     @Override
-    public String getUsername() {
+    public String getUsername(){
         return login;
     }
 
     @Override
-    public boolean isAccountNonExpired() {
+    public boolean isAccountNonExpired(){
         return true;
     }
 
     @Override
-    public boolean isAccountNonLocked() {
+    public boolean isAccountNonLocked(){
         return true;
     }
 
     @Override
-    public boolean isCredentialsNonExpired() {
+    public boolean isCredentialsNonExpired(){
         return true;
     }
 
     @Override
-    public boolean isEnabled() {
+    public boolean isEnabled(){
         return true;
-    }
-
-    public User() {
-    }
-
-    public User(Role userRole, String login, String password, Customer customer) {
-        this.Role = userRole;
-        this.login = login;
-        this.password = password;
-        this.customer = customer;
     }
 }

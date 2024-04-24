@@ -1,4 +1,4 @@
-package com.KacFlor.ShopSpring.security;
+package com.KacFlor.ShopSpring.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -18,9 +18,11 @@ import java.util.function.Function;
 import static javax.crypto.Cipher.SECRET_KEY;
 
 @Service
-public class JwtService {
+public class JwtService{
 
-    public String extractLogin(String token) {
+    private String jwtSecret = "4261656C64756E67491624918624781263819203713128936123781631290312739123871290371238126312783o6123790p126389123612839o126312938126";
+
+    public String extractLogin(String token){
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -43,26 +45,26 @@ public class JwtService {
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
-                .signWith(getSignInKey(), SignatureAlgorithm.ES256)
+                .signWith(getSignInKey(), SignatureAlgorithm.HS512)
                 .compact();
     }
 
-    public boolean isTokenValid(String token, UserDetails userDetails) {
+    public boolean isTokenValid(String token, UserDetails userDetails){
         final String username = extractLogin(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
-    private boolean isTokenExpired(String token) {
+    private boolean isTokenExpired(String token){
         return extractExpiration(token).before(new Date());
     }
 
-    private Date extractExpiration(String token) {
+    private Date extractExpiration(String token){
         return extractClaim(token, Claims::getExpiration);
     }
 
     private Claims extractAllClaims(String token){
         return Jwts
-                .parserBuilder()
+                .parser()
                 .setSigningKey(getSignInKey())
                 .build()
                 .parseClaimsJws(token)
@@ -70,9 +72,9 @@ public class JwtService {
 
     }
 
-    private Key getSignInKey() {
-        byte[] keyBytes;
-        keyBytes = Decoders.BASE64.decode(String.valueOf(SECRET_KEY));
+    private Key getSignInKey(){
+        byte[] keyBytes = Decoders.BASE64.decode(this.jwtSecret);
         return Keys.hmacShaKeyFor(keyBytes);
     }
+
 }

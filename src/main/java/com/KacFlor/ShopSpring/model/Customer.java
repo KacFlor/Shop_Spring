@@ -2,7 +2,9 @@ package com.KacFlor.ShopSpring.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
@@ -11,6 +13,8 @@ import java.util.List;
 @Table
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Customer extends BaseEntity{
 
     @Column(name = "firstName")
@@ -56,17 +60,10 @@ public class Customer extends BaseEntity{
     @JoinColumn(name = "wishlist_id")
     private Wishlist wishlist;
 
-
-    public Customer() {
-    }
-
-    public Customer(String firstName, String lastName, String email, String address, Number phoneNumber, List<Order> orders, List<CardData> cardDatas) {
+    public Customer(String firstName, String lastName, String email, String address){
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.orders = orders;
-        this.cardDatas = cardDatas;
     }
 }
