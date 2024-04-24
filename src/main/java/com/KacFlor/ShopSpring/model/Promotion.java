@@ -34,10 +34,10 @@ public class Promotion extends BaseEntity{
     @JoinColumn(name = "product_id")
     private Product product;
 
-    public Promotion() {
+    public Promotion(){
     }
 
-    public Promotion(String name, String description, LocalDate startDate, LocalDate endDate, Double discount) {
+    public Promotion(String name, String description, LocalDate startDate, LocalDate endDate, Double discount){
         this.name = name;
         this.description = description;
         this.startDate = startDate;

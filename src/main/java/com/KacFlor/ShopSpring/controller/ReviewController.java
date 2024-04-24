@@ -13,17 +13,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(
         path = {"review"}
 )
-public class ReviewController {
+public class ReviewController{
 
     private final ReviewService reviewService;
 
     @Autowired
-    public ReviewController(ReviewService reviewService) {
+    public ReviewController(ReviewService reviewService){
         this.reviewService = reviewService;
     }
 
     @GetMapping
-    public List<Review> getReview() {
+    public List<Review> getReview(){
         return this.reviewService.getReview();
     }
 }

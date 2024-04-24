@@ -12,20 +12,20 @@ import java.util.List;
 @Setter
 public class Cart extends BaseEntity{
 
-    @OneToMany(mappedBy = "cart" ,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "cart", fetch = FetchType.EAGER)
     private List<Product> products;
 
     @Column(name = "quantity")
     private Integer quantity;
 
     @OneToOne(mappedBy = "cart", fetch = FetchType.EAGER)
-    private  Customer customer;
+    private Customer customer;
 
 
-    public Cart() {
+    public Cart(){
     }
 
-    public Cart(List<Product> products) {
+    public Cart(List<Product> products){
         this.products = products;
     }
 }

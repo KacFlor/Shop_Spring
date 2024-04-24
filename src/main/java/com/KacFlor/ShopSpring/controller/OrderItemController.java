@@ -13,16 +13,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(
         path = {"orderitem"}
 )
-public class OrderItemController {
+public class OrderItemController{
+
     private final OrderItemService orderItemService;
 
     @Autowired
-    public OrderItemController(OrderItemService orderItemService) {
+    public OrderItemController(OrderItemService orderItemService){
         this.orderItemService = orderItemService;
     }
 
     @GetMapping
-    public List<OrderItem> getOrderItem() {
+    public List<OrderItem> getOrderItem(){
         return this.orderItemService.getOrderItem();
     }
 }

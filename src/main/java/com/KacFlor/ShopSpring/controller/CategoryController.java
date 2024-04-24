@@ -14,17 +14,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(
         path = {"category"}
 )
-public class CategoryController {
+public class CategoryController{
 
     private final CategoryService categoryService;
 
     @Autowired
-    public CategoryController(CategoryService categoryService) {
+    public CategoryController(CategoryService categoryService){
         this.categoryService = categoryService;
     }
 
     @GetMapping
-    public List<Category> getCategory() {
+    public List<Category> getCategory(){
         return this.categoryService.getCategory();
     }
 }

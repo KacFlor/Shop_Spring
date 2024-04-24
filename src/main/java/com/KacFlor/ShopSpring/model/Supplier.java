@@ -14,7 +14,7 @@ import java.util.List;
 @Table
 @Getter
 @Setter
-public class Supplier extends BaseEntity {
+public class Supplier extends BaseEntity{
 
     @Column(name = "name")
     @NotBlank
@@ -23,10 +23,10 @@ public class Supplier extends BaseEntity {
     @OneToMany(mappedBy = "supplier")
     private List<Product> products;
 
-    public Supplier() {
+    public Supplier(){
     }
 
-    public Supplier(String name) {
+    public Supplier(String name){
         this.name = name;
     }
 }

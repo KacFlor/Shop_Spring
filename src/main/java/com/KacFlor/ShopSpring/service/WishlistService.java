@@ -8,16 +8,16 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class WishlistService {
+public class WishlistService{
 
     private final WishlistRepository wishlistRepository;
 
     @Autowired
-    public WishlistService(WishlistRepository wishlistRepository) {
+    public WishlistService(WishlistRepository wishlistRepository){
         this.wishlistRepository = wishlistRepository;
     }
 
-    public List<Wishlist> getWishlist() {
+    public List<Wishlist> getWishlist(){
         return wishlistRepository.findAll();
     }
 }

@@ -6,14 +6,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class PaymentConfig {
+public class PaymentConfig{
 
     public PaymentConfig(){
 
     }
 
     @Bean
-    CommandLineRunner commandLineRunner8(PaymentRepository paymentRepository) {
+    CommandLineRunner commandLineRunner8(PaymentRepository paymentRepository){
         return (args) -> {
         };
     }

@@ -8,15 +8,16 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ShipmentService {
+public class ShipmentService{
 
     private final ShipmentRepository shipmentRepository;
+
     @Autowired
-    public ShipmentService(ShipmentRepository shipmentRepository) {
+    public ShipmentService(ShipmentRepository shipmentRepository){
         this.shipmentRepository = shipmentRepository;
     }
 
-    public List<Shipment> getShipment() {
+    public List<Shipment> getShipment(){
         return shipmentRepository.findAll();
     }
 }

@@ -31,11 +31,10 @@ public class Order extends BaseEntity{
     private List<OrderItem> orderItems;
 
 
-
-    public Order() {
+    public Order(){
     }
 
-    public Order(LocalDate orderDate, Double totalPrice) {
+    public Order(LocalDate orderDate, Double totalPrice){
         this.orderDate = orderDate;
         this.totalPrice = totalPrice;
     }

@@ -15,26 +15,27 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(
         path = {"user"}
 )
-public class UserController {
+public class UserController{
 
     private final UserService userService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService){
         this.userService = userService;
     }
 
     @GetMapping
-    public List<User> getUser() {
-        return this.userService.getUser();}
+    public List<User> getUser(){
+        return this.userService.getUser();
+    }
 
     @GetMapping("user")
-    public String helloUser() {
+    public String helloUser(){
         return "Hello User";
     }
 
     @GetMapping("admin")
-    public String helloAdmin() {
+    public String helloAdmin(){
         return "Hello Admin";
     }
 }

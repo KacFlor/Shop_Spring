@@ -21,16 +21,16 @@ public class Review extends BaseEntity{
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
-    private  Customer customer;
+    private Customer customer;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
-    private  Product product;
+    private Product product;
 
-    public Review() {
+    public Review(){
     }
 
-    public Review(Integer rating, String comment) {
+    public Review(Integer rating, String comment){
         this.rating = rating;
         this.comment = comment;
     }

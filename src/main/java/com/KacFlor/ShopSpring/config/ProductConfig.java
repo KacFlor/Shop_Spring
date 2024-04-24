@@ -6,13 +6,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class ProductConfig {
+public class ProductConfig{
 
-    public ProductConfig() {
+    public ProductConfig(){
     }
 
     @Bean
-    CommandLineRunner commandLineRunner7(ProductRepository productRepository) {
+    CommandLineRunner commandLineRunner7(ProductRepository productRepository){
         return (args) -> {
         };
     }

@@ -6,14 +6,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class OrderConfig {
+public class OrderConfig{
 
     public OrderConfig(){
 
     }
 
     @Bean
-    CommandLineRunner commandLineRunner10(OrderItemRepository orderItemRepository) {
+    CommandLineRunner commandLineRunner10(OrderItemRepository orderItemRepository){
         return (args) -> {
         };
     }

@@ -6,14 +6,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class ShipmentConfig {
+public class ShipmentConfig{
 
     public ShipmentConfig(){
 
     }
 
     @Bean
-    CommandLineRunner commandLineRunner4(ShipmentRepository shipmentRepository) {
+    CommandLineRunner commandLineRunner4(ShipmentRepository shipmentRepository){
         return (args) -> {
         };
     }
