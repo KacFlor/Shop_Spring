@@ -26,7 +26,7 @@ public class CardDataController{
         this.cardDataService = cardDataService;
     }
 
-    @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
+    @PreAuthorize("hasAuthority('" + Role.Fields.USER + "')")
     @GetMapping
     public List<CardData> getCardData(){
         return this.cardDataService.getCardData();
