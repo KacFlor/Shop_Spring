@@ -8,7 +8,7 @@ import lombok.Setter;
 @Table()
 @Getter
 @Setter
-public class Wishlist extends BaseEntity {
+public class Wishlist extends BaseEntity{
 
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -19,6 +19,6 @@ public class Wishlist extends BaseEntity {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    public Wishlist() {
+    public Wishlist(){
     }
 }

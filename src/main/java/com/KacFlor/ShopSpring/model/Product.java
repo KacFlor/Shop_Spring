@@ -11,7 +11,7 @@ import java.util.List;
 @Table
 @Getter
 @Setter
-public class Product extends BaseEntity {
+public class Product extends BaseEntity{
 
     @Column(name = "sku")
     @NotBlank
@@ -51,10 +51,11 @@ public class Product extends BaseEntity {
 
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
     private List<Review> reviews;
-    public Product() {
+
+    public Product(){
     }
 
-    public Product(String sku, String description, Double price, Integer stock, Category category, Supplier supplier, Promotion promotion) {
+    public Product(String sku, String description, Double price, Integer stock, Category category, Supplier supplier, Promotion promotion){
         this.sku = sku;
         this.description = description;
         this.price = price;

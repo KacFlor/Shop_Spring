@@ -6,14 +6,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class UserConfig {
+public class UserConfig{
 
     public UserConfig(){
 
     }
 
     @Bean
-    CommandLineRunner commandLineRunner2(UserRepository userRepository) {
+    CommandLineRunner commandLineRunnerUser(UserRepository userRepository){
         return (args) -> {
         };
     }

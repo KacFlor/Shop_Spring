@@ -13,16 +13,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(
         path = {"customer"}
 )
-public class CustomerController {
+public class CustomerController{
+
     private final CustomerService customerService;
 
     @Autowired
-    public CustomerController(CustomerService customerService) {
+    public CustomerController(CustomerService customerService){
         this.customerService = customerService;
     }
 
     @GetMapping
-    public List<Customer> getCustomer() {
+    public List<Customer> getCustomer(){
         return this.customerService.getCustomer();
     }
 }

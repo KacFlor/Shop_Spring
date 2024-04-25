@@ -49,10 +49,10 @@ public class Shipment extends BaseEntity{
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    public Shipment() {
+    public Shipment(){
     }
 
-    public Shipment(LocalDate shipmentDate, String address, String city, String state, String country, String zipcode) {
+    public Shipment(LocalDate shipmentDate, String address, String city, String state, String country, String zipcode){
         this.shipmentDate = shipmentDate;
         this.address = address;
         this.city = city;

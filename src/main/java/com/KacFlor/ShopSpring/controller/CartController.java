@@ -13,15 +13,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(
         path = {"cart"}
 )
-public class CartController {
+public class CartController{
+
     private final CartService cartService;
 
     @Autowired
-    public CartController(CartService cartService) {
+    public CartController(CartService cartService){
         this.cartService = cartService;
     }
 
     @GetMapping
-    public List<Cart> getCart() {
-        return this.cartService.getCart();}
+    public List<Cart> getCart(){
+        return this.cartService.getCart();
+    }
 }

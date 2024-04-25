@@ -13,17 +13,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(
         path = {"product"}
 )
-public class ProductController {
+public class ProductController{
 
     private final ProductService productService;
 
     @Autowired
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService){
         this.productService = productService;
     }
 
     @GetMapping
-    public List<Product> getProduct() {
+    public List<Product> getProduct(){
         return this.productService.getProduct();
     }
 }

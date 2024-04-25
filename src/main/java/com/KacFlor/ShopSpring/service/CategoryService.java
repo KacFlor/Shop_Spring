@@ -8,16 +8,16 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CategoryService {
+public class CategoryService{
 
     final private CategoryRepository categoryRepository;
 
     @Autowired
-    public CategoryService(CategoryRepository categoryRepository) {
+    public CategoryService(CategoryRepository categoryRepository){
         this.categoryRepository = categoryRepository;
     }
 
-    public List<Category> getCategory() {
+    public List<Category> getCategory(){
         return categoryRepository.findAll();
     }
 }

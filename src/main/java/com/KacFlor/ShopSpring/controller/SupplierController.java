@@ -14,15 +14,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(
         path = {"supplier"}
 )
-public class SupplierController {
+public class SupplierController{
+
     private final SupplierService supplierService;
 
     @Autowired
-    public SupplierController(SupplierService supplierService) {
+    public SupplierController(SupplierService supplierService){
         this.supplierService = supplierService;
     }
 
     @GetMapping
-    public List<Supplier> getSupplier() {
-        return this.supplierService.getSupplier();}
+    public List<Supplier> getSupplier(){
+        return this.supplierService.getSupplier();
+    }
 }

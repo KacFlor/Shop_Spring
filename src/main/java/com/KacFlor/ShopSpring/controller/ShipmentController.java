@@ -13,17 +13,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(
         path = {"shipment"}
 )
-public class ShipmentController {
+public class ShipmentController{
 
     private final ShipmentService shipmentService;
 
     @Autowired
-    public ShipmentController(ShipmentService shipmentService) {
+    public ShipmentController(ShipmentService shipmentService){
         this.shipmentService = shipmentService;
     }
 
     @GetMapping
-    public List<Shipment> getShipment() {
+    public List<Shipment> getShipment(){
         return this.shipmentService.getShipment();
     }
 }

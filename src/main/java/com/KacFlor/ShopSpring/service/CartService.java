@@ -8,16 +8,16 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CartService {
+public class CartService{
 
     private final CartRepository cartRepository;
 
     @Autowired
-    public CartService(CartRepository cartRepository) {
+    public CartService(CartRepository cartRepository){
         this.cartRepository = cartRepository;
     }
 
-    public List<Cart> getCart() {
+    public List<Cart> getCart(){
         return cartRepository.findAll();
     }
 }

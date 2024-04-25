@@ -8,16 +8,16 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class OrderItemService {
+public class OrderItemService{
 
     private final OrderItemRepository orderItemRepository;
 
     @Autowired
-    public OrderItemService(OrderItemRepository orderItemRepository) {
+    public OrderItemService(OrderItemRepository orderItemRepository){
         this.orderItemRepository = orderItemRepository;
     }
 
-    public List<OrderItem> getOrderItem() {
+    public List<OrderItem> getOrderItem(){
         return orderItemRepository.findAll();
     }
 }

@@ -26,10 +26,10 @@ public class OrderItem extends BaseEntity{
     @JoinColumn(name = "product_id")
     private Product product;
 
-    public OrderItem() {
+    public OrderItem(){
     }
 
-    public OrderItem(LocalDate quantity, Double price) {
+    public OrderItem(LocalDate quantity, Double price){
         this.quantity = quantity;
         this.price = price;
     }

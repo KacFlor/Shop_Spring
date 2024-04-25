@@ -12,13 +12,13 @@ import java.io.Serializable;
 @MappedSuperclass
 @Getter
 @Setter
-public class BaseEntity implements Serializable {
+public class BaseEntity implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  Integer id;
+    private Integer id;
 
-    public boolean isNew() {
+    public boolean isNew(){
         return this.id == null;
     }
 }

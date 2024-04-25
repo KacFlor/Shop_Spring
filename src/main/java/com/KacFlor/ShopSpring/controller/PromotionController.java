@@ -13,17 +13,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(
         path = {"promotion"}
 )
-public class PromotionController {
+public class PromotionController{
 
     private final PromotionService promotionService;
 
     @Autowired
-    public PromotionController(PromotionService promotionService) {
+    public PromotionController(PromotionService promotionService){
         this.promotionService = promotionService;
     }
 
     @GetMapping
-    public List<Promotion> getPromotion() {
+    public List<Promotion> getPromotion(){
         return this.promotionService.getPromotion();
     }
 }

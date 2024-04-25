@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
 @RestController
-public class SpringShop {
+public class SpringShop{
 
-	public static void main(String[] args) {
-		SpringApplication.run(SpringShop.class, args);
-	}
+    public static void main(String[] args){
+        SpringApplication.run(SpringShop.class, args);
+    }
 }

@@ -26,10 +26,10 @@ public class Payment extends BaseEntity{
     @OneToOne(mappedBy = "payment", fetch = FetchType.EAGER)
     private Shipment shipment;
 
-    public Payment() {
+    public Payment(){
     }
 
-    public Payment(LocalDate paymentDate, String paymentMet, Double amount) {
+    public Payment(LocalDate paymentDate, String paymentMet, Double amount){
         this.paymentDate = paymentDate;
         this.paymentMet = paymentMet;
         this.amount = amount;

@@ -6,13 +6,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class CustomerConfig {
+public class CustomerConfig{
 
     public CustomerConfig(){
     }
 
     @Bean
-    CommandLineRunner commandLineRunner11(CustomerRepository customerRepository) {
+    CommandLineRunner commandLineRunnerCustomer(CustomerRepository customerRepository){
         return (args) -> {
         };
     }

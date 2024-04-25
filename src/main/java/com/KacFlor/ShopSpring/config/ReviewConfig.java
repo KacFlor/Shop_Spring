@@ -6,14 +6,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class ReviewConfig {
+public class ReviewConfig{
 
     public ReviewConfig(){
 
     }
 
     @Bean
-    CommandLineRunner commandLineRunner5(ReviewRepository reviewRepository) {
+    CommandLineRunner commandLineRunnerReview(ReviewRepository reviewRepository){
         return (args) -> {
         };
     }

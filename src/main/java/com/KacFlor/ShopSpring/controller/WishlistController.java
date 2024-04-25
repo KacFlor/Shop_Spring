@@ -13,17 +13,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(
         path = {"wishlist"}
 )
-public class WishlistController {
+public class WishlistController{
 
     private final WishlistService wishlistService;
 
     @Autowired
-    public WishlistController(WishlistService wishlistService) {
+    public WishlistController(WishlistService wishlistService){
         this.wishlistService = wishlistService;
     }
 
     @GetMapping
-    public List<Wishlist> getWishlist() {
+    public List<Wishlist> getWishlist(){
         return this.wishlistService.getWishlist();
     }
 }

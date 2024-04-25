@@ -6,13 +6,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class PromotionConfig {
+public class PromotionConfig{
 
     public PromotionConfig(){
     }
 
     @Bean
-    CommandLineRunner commandLineRunner6(PromotionRepository promotionRepository) {
+    CommandLineRunner commandLineRunnerPromotion(PromotionRepository promotionRepository){
         return (args) -> {
         };
     }

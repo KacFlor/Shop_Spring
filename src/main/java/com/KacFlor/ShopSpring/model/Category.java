@@ -20,10 +20,10 @@ public class Category extends BaseEntity{
     @OneToMany(mappedBy = "category")
     private List<Product> products;
 
-    public Category() {
+    public Category(){
     }
 
-    public Category(String name) {
+    public Category(String name){
         this.name = name;
     }
 }

@@ -9,13 +9,13 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
 @Configuration
-public class CardDataConfig {
+public class CardDataConfig{
 
-    public CardDataConfig() {
+    public CardDataConfig(){
     }
 
     @Bean
-    CommandLineRunner commandLineRunner14(CardDataRepository cardDataRepository) {
+    CommandLineRunner commandLineRunnerCardData(CardDataRepository cardDataRepository){
         return (args) -> {
             CardData first = new CardData(
                     "123 123 132 3121"
