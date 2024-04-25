@@ -5,9 +5,11 @@ import com.KacFlor.ShopSpring.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService{
@@ -19,36 +21,56 @@ public class UserService{
         this.userRepository = userRepository;
     }
 
-    public List<User> getUser(){
+    public List<User> getAllUser(){
         return userRepository.findAll();
     }
 
-    public String changeName(String newName){
+    public User getCurrentUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = ((UserDetails) principal).getUsername();
+
+        return userRepository.findByLogin(username);
+    }
+
+
+    public Boolean changeName(String newName){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails) principal).getUsername();
+
 
         User user = userRepository.findByLogin(username);
         user.setLogin(newName);
 
         userRepository.save(user);
 
-        return "Login Changed";
+        return Boolean.TRUE;
     }
 
-    public String deleteUserForAdm(String Login){
+    public Boolean deleteUserByLogin(String Login){
 
         User user = userRepository.findByLogin(Login);
 
         if (user != null) {
             userRepository.delete(user);
-            return "User deleted";
+            return Boolean.TRUE;
         }
         else{
-            return "ERROR";
+            throw new UsernameNotFoundException("User not found");
         }
     }
 
-    public String deleteUser(){
+    public Boolean deleteUserById(Integer userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            userRepository.delete(user);
+            return Boolean.TRUE;
+        } else {
+            throw new UsernameNotFoundException("User with id '" + userId + "' not found");
+        }
+    }
+
+    public Boolean deleteUser(){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = ((UserDetails) principal).getUsername();
 
@@ -56,17 +78,11 @@ public class UserService{
 
         if (user != null && username.equals(user.getLogin())) {
             userRepository.delete(user);
-            return "User deleted";
+            return Boolean.TRUE;
         }
         else{
-            return "ERROR";
+            throw new UsernameNotFoundException("User with login '" + username + "' not found");
         }
-    }
-
-    public String getName(){
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = ((UserDetails) principal).getUsername();
-        return username;
     }
 
 }

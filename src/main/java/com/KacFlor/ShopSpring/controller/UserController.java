@@ -23,33 +23,40 @@ public class UserController{
         this.userService = userService;
     }
 
-    @PreAuthorize("hasAuthority('" + Role.Fields.USER + "')")
-    @GetMapping("/user-name")
-    public String getName(){
-        return userService.getName();
+    @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
+    @DeleteMapping("/delete-id")
+    public Boolean deleteById(@RequestBody Integer id){
+        return userService.deleteUserById(id);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
-    @GetMapping("/users-list")
+    @DeleteMapping("/delete-log")
+    public Boolean deleteById(@RequestBody String login){
+        return userService.deleteUserByLogin(login);
+    }
+
+    @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
+    @GetMapping("/users")
     public List<User> getUsersList(){
-        return userService.getUser();
+        return userService.getAllUser();
+    }
+
+
+    @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
+    @GetMapping("/me")
+    public User getUser(){
+        return userService.getCurrentUser();
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
-    @PatchMapping("/login-change")
-    public String loginChange(@RequestBody String newLogin){
+    @PatchMapping("/me")
+    public Boolean loginChange(@RequestBody String newLogin){
         return userService.changeName(newLogin);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.USER + "')")
-    @DeleteMapping("/delete-user-account")
+    @DeleteMapping("/me")
     public String deleteUser(){
         return userService.deleteUser();
-    }
-
-    @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
-    @DeleteMapping("/delete-user-account-for-adm")
-    public String deleteUserForAdm(@RequestBody String login){
-        return userService.deleteUserForAdm(login);
     }
 }
