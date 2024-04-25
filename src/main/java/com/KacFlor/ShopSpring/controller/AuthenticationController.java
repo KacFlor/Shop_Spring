@@ -1,5 +1,6 @@
 package com.KacFlor.ShopSpring.controller;
 
+import com.KacFlor.ShopSpring.model.Role;
 import com.KacFlor.ShopSpring.security.AuthenticationRequest;
 import com.KacFlor.ShopSpring.security.AuthenticationResponse;
 import com.KacFlor.ShopSpring.service.AuthenticationService;
@@ -18,11 +19,19 @@ public class AuthenticationController{
 
     private final AuthenticationService service;
 
-    @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(
+    @PostMapping("/register-user")
+    public ResponseEntity<AuthenticationResponse> registerUser(
             @RequestBody RegisterRequest request
     ){
-        return ResponseEntity.ok(service.register(request));
+        return ResponseEntity.ok(service.register(request, Role.USER));
+
+    }
+
+    @PostMapping("/register-admin")
+    public ResponseEntity<AuthenticationResponse> registerAdmin(
+            @RequestBody RegisterRequest request
+    ){
+        return ResponseEntity.ok(service.register(request, Role.ADMIN));
 
     }
 

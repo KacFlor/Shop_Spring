@@ -28,10 +28,10 @@ public class AuthenticationService{
 
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public AuthenticationResponse register(RegisterRequest request){
+    public AuthenticationResponse register(RegisterRequest request, Role role){
         var customer = new Customer();
         String encodedPassword = passwordEncoder.encode(request.getPassword());
-        var user = new User(request.getLogin(), encodedPassword, customer, Role.USER);
+        var user = new User(request.getLogin(), encodedPassword, customer, role);
         userRepository.save(user);
         customerRepository.save(customer);
         var jwtToken = jwtService.generateToken(user);
