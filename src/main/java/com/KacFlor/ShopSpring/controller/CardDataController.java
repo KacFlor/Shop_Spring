@@ -2,6 +2,7 @@ package com.KacFlor.ShopSpring.controller;
 
 import java.util.List;
 
+import com.KacFlor.ShopSpring.model.Role;
 import com.KacFlor.ShopSpring.service.CardDataService;
 import com.KacFlor.ShopSpring.model.CardData;
 import jakarta.annotation.security.RolesAllowed;
@@ -25,6 +26,7 @@ public class CardDataController{
         this.cardDataService = cardDataService;
     }
 
+    @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @GetMapping
     public List<CardData> getCardData(){
         return this.cardDataService.getCardData();
