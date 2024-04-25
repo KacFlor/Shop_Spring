@@ -56,7 +56,7 @@ public class UserController{
 
     @PreAuthorize("hasAuthority('" + Role.Fields.USER + "')")
     @DeleteMapping("/me")
-    public String deleteUser(){
+    public Boolean deleteUser(){
         return userService.deleteUser();
     }
 }
