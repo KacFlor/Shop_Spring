@@ -13,7 +13,7 @@ public class OrderConfig{
     }
 
     @Bean
-    CommandLineRunner commandLineRunner10(OrderItemRepository orderItemRepository){
+    CommandLineRunner commandLineRunnerOrder(OrderItemRepository orderItemRepository){
         return (args) -> {
         };
     }

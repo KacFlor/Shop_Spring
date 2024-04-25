@@ -15,7 +15,7 @@ public class CardDataConfig{
     }
 
     @Bean
-    CommandLineRunner commandLineRunner14(CardDataRepository cardDataRepository){
+    CommandLineRunner commandLineRunnerCardData(CardDataRepository cardDataRepository){
         return (args) -> {
             CardData first = new CardData(
                     "123 123 132 3121"

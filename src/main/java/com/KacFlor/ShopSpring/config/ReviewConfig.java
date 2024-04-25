@@ -13,7 +13,7 @@ public class ReviewConfig{
     }
 
     @Bean
-    CommandLineRunner commandLineRunner5(ReviewRepository reviewRepository){
+    CommandLineRunner commandLineRunnerReview(ReviewRepository reviewRepository){
         return (args) -> {
         };
     }

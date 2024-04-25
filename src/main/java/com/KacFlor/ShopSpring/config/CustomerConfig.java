@@ -12,7 +12,7 @@ public class CustomerConfig{
     }
 
     @Bean
-    CommandLineRunner commandLineRunner11(CustomerRepository customerRepository){
+    CommandLineRunner commandLineRunnerCustomer(CustomerRepository customerRepository){
         return (args) -> {
         };
     }

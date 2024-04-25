@@ -12,7 +12,7 @@ public class CartConfig{
     }
 
     @Bean
-    CommandLineRunner commandLineRunner13(CartRepository cartRepository){
+    CommandLineRunner commandLineRunnerCart(CartRepository cartRepository){
         return (args) -> {
         };
     }

@@ -12,7 +12,7 @@ public class ProductConfig{
     }
 
     @Bean
-    CommandLineRunner commandLineRunner7(ProductRepository productRepository){
+    CommandLineRunner commandLineRunnerProduct(ProductRepository productRepository){
         return (args) -> {
         };
     }

@@ -29,7 +29,7 @@ public class AuthenticationService{
     private final BCryptPasswordEncoder passwordEncoder;
 
     public AuthenticationResponse register(RegisterRequest request){
-        var customer = new Customer("Adam", "Florczyk", "kacper.florczyk@onet.pl", "staffa");
+        var customer = new Customer();
         String encodedPassword = passwordEncoder.encode(request.getPassword());
         var user = new User(request.getLogin(), encodedPassword, customer, Role.USER);
         userRepository.save(user);

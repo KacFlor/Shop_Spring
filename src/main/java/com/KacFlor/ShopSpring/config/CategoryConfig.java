@@ -13,7 +13,7 @@ public class CategoryConfig{
     }
 
     @Bean
-    CommandLineRunner commandLineRunner12(CategoryRepository categoryRepository){
+    CommandLineRunner commandLineRunnerCategory(CategoryRepository categoryRepository){
         return (args) -> {
         };
     }

@@ -13,7 +13,7 @@ public class ShipmentConfig{
     }
 
     @Bean
-    CommandLineRunner commandLineRunner4(ShipmentRepository shipmentRepository){
+    CommandLineRunner commandLineRunnerShipment(ShipmentRepository shipmentRepository){
         return (args) -> {
         };
     }

@@ -13,7 +13,7 @@ public class UserConfig{
     }
 
     @Bean
-    CommandLineRunner commandLineRunner2(UserRepository userRepository){
+    CommandLineRunner commandLineRunnerUser(UserRepository userRepository){
         return (args) -> {
         };
     }

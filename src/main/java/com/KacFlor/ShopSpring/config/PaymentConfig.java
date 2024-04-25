@@ -13,7 +13,7 @@ public class PaymentConfig{
     }
 
     @Bean
-    CommandLineRunner commandLineRunner8(PaymentRepository paymentRepository){
+    CommandLineRunner commandLineRunnerPayment(PaymentRepository paymentRepository){
         return (args) -> {
         };
     }

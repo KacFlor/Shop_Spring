@@ -31,7 +31,7 @@ public class SecurityConfig{
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/auth/**")
+                .requestMatchers("/authentication/**","/card-data")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

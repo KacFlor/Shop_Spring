@@ -18,19 +18,15 @@ import java.util.List;
 public class Customer extends BaseEntity{
 
     @Column(name = "firstName")
-    @NotBlank
     private String firstName;
 
     @Column(name = "lastName")
-    @NotBlank
     private String lastName;
 
     @Column(name = "email")
-    @NotBlank
     private String email;
 
     @Column(name = "address")
-    @NotBlank
     private String address;
 
     @Column(name = "phone")

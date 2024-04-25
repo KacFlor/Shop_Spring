@@ -13,7 +13,7 @@ public class WishlistConfig{
     }
 
     @Bean
-    CommandLineRunner commandLineRunner(WishlistRepository wishlistRepository){
+    CommandLineRunner commandLineRunnerWhishlist(WishlistRepository wishlistRepository){
         return (args) -> {
         };
 

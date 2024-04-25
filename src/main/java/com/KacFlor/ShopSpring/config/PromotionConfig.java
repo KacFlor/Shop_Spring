@@ -12,7 +12,7 @@ public class PromotionConfig{
     }
 
     @Bean
-    CommandLineRunner commandLineRunner6(PromotionRepository promotionRepository){
+    CommandLineRunner commandLineRunnerPromotion(PromotionRepository promotionRepository){
         return (args) -> {
         };
     }
