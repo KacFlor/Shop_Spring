@@ -6,7 +6,6 @@ import java.util.List;
 import com.KacFlor.ShopSpring.model.Role;
 import com.KacFlor.ShopSpring.model.User;
 import com.KacFlor.ShopSpring.service.UserService;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +32,7 @@ public class UserController{
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @GetMapping("/users")
     public List<User> getUsersList(){
-        return userService.getAllUser();
+        return userService.getAllUsers();
     }
 
 
