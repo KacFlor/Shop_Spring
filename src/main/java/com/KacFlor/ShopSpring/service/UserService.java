@@ -25,7 +25,7 @@ public class UserService{
         return userRepository.findAll();
     }
 
-    public User getCurrentUser() {
+    public User getCurrentUser(){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = ((UserDetails) principal).getUsername();
 
@@ -43,30 +43,17 @@ public class UserService{
 
         userRepository.save(user);
 
-        return Boolean.TRUE;
+        return true;
     }
 
-    public Boolean deleteUserByLogin(String Login){
-
-        User user = userRepository.findByLogin(Login);
-
-        if (user != null) {
-            userRepository.delete(user);
-            return Boolean.TRUE;
-        }
-        else{
-            throw new UsernameNotFoundException("User not found");
-        }
-    }
-
-    public Boolean deleteUserById(Integer userId) {
+    public Boolean deleteUserById(Integer userId){
         Optional<User> userOptional = userRepository.findById(userId);
-        if (userOptional.isPresent()) {
+        if(userOptional.isPresent()){
             User user = userOptional.get();
             userRepository.delete(user);
-            return Boolean.TRUE;
-        } else {
-            throw new UsernameNotFoundException("User with id '" + userId + "' not found");
+            return true;
+        }else{
+            throw new UsernameNotFoundException("User not found");
         }
     }
 
@@ -76,12 +63,11 @@ public class UserService{
 
         User user = userRepository.findByLogin(username);
 
-        if (user != null && username.equals(user.getLogin())) {
+        if(user != null && username.equals(user.getLogin())){
             userRepository.delete(user);
-            return Boolean.TRUE;
-        }
-        else{
-            throw new UsernameNotFoundException("User with login '" + username + "' not found");
+            return true;
+        }else{
+            throw new UsernameNotFoundException("User not found");
         }
     }
 
