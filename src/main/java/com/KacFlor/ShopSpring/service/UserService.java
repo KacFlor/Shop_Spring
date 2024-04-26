@@ -33,7 +33,7 @@ public class UserService{
     }
 
 
-    public Boolean changeName(String newName){
+    public boolean changeName(String newName){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = ((UserDetails) principal).getUsername();
 
@@ -46,7 +46,7 @@ public class UserService{
         return true;
     }
 
-    public Boolean deleteUserById(Integer userId){
+    public boolean deleteUserById(Integer userId){
         Optional<User> userOptional = userRepository.findById(userId);
         if(userOptional.isPresent()){
             User user = userOptional.get();
@@ -57,7 +57,7 @@ public class UserService{
         }
     }
 
-    public Boolean deleteUser(){
+    public boolean deleteUser(){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = ((UserDetails) principal).getUsername();
 

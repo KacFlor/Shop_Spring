@@ -26,7 +26,7 @@ public class UserController{
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @DeleteMapping("/{id}")
-    public Boolean deleteById(@PathVariable("id") Integer id){
+    public boolean deleteById(@PathVariable("id") Integer id){
         return userService.deleteUserById(id);
     }
 
@@ -45,13 +45,13 @@ public class UserController{
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PatchMapping("/me")
-    public Boolean loginChange(@RequestBody String newLogin){
+    public boolean loginChange(@RequestBody String newLogin){
         return userService.changeName(newLogin);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.USER + "')")
     @DeleteMapping("/me")
-    public Boolean deleteUser(){
+    public boolean deleteUser(){
         return userService.deleteUser();
     }
 
