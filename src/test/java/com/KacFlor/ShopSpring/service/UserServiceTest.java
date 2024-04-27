@@ -54,7 +54,6 @@ public class UserServiceTest{
         hAdmin = new User("HAdmin",  encoder.encode("1234"), new Customer(), Role.ADMIN);
     }
 
-    // JUnit test for getAllUsers method
     @DisplayName("JUnit test for getAllUsers method")
     @Test
     public void testGetAllUsers(){
@@ -69,7 +68,6 @@ public class UserServiceTest{
         assertThat(result.size()).isEqualTo(4);
     }
 
-    // JUnit test for getCurrentUser method
     @DisplayName("JUnit test for getCurrentUser method")
     @Test
     public void testGetCurrentUser(){
@@ -92,7 +90,6 @@ public class UserServiceTest{
         assertThat(currentUser).isEqualTo(user1);
     }
 
-    // JUnit test for changeName method
     @DisplayName("JUnit test for changeName method")
     @Test
     public void testchangeName(){
@@ -117,6 +114,45 @@ public class UserServiceTest{
 
         assertThat(user1.getLogin()).isNotNull();
         assertThat(user1.getLogin()).isEqualTo(newName);
+    }
+
+    @DisplayName("JUnit test for deleteUserById method")
+    @Test
+    public void testDeleteUserById(){
+
+        Integer UserId = 2;
+
+        when(userRepository.findById(UserId)).thenReturn(Optional.ofNullable(user1));
+
+        boolean result = userService.deleteUserById(UserId);
+        assertTrue(result);
+
+        // then - verify the output
+        verify(userRepository, times(1)).delete(user1);
+
+    }
+
+    @DisplayName("JUnit test for deleteUser method")
+    @Test
+    public void testDeleteUser(){
+
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+
+        UserDetails userDetails = Mockito.mock(UserDetails.class);
+        when(userDetails.getUsername()).thenReturn("Test1");
+
+        Authentication authentication = Mockito.mock(Authentication.class);
+        when(authentication.getPrincipal()).thenReturn(userDetails);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+
+        when(userRepository.findByLogin("Test1")).thenReturn(user1);
+
+        boolean result = userService.deleteUser();
+        assertTrue(result);
+
+        verify(userRepository, times(1)).delete(user1);
+
     }
 
 }
