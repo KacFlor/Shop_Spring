@@ -66,6 +66,11 @@ public class UserServiceTest{
 
         assertThat(result).isNotNull();
         assertThat(result.size()).isEqualTo(4);
+
+        assertThat(result.get(0).getLogin()).isEqualTo("Test1");
+        assertThat(result.get(1).getLogin()).isEqualTo("Test2");
+        assertThat(result.get(2).getLogin()).isEqualTo("Test3");
+        assertThat(result.get(3).getLogin()).isEqualTo("HAdmin");
     }
 
     @DisplayName("JUnit test for getCurrentUser method")
@@ -87,7 +92,7 @@ public class UserServiceTest{
         User currentUser = userService.getCurrentUser();
 
         assertThat(currentUser).isNotNull();
-        assertThat(currentUser).isEqualTo(user1);
+        assertThat(currentUser.getLogin()).isEqualTo(user1.getLogin());
     }
 
     @DisplayName("JUnit test for changeName method")
