@@ -1,89 +1,125 @@
 package com.KacFlor.ShopSpring.controller;
 
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 import com.KacFlor.ShopSpring.model.Customer;
 import com.KacFlor.ShopSpring.model.Role;
 import com.KacFlor.ShopSpring.model.User;
 import com.KacFlor.ShopSpring.service.UserService;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.security.test.context.support.WithMockUser;
+
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
-import static org.testng.Assert.assertEquals;
 
-public class UserControllerTest{
+@SpringBootTest
+@AutoConfigureMockMvc
+public class UserControllerTest {
 
-    @Mock
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
     private UserService userService;
 
-    @InjectMocks
-    private UserController userController;
-
-    @BeforeClass
-    public void setUp(){
-        MockitoAnnotations.openMocks(this);
-    }
 
     @Test
-    public void testDeleteUserById(){
+    public void testDeleteUserById() throws Exception {
+        User user = new User("TestLogin", "passwordLogin", new Customer(), Role.ADMIN);
+
+        Authentication auth = new UsernamePasswordAuthenticationToken(user, null,
+                Collections.singletonList(new SimpleGrantedAuthority("ADMIN")));
+
+        SecurityContextHolder.getContext().setAuthentication(auth);
 
         Integer userId = 1;
         given(userService.deleteUserById(userId)).willReturn(true);
 
-        boolean result = userController.deleteById(userId);
-
-        assertEquals(result, true);
+        mockMvc.perform(delete("/user/{id}", userId))
+                .andExpect(status().isOk());
     }
 
     @Test
-    public void testGetUsersList(){
+    public void testGetUsersList() throws Exception {
+        User user = new User("TestLogin", "passwordLogin", new Customer(), Role.ADMIN);
+
+        Authentication auth = new UsernamePasswordAuthenticationToken(user, null,
+                Collections.singletonList(new SimpleGrantedAuthority("ADMIN")));
+
+        SecurityContextHolder.getContext().setAuthentication(auth);
 
         List<User> userList = Arrays.asList(
                 new User("Test1", "password1", new Customer(), Role.USER),
                 new User("Test2", "password2", new Customer(), Role.USER),
                 new User("Test3", "password3", new Customer(), Role.USER)
         );
-        given(userService.getAllUsers()).willReturn(userList);
+        when(userService.getAllUsers()).thenReturn(userList);
 
-        List<User> result = userController.getUsersList();
-
-        assertEquals(result.size(), 3);
+        mockMvc.perform(get("/user/users"))
+                .andExpect(status().isOk());
     }
 
     @Test
-    public void testGetUser(){
+    public void testGetUser() throws Exception {
+        User user = new User("TestLogin", "passwordLogin", new Customer(), Role.ADMIN);
 
-        User user = new User("Test1", "password", new Customer(), Role.USER);
-        given(userService.getCurrentUser()).willReturn(user);
+        Authentication auth = new UsernamePasswordAuthenticationToken(user, null,
+                Collections.singletonList(new SimpleGrantedAuthority("USER")));
 
-        User result = userController.getUser();
+        SecurityContextHolder.getContext().setAuthentication(auth);
 
-        assertEquals(result, user);
+        when(userService.getCurrentUser()).thenReturn(user);
+
+        mockMvc.perform(get("/user/me"))
+                .andExpect(status().isOk());
     }
 
     @Test
-    public void testLoginChange(){
+    public void testLoginChange() throws Exception {
+        User user = new User("TestLogin", "passwordLogin", new Customer(), Role.ADMIN);
+
+        Authentication auth = new UsernamePasswordAuthenticationToken(user, null,
+                Collections.singletonList(new SimpleGrantedAuthority("USER")));
+
+        SecurityContextHolder.getContext().setAuthentication(auth);
 
         String newLogin = "1resu";
-        given(userService.changeName(newLogin)).willReturn(true);
+        when(userService.changeName(newLogin)).thenReturn(true);
 
-        boolean result = userController.loginChange(newLogin);
-
-        assertEquals(result, true);
+        mockMvc.perform(patch("/user/me")
+                        .content(newLogin)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     @Test
-    public void testDeleteUser(){
+    public void testDeleteUser() throws Exception {
+        User user = new User("TestLogin", "passwordLogin", new Customer(), Role.ADMIN);
 
-        given(userService.deleteUser()).willReturn(true);
+        Authentication auth = new UsernamePasswordAuthenticationToken(user, null,
+                Collections.singletonList(new SimpleGrantedAuthority("USER")));
 
-        boolean result = userController.deleteUser();
+        SecurityContextHolder.getContext().setAuthentication(auth);
 
-        assertEquals(result, true);
+        when(userService.deleteUser()).thenReturn(true);
+
+        mockMvc.perform(delete("/user/me"))
+                .andExpect(status().isOk());
     }
 }
