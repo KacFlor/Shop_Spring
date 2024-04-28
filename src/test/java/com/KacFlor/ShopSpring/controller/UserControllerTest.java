@@ -27,7 +27,7 @@ import java.util.List;
 
 import static org.mockito.BDDMockito.given;
 
-@SpringBootTest
+@SpringBootTest(classes = UserController.class)
 @AutoConfigureMockMvc
 public class UserControllerTest {
 
