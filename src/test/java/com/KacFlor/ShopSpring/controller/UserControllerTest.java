@@ -4,6 +4,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import com.KacFlor.ShopSpring.config.SecurityConfig;
 import com.KacFlor.ShopSpring.model.Customer;
 import com.KacFlor.ShopSpring.model.Role;
 import com.KacFlor.ShopSpring.model.User;
@@ -18,6 +19,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 
@@ -27,7 +30,7 @@ import java.util.List;
 
 import static org.mockito.BDDMockito.given;
 
-@SpringBootTest(classes = UserController.class)
+@SpringBootTest
 @AutoConfigureMockMvc
 public class UserControllerTest {
 
@@ -39,7 +42,6 @@ public class UserControllerTest {
 
 
     @Test
-
     public void testDeleteUserById() throws Exception {
         User user = new User("TestLogin", "passwordLogin", new Customer(), Role.ADMIN);
 
