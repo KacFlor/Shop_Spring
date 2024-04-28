@@ -23,6 +23,9 @@ jobs:
           distribution: 'adopt'
           java-version: '21'
 
+      - name: Add spring-boot-starter-security dependency
+        run: echo "<dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-security</artifactId></dependency>" >> pom.xml
+
       - name: Build with Maven
         run: mvn clean install -U
 
