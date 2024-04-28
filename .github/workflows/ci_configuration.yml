@@ -23,12 +23,8 @@ jobs:
           distribution: 'adopt'
           java-version: '21'
 
-      - name: Change Maven Surefire Plugin version
-        run: |
-          sed -i 's/<version>3.11.0<\/version>/<version>3.2.5<\/version>/' pom.xml
-
       - name: Build with Maven
-        run: mvn clean install
+        run: mvn clean install -U
 
       - name: Run Tests
         run: mvn test
