@@ -19,7 +19,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.security.test.context.support.WithMockUser;
 
 
 import java.util.Arrays;
@@ -28,7 +27,7 @@ import java.util.List;
 
 import static org.mockito.BDDMockito.given;
 
-@SpringBootTest(classes = UserControllerTest.class)
+@SpringBootTest
 @AutoConfigureMockMvc
 public class UserControllerTest {
 
@@ -40,6 +39,7 @@ public class UserControllerTest {
 
 
     @Test
+
     public void testDeleteUserById() throws Exception {
         User user = new User("TestLogin", "passwordLogin", new Customer(), Role.ADMIN);
 
@@ -49,7 +49,10 @@ public class UserControllerTest {
         SecurityContextHolder.getContext().setAuthentication(auth);
 
         Integer userId = 1;
+
+
         given(userService.deleteUserById(userId)).willReturn(true);
+
 
         mockMvc.perform(delete("/user/{id}", userId))
                 .andExpect(status().isAccepted());
