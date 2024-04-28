@@ -52,7 +52,7 @@ public class UserControllerTest {
         given(userService.deleteUserById(userId)).willReturn(true);
 
         mockMvc.perform(delete("/user/{id}", userId))
-                .andExpect(status().isOk());
+                .andExpect(status().isAccepted());
     }
 
     @Test
