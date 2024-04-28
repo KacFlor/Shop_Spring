@@ -3,13 +3,14 @@ package com.KacFlor.ShopSpring.model;
 import jakarta.persistence.*;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "cardData")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class CardData extends BaseEntity{
 
     @Column(name = "cardNum")
@@ -20,10 +21,5 @@ public class CardData extends BaseEntity{
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    public CardData(){
-    }
 
-    public CardData(String cardNum){
-        this.cardNum = cardNum;
-    }
 }

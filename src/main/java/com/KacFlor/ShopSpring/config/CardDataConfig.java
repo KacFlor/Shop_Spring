@@ -17,12 +17,7 @@ public class CardDataConfig{
     @Bean
     CommandLineRunner commandLineRunnerCardData(CardDataRepository cardDataRepository){
         return (args) -> {
-            CardData first = new CardData(
-                    "123 123 132 3121"
-            );
-            cardDataRepository.saveAll(
-                    List.of(first)
-            );
+
         };
 
     }
