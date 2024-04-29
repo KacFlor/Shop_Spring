@@ -35,8 +35,7 @@ jobs:
           java-version: '11'
 
       - name: Wait for PostgreSQL to be ready
-        run: |
-          dockerize -wait tcp://localhost:5432 -timeout 1m
+        run: sleep 30
 
       - name: Build with Maven
         run: mvn clean install -U
