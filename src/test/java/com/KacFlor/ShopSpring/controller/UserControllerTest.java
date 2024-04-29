@@ -2,6 +2,7 @@ package com.KacFlor.ShopSpring.controller;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.KacFlor.ShopSpring.config.SecurityConfig;
@@ -113,7 +114,8 @@ public class UserControllerTest {
         mockMvc.perform(patch("/user/me")
                 .content(newLogin)
                 .contentType(MediaType.TEXT_PLAIN))
-            .andExpect(status().isOk());
+                .andDo(print())
+                .andExpect(status().isOk());
 
     }
 

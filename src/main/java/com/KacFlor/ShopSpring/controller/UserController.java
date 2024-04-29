@@ -38,7 +38,7 @@ public class UserController{
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @GetMapping("/me")
-    public ResponseEntity<User> getUserName(){
+    public ResponseEntity<User> getUser(){
         User currentUser = userService.getCurrentUser();
         return ResponseEntity.ok(currentUser);
     }
