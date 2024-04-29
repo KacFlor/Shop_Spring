@@ -84,7 +84,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testGetUser() throws Exception {
+    public void testGetUserName() throws Exception {
         User user = new User("TestLogin", "passwordLogin", new Customer(), Role.ADMIN);
 
         Authentication auth = new UsernamePasswordAuthenticationToken(user, null,

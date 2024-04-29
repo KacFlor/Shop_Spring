@@ -13,46 +13,46 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class UserController{
 
     private final UserService userService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService){
         this.userService = userService;
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable("id") Integer id) {
+    public ResponseEntity<Void> deleteById(@PathVariable("id") Integer id){
         userService.deleteUserById(id);
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getUsersList() {
+    public ResponseEntity<List<User>> getUsersList(){
         List<User> userList = userService.getAllUsers();
         return ResponseEntity.ok(userList);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @GetMapping("/me")
-    public ResponseEntity<User> getUser() {
+    public ResponseEntity<User> getUserName(){
         User currentUser = userService.getCurrentUser();
         return ResponseEntity.ok(currentUser);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PatchMapping("/me")
-    public ResponseEntity<Void> loginChange(@RequestBody String newLogin) {
+    public ResponseEntity<Void> loginChange(@RequestBody String newLogin){
         userService.changeName(newLogin);
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.USER + "')")
     @DeleteMapping("/me")
-    public ResponseEntity<Void> deleteUser() {
+    public ResponseEntity<Void> deleteUser(){
         userService.deleteUser();
         return new ResponseEntity(HttpStatus.OK);
     }
