@@ -45,7 +45,7 @@ public class UserController{
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PatchMapping("/me")
-    public ResponseEntity<Void> loginChangeUser(@RequestBody String newLogin){
+    public ResponseEntity<Void> loginChange(@RequestBody String newLogin){
         userService.changeName(newLogin);
         return new ResponseEntity<>(HttpStatus.OK);
     }
