@@ -23,6 +23,10 @@ jobs:
           distribution: 'adopt'
           java-version: '21'
 
+      - name: Start PostgreSQL
+        run: |
+          sudo service postgresql start
+
       - name: Build with Maven
         run: mvn clean install -U
 
