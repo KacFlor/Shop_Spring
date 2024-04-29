@@ -1,19 +1,18 @@
 package com.KacFlor.ShopSpring.controller;
 
-
 import java.util.List;
 
 import com.KacFlor.ShopSpring.model.Role;
 import com.KacFlor.ShopSpring.model.User;
 import com.KacFlor.ShopSpring.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(
-        path = {"user"}
-)
+@RequestMapping("/user")
 public class UserController{
 
     private final UserService userService;
@@ -25,33 +24,36 @@ public class UserController{
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @DeleteMapping("/{id}")
-    public boolean deleteById(@PathVariable("id") Integer id){
-        return userService.deleteUserById(id);
+    public ResponseEntity deleteById(@PathVariable("id") Integer id){
+        userService.deleteUserById(id);
+        return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @GetMapping("/users")
-    public List<User> getUsersList(){
-        return userService.getAllUsers();
+    public ResponseEntity<List<User>> getUsersList(){
+        List<User> userList = userService.getAllUsers();
+        return ResponseEntity.ok(userList);
     }
-
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @GetMapping("/me")
-    public User getUser(){
-        return userService.getCurrentUser();
+    public ResponseEntity<User> getUser(){
+        User currentUser = userService.getCurrentUser();
+        return ResponseEntity.ok(currentUser);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PatchMapping("/me")
-    public boolean loginChange(@RequestBody String newLogin){
-        return userService.changeName(newLogin);
+    public ResponseEntity loginChange(@RequestBody String newLogin){
+        userService.changeName(newLogin);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.USER + "')")
     @DeleteMapping("/me")
-    public boolean deleteUser(){
-        return userService.deleteUser();
+    public ResponseEntity deleteUser(){
+        userService.deleteUser();
+        return new ResponseEntity(HttpStatus.OK);
     }
-
 }

@@ -12,10 +12,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.*;
+
 import org.springframework.security.core.Authentication;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -27,8 +26,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,16 +39,17 @@ public class UserServiceTest{
     private UserService userService;
 
     private User user1;
+
     private User user2;
 
     private User hAdmin;
 
     @BeforeEach
-    public void setup() {
+    public void setup(){
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         user1 = new User("Test1", "encodedPassword1", new Customer(), Role.USER);
         user2 = new User("Test2", "encodedPassword2", new Customer(), Role.USER);
-        hAdmin = new User("HAdmin",  encoder.encode("1234"), new Customer(), Role.ADMIN);
+        hAdmin = new User("HAdmin", encoder.encode("1234"), new Customer(), Role.ADMIN);
     }
 
     @DisplayName("JUnit test for getAllUsers method")
@@ -60,7 +58,7 @@ public class UserServiceTest{
 
         User user3 = new User("Test3", "encodedPassword3", new Customer(), Role.USER);
 
-        given(userRepository.findAll()).willReturn(List.of(user1,user2,user3,hAdmin));
+        given(userRepository.findAll()).willReturn(List.of(user1, user2, user3, hAdmin));
 
         List<User> result = userService.getAllUsers();
 
@@ -132,7 +130,6 @@ public class UserServiceTest{
         boolean result = userService.deleteUserById(UserId);
         assertTrue(result);
 
-        // then - verify the output
         verify(userRepository, times(1)).delete(user1);
 
     }
