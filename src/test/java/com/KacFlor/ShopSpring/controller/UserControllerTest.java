@@ -83,7 +83,9 @@ public class UserControllerTest {
         when(userService.getAllUsers()).thenReturn(userList);
 
         mockMvc.perform(get("/user/users"))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json("[{'username':'Test1','password':'password1'},{'username':'Test2','password':'password2'},{'username':'Test3','password':'password3'}]"));
     }
 
     @Test
@@ -94,8 +96,11 @@ public class UserControllerTest {
         when(userService.getCurrentUser()).thenReturn(user);
 
         mockMvc.perform(get("/user/me"))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json("{\"username\":\"TestLogin\",\"password\":\"passwordLogin\"}"));
     }
+
 
     @Test
     @WithMockUser(username = "admin", authorities = { "ADMIN", "USER" })
