@@ -10,6 +10,7 @@ import com.KacFlor.ShopSpring.model.Customer;
 import com.KacFlor.ShopSpring.model.Role;
 import com.KacFlor.ShopSpring.model.User;
 import com.KacFlor.ShopSpring.security.JwtAuthenticationFilter;
+import com.KacFlor.ShopSpring.service.JwtService;
 import com.KacFlor.ShopSpring.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,26 +53,13 @@ public class UserControllerTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
-    @Autowired
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
-
-    @BeforeEach
-    public void setup() {
-        mockMvc = MockMvcBuilders
-                .webAppContextSetup(webApplicationContext)
-                .addFilter(jwtAuthenticationFilter)
-                .build();
-    }
+    @MockBean
+    private JwtService jwtService;
 
 
     @Test
+    @WithMockUser(username = "admin", authorities = { "ADMIN", "USER" })
     public void testDeleteUserById() throws Exception {
-        User user = new User("TestLogin", "passwordLogin", new Customer(), Role.ADMIN);
-
-        Authentication auth = new UsernamePasswordAuthenticationToken(user, null,
-                Collections.singletonList(new SimpleGrantedAuthority("ADMIN")));
-
-        SecurityContextHolder.getContext().setAuthentication(auth);
 
         Integer userId = 1;
 
@@ -84,13 +72,8 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", authorities = { "ADMIN", "USER" })
     public void testGetUsersList() throws Exception {
-        User user = new User("TestLogin", "passwordLogin", new Customer(), Role.ADMIN);
-
-        Authentication auth = new UsernamePasswordAuthenticationToken(user, null,
-                Collections.singletonList(new SimpleGrantedAuthority("ADMIN")));
-
-        SecurityContextHolder.getContext().setAuthentication(auth);
 
         List<User> userList = Arrays.asList(
                 new User("Test1", "password1", new Customer(), Role.USER),
@@ -104,13 +87,9 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", authorities = { "ADMIN", "USER" })
     public void testGetUser() throws Exception {
         User user = new User("TestLogin", "passwordLogin", new Customer(), Role.ADMIN);
-
-        Authentication auth = new UsernamePasswordAuthenticationToken(user, null,
-                Collections.singletonList(new SimpleGrantedAuthority("USER")));
-
-        SecurityContextHolder.getContext().setAuthentication(auth);
 
         when(userService.getCurrentUser()).thenReturn(user);
 
@@ -119,13 +98,9 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", authorities = { "ADMIN", "USER" })
     public void testLoginChange() throws Exception {
         User user = new User("TestLogin", "passwordLogin", new Customer(), Role.ADMIN);
-
-        Authentication auth = new UsernamePasswordAuthenticationToken(user, null,
-                Collections.singletonList(new SimpleGrantedAuthority("USER")));
-
-        SecurityContextHolder.getContext().setAuthentication(auth);
 
         String newLogin = "1resu";
         when(userService.changeName(newLogin)).thenReturn(true);
@@ -136,16 +111,12 @@ public class UserControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
 
+
     }
 
     @Test
+    @WithMockUser(username = "admin", authorities = { "ADMIN", "USER" })
     public void testDeleteUser() throws Exception {
-        User user = new User("TestLogin", "passwordLogin", new Customer(), Role.ADMIN);
-
-        Authentication auth = new UsernamePasswordAuthenticationToken(user, null,
-                Collections.singletonList(new SimpleGrantedAuthority("USER")));
-
-        SecurityContextHolder.getContext().setAuthentication(auth);
 
         when(userService.deleteUser()).thenReturn(true);
 
