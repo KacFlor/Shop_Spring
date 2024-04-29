@@ -24,9 +24,9 @@ public class UserController{
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable("id") Integer id){
-        boolean response = userService.deleteUserById(id);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    public ResponseEntity deleteById(@PathVariable("id") Integer id){
+        userService.deleteUserById(id);
+        return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
@@ -45,15 +45,15 @@ public class UserController{
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PatchMapping("/me")
-    public ResponseEntity<Void> loginChange(@RequestBody String newLogin){
+    public ResponseEntity loginChange(@RequestBody String newLogin){
         userService.changeName(newLogin);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.USER + "')")
     @DeleteMapping("/me")
-    public ResponseEntity<Void> deleteUser(){
+    public ResponseEntity deleteUser(){
         userService.deleteUser();
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
