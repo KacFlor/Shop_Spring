@@ -5,14 +5,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.KacFlor.ShopSpring.config.SecurityConfig;
 import com.KacFlor.ShopSpring.model.Customer;
 import com.KacFlor.ShopSpring.model.Role;
 import com.KacFlor.ShopSpring.model.User;
-import com.KacFlor.ShopSpring.security.JwtAuthenticationFilter;
 import com.KacFlor.ShopSpring.service.JwtService;
 import com.KacFlor.ShopSpring.service.UserService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -21,19 +18,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
-
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
@@ -41,7 +29,7 @@ import static org.mockito.BDDMockito.given;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
-public class UserControllerTest {
+public class UserControllerTest{
 
     @Autowired
     private MockMvc mockMvc;
@@ -58,8 +46,8 @@ public class UserControllerTest {
 
 
     @Test
-    @WithMockUser(username = "admin", authorities = { "ADMIN", "USER" })
-    public void testDeleteUserById() throws Exception {
+    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
+    public void testDeleteUserById() throws Exception{
 
         Integer userId = 1;
 
@@ -72,8 +60,8 @@ public class UserControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "admin", authorities = { "ADMIN", "USER" })
-    public void testGetUsersList() throws Exception {
+    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
+    public void testGetUsersList() throws Exception{
 
         List<User> userList = Arrays.asList(
                 new User("Test1", "password1", new Customer(), Role.USER),
@@ -89,8 +77,8 @@ public class UserControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "admin", authorities = { "ADMIN", "USER" })
-    public void testGetUser() throws Exception {
+    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
+    public void testGetUser() throws Exception{
         User user = new User("TestLogin", "passwordLogin", new Customer(), Role.ADMIN);
 
         when(userService.getCurrentUser()).thenReturn(user);
@@ -103,16 +91,16 @@ public class UserControllerTest {
 
 
     @Test
-    @WithMockUser(username = "admin", authorities = { "ADMIN", "USER" })
-    public void testLoginChange() throws Exception {
+    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
+    public void testLoginChange() throws Exception{
         User user = new User("TestLogin", "passwordLogin", new Customer(), Role.ADMIN);
 
         String newLogin = "1resu";
         when(userService.changeName(newLogin)).thenReturn(true);
 
         mockMvc.perform(patch("/user/me")
-                .content(newLogin)
-                .contentType(MediaType.TEXT_PLAIN))
+                        .content(newLogin)
+                        .contentType(MediaType.TEXT_PLAIN))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -120,8 +108,8 @@ public class UserControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "admin", authorities = { "ADMIN", "USER" })
-    public void testDeleteUser() throws Exception {
+    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
+    public void testDeleteUser() throws Exception{
 
         when(userService.deleteUser()).thenReturn(true);
 
