@@ -111,9 +111,10 @@ public class UserControllerTest {
         when(userService.changeName(newLogin)).thenReturn(true);
 
         mockMvc.perform(patch("/user/me")
-                        .content(newLogin)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .content(newLogin)
+                .contentType(MediaType.TEXT_PLAIN))
+            .andExpect(status().isOk());
+
     }
 
     @Test
