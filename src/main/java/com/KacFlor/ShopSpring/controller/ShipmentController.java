@@ -2,12 +2,14 @@ package com.KacFlor.ShopSpring.controller;
 
 import java.util.List;
 
+import com.KacFlor.ShopSpring.model.Customer;
+import com.KacFlor.ShopSpring.model.Role;
 import com.KacFlor.ShopSpring.model.Shipment;
 import com.KacFlor.ShopSpring.service.ShipmentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(
@@ -22,8 +24,24 @@ public class ShipmentController{
         this.shipmentService = shipmentService;
     }
 
-    @GetMapping
-    public List<Shipment> getShipment(){
-        return this.shipmentService.getShipment();
+    @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
+    @GetMapping("/all")
+    public ResponseEntity<List<Shipment>> getAllShipments(){
+        //List<Shipment> shipments = shipmentService.getAll();
+        return null;
+    }
+
+    @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
+    @GetMapping("/{id}")
+    public ResponseEntity<List<Shipment>> getCustomerShipments(@PathVariable("id") Integer id){
+        //List<Shipment> shipments = shipmentService.getAllById();
+      return null;
+    }
+
+    @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteCustomerShipments(){
+        //shipmentService.deleteAllById();
+       return null;
     }
 }
