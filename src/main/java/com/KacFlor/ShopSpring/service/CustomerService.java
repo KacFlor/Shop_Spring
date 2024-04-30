@@ -19,6 +19,7 @@ import java.util.Optional;
 public class CustomerService{
 
     final private CustomerRepository customerRepository;
+
     final private UserRepository userRepository;
 
     @Autowired
@@ -55,7 +56,7 @@ public class CustomerService{
         return user.getCustomer();
     }
 
-    public boolean dataChange(CustomerUpdateRequest customerUpdateRequest) {
+    public boolean dataChange(CustomerUpdateRequest customerUpdateRequest){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         String username = authentication.getName();
@@ -74,7 +75,7 @@ public class CustomerService{
 
         customerRepository.save(customer);
 
-      return true;
+        return true;
 
     }
 
@@ -88,8 +89,12 @@ public class CustomerService{
         String name = user.getCustomer().getFirstName();
 
         Customer customer = customerRepository.findByFirstName(name);
-        customerRepository.delete(customer);
-        userRepository.delete(user);
+        if(user != null && username.equals(user.getLogin()) && customer != null && name.equals(customer.getFirstName())){
+            customerRepository.delete(customer);
+            userRepository.delete(user);
+        }else{
+            throw new UsernameNotFoundException("User not found");
+        }
 
 
         return true;

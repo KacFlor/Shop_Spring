@@ -49,7 +49,7 @@ public class CustomerController{
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PatchMapping("/me")
-    public ResponseEntity<?> dataChange(@RequestBody CustomerUpdateRequest customerUpdateRequest) {
+    public ResponseEntity<?> dataChange(@RequestBody CustomerUpdateRequest customerUpdateRequest){
         customerService.dataChange(customerUpdateRequest);
         return new ResponseEntity(HttpStatus.OK);
     }
