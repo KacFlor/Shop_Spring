@@ -20,11 +20,9 @@ import static org.mockito.Mockito.*;
 import org.springframework.security.core.Authentication;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -32,7 +30,7 @@ import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
-public class ControllerServiceTest{
+public class CustomerServiceTest{
 
     @Mock
     private CustomerRepository customerRepository;
@@ -50,8 +48,11 @@ public class ControllerServiceTest{
     private User hAdmin;
 
     private Customer customer = new Customer();
+
     private Customer customer1 = new Customer();
+
     private Customer customer2 = new Customer();
+
     @BeforeEach
     public void setup(){
         PasswordEncoder encoder = new BCryptPasswordEncoder();

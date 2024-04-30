@@ -10,6 +10,7 @@ import com.KacFlor.ShopSpring.model.Role;
 import com.KacFlor.ShopSpring.model.User;
 import com.KacFlor.ShopSpring.service.JwtService;
 import com.KacFlor.ShopSpring.service.UserService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -18,9 +19,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,13 +41,11 @@ public class UserControllerTest{
     @MockBean
     private UserService userService;
 
-
     @Autowired
     private WebApplicationContext webApplicationContext;
 
     @MockBean
     private JwtService jwtService;
-
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
@@ -103,8 +105,6 @@ public class UserControllerTest{
                         .contentType(MediaType.TEXT_PLAIN))
                 .andDo(print())
                 .andExpect(status().isOk());
-
-
     }
 
     @Test
