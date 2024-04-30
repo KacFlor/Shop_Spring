@@ -8,12 +8,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.KacFlor.ShopSpring.controllersRequests.CustomerUpdateRequest;
 import com.KacFlor.ShopSpring.model.Customer;
-import com.KacFlor.ShopSpring.model.Role;
-import com.KacFlor.ShopSpring.model.User;
 import com.KacFlor.ShopSpring.service.CustomerService;
 import com.KacFlor.ShopSpring.service.JwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -22,11 +19,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 
@@ -41,29 +35,15 @@ public class CustomerControllerTest{
     @MockBean
     private CustomerService customerService;
 
-    @Autowired
-    private WebApplicationContext webApplicationContext;
-
     @MockBean
     private JwtService jwtService;
-
-    private Customer customer = new Customer();
-
-    private Customer customer1 = new Customer();
-
-    private Customer customer2 = new Customer();
-
-    @BeforeEach
-    public void setup(){
-        customer1.setFirstName("Test1");
-        customer2.setFirstName("Test2");
-        customer.setFirstName("HAdmin");
-    }
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
     public void testGetById() throws Exception{
 
+        Customer customer1 = new Customer();
+        customer1.setFirstName("Test1");
         Integer userId = 1;
 
         given(customerService.getCustomerById(userId)).willReturn(customer1);
@@ -92,6 +72,13 @@ public class CustomerControllerTest{
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
     public void testGetCustomersList() throws Exception{
+        Customer customer = new Customer();
+        Customer customer1 = new Customer();
+        Customer customer2 = new Customer();
+
+        customer1.setFirstName("Test1");
+        customer2.setFirstName("Test2");
+        customer.setFirstName("HAdmin");
 
         when(customerService.getAll()).thenReturn(List.of(customer1, customer2, customer));
 
@@ -106,6 +93,8 @@ public class CustomerControllerTest{
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
     public void testGetCustomer() throws Exception{
+        Customer customer1 = new Customer();
+        customer1.setFirstName("Test1");
 
         when(customerService.getCurrent()).thenReturn(customer1);
 

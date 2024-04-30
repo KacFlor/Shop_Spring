@@ -10,7 +10,6 @@ import com.KacFlor.ShopSpring.dao.UserRepository;
 import com.KacFlor.ShopSpring.model.Customer;
 import com.KacFlor.ShopSpring.model.Role;
 import com.KacFlor.ShopSpring.model.User;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,35 +41,15 @@ public class CustomerServiceTest{
     @InjectMocks
     private CustomerService customerService;
 
-    private User user1;
-
-    private User user2;
-
-    private User hAdmin;
-
-    private Customer customer = new Customer();
-
-    private Customer customer1 = new Customer();
-
-    private Customer customer2 = new Customer();
-
-    @BeforeEach
-    public void setup(){
-        PasswordEncoder encoder = new BCryptPasswordEncoder();
-        user1 = new User("Test1", "encodedPassword1", customer1, Role.USER);
-        user2 = new User("Test2", "encodedPassword2", customer2, Role.USER);
-        hAdmin = new User("HAdmin", encoder.encode("1234"), customer, Role.ADMIN);
-        customer1.setUser(user1);
-        customer2.setUser(user2);
-        customer.setUser(hAdmin);
-        customer1.setFirstName("Test1");
-        customer2.setFirstName("Test2");
-        customer.setFirstName("HAdmin");
-    }
-
     @DisplayName("JUnit test for getById method")
     @Test
     public void testGetById(){
+        Customer customer1 = new Customer();
+
+        User user1 = new User("Test1", "encodedPassword1", customer1, Role.USER);
+
+        customer1.setUser(user1);
+        customer1.setFirstName("Test1");
 
         Integer customerId = 1;
 
@@ -86,6 +65,12 @@ public class CustomerServiceTest{
     @DisplayName("JUnit test for deleteById method")
     @Test
     public void testDeleteById(){
+        Customer customer1 = new Customer();
+
+        User user1 = new User("Test1", "encodedPassword1", customer1, Role.USER);
+
+        customer1.setUser(user1);
+        customer1.setFirstName("Test1");
 
         Integer CustomerId = 2;
 
@@ -102,6 +87,21 @@ public class CustomerServiceTest{
     @DisplayName("JUnit test getCustomersList method")
     @Test
     public void testGetCustomersList(){
+        Customer customer1 = new Customer();
+        Customer customer2 = new Customer();
+        Customer customer = new Customer();
+
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        User user1 = new User("Test1", "encodedPassword1", customer1, Role.USER);
+        User user2 = new User("Test2", "encodedPassword2", customer2, Role.USER);
+        User hAdmin = new User("HAdmin", encoder.encode("1234"), customer, Role.ADMIN);
+
+        customer1.setUser(user1);
+        customer2.setUser(user2);
+        customer.setUser(hAdmin);
+        customer1.setFirstName("Test1");
+        customer2.setFirstName("Test2");
+        customer.setFirstName("HAdmin");
 
         given(customerRepository.findAll()).willReturn(List.of(customer1, customer2, customer));
 
@@ -109,7 +109,6 @@ public class CustomerServiceTest{
 
         assertThat(result).isNotNull();
         assertThat(result.size()).isEqualTo(3);
-        System.out.println(result);
 
         assertThat(result.get(0).getFirstName()).isEqualTo("Test1");
         assertThat(result.get(1).getFirstName()).isEqualTo("Test2");
@@ -119,6 +118,12 @@ public class CustomerServiceTest{
     @DisplayName("JUnit test for getCustomer method")
     @Test
     public void testGetCustomer(){
+        Customer customer1 = new Customer();
+
+        User user1 = new User("Test1", "encodedPassword1", customer1, Role.USER);
+
+        customer1.setUser(user1);
+        customer1.setFirstName("Test1");
 
         Authentication authentication = mock(Authentication.class);
         SecurityContext securityContext = mock(SecurityContext.class);
@@ -142,6 +147,12 @@ public class CustomerServiceTest{
     @DisplayName("JUnit test for dataChange method")
     @Test
     public void testDataChange(){
+        Customer customer1 = new Customer();
+
+        User user1 = new User("Test1", "encodedPassword1", customer1, Role.USER);
+
+        customer1.setUser(user1);
+        customer1.setFirstName("Test1");
 
         Authentication authentication = mock(Authentication.class);
         SecurityContext securityContext = mock(SecurityContext.class);
@@ -181,6 +192,12 @@ public class CustomerServiceTest{
     @DisplayName("JUnit test for deleteCustomer method")
     @Test
     public void testDeleteCustomer(){
+        Customer customer1 = new Customer();
+
+        User user1 = new User("Test1", "encodedPassword1", customer1, Role.USER);
+
+        customer1.setUser(user1);
+        customer1.setFirstName("Test1");
 
         Authentication authentication = mock(Authentication.class);
         SecurityContext securityContext = mock(SecurityContext.class);
