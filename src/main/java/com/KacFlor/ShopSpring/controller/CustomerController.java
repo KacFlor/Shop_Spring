@@ -28,9 +28,9 @@ public class CustomerController{
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @GetMapping("/{id}")
-    public ResponseEntity getById(@PathVariable("id") Integer id){
-        customerService.getCustomerById(id);
-        return new ResponseEntity(HttpStatus.ACCEPTED);
+    public ResponseEntity<Optional<Customer>> getById(@PathVariable("id") Integer id){
+        Optional<Customer> customer = Optional.ofNullable(customerService.getCustomerById(id));
+        return ResponseEntity.ok(customer);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")

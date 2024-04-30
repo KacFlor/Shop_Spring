@@ -29,12 +29,9 @@ public class CustomerService{
 
     public Customer getCustomerById(Integer customerId) {
         Optional<Customer> customerOptional = customerRepository.findById(customerId);
-        Optional<User> userOptional = userRepository.findById(customerId);
         if(customerOptional.isPresent()){
-            Customer customer = customerOptional.get();
-            User user = userOptional.get();
-            return user.getCustomer();
-        }else{
+            return customerOptional.get();
+        } else {
             throw new UsernameNotFoundException("Customer not found");
         }
     }

@@ -62,6 +62,21 @@ public class CustomerControllerTest{
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
+    public void testGetById() throws Exception{
+
+        Integer userId = 1;
+
+        given(customerService.getCustomerById(userId)).willReturn(customer1);
+
+        mockMvc.perform(get("/customer/{id}", userId))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json("{'firstName':'Test1'}"));
+
+    }
+
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
     public void testDeleteById() throws Exception{
 
         Integer userId = 1;

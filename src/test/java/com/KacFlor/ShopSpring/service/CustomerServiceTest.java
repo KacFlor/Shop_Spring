@@ -1,6 +1,7 @@
 package com.KacFlor.ShopSpring.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.KacFlor.ShopSpring.controllersRequests.CustomerUpdateRequest;
@@ -65,6 +66,21 @@ public class CustomerServiceTest{
         customer1.setFirstName("Test1");
         customer2.setFirstName("Test2");
         customer.setFirstName("HAdmin");
+    }
+
+    @DisplayName("JUnit test for getById method")
+    @Test
+    public void testGetById(){
+
+        Integer customerId = 1;
+
+        when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer1));
+
+        Customer actualCustomer = customerService.getCustomerById(customerId);
+
+        assertEquals(customer1, actualCustomer);
+
+        verify(customerRepository, times(1)).findById(customerId);
     }
 
     @DisplayName("JUnit test for deleteById method")
