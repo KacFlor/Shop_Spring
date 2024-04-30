@@ -1,5 +1,8 @@
 package com.KacFlor.ShopSpring.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -31,6 +34,7 @@ public class User extends BaseEntity implements UserDetails{
     private String password;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonBackReference
     private Customer customer;
 
     @Enumerated
@@ -71,4 +75,5 @@ public class User extends BaseEntity implements UserDetails{
     public boolean isEnabled(){
         return true;
     }
+
 }

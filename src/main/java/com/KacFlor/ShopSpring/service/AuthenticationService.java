@@ -33,6 +33,8 @@ public class AuthenticationService{
         String encodedPassword = passwordEncoder.encode(request.getPassword());
         var user = new User(request.getLogin(), encodedPassword, customer, role);
         userRepository.save(user);
+        customer.setUser(user);
+        customer.setFirstName(request.getLogin());
         customerRepository.save(customer);
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()

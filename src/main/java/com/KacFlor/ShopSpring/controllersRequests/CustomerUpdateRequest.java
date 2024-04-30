@@ -14,6 +14,6 @@ public class CustomerUpdateRequest {
     private String lastName;
     private String email;
     private String address;
-    private String phoneNumber;
+    private Long phoneNumber;
 
 }

@@ -1,10 +1,12 @@
 package com.KacFlor.ShopSpring.service;
 
 import com.KacFlor.ShopSpring.controllersRequests.CustomerUpdateRequest;
+import com.KacFlor.ShopSpring.dao.UserRepository;
 import com.KacFlor.ShopSpring.model.Customer;
 import com.KacFlor.ShopSpring.dao.CustomerRepository;
 import com.KacFlor.ShopSpring.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,17 +19,22 @@ import java.util.Optional;
 public class CustomerService{
 
     final private CustomerRepository customerRepository;
+    final private UserRepository userRepository;
 
     @Autowired
-    public CustomerService(CustomerRepository customerRepository){
+    public CustomerService(CustomerRepository customerRepository, UserRepository userRepository){
         this.customerRepository = customerRepository;
+        this.userRepository = userRepository;
     }
 
-    public boolean deleteUserById(Integer customerId){
+    public boolean deleteCustomerById(Integer customerId){
         Optional<Customer> customerOptional = customerRepository.findById(customerId);
+        Optional<User> userOptional = userRepository.findById(customerId);
         if(customerOptional.isPresent()){
             Customer customer = customerOptional.get();
+            User user = userOptional.get();
             customerRepository.delete(customer);
+            userRepository.delete(user);
             return true;
         }else{
             throw new UsernameNotFoundException("Customer not found");
@@ -38,49 +45,53 @@ public class CustomerService{
         return customerRepository.findAll();
     }
 
-    public Customer getCurrent() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String email = ((UserDetails) principal).getUsername();
+    public Customer getCurrent(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        return customerRepository.findByEmail(email);
+        String username = authentication.getName();
+
+        User user = userRepository.findByLogin(username);
+
+        return user.getCustomer();
     }
 
     public boolean dataChange(CustomerUpdateRequest customerUpdateRequest) {
-        // Pobierz aktualnie zalogowanego użytkownika
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String email = ((UserDetails) principal).getUsername();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        // Znajdź klienta w repozytorium na podstawie adresu e-mail
-        Customer customer = customerRepository.findByEmail(email);
-        if (customer != null) {
-            // Aktualizuj dane klienta na podstawie danych z CustomerUpdateRequest
-            customer.setFirstName(customerUpdateRequest.getFirstName());
-            customer.setLastName(customerUpdateRequest.getLastName());
-            customer.setEmail(customerUpdateRequest.getEmail());
-            customer.setAddress(customerUpdateRequest.getAddress());
+        String username = authentication.getName();
 
-            // Sprawdzamy, czy numer telefonu nie jest pusty
-            if (customerUpdateRequest.getPhoneNumber() != null && !customerUpdateRequest.getPhoneNumber().isEmpty()) {
-                // Konwertujemy numer telefonu na typ Number i ustawiamy go w obiekcie Customer
-                try {
-                    Number phoneNumber = Long.parseLong(customerUpdateRequest.getPhoneNumber());
-                    customer.setPhoneNumber(phoneNumber);
-                } catch (NumberFormatException e) {
-                    // Obsługa błędu, gdy numer telefonu nie jest poprawny
-                    System.err.println("Niepoprawny format numeru telefonu: " + customerUpdateRequest.getPhoneNumber());
-                }
-            }
+        User user = userRepository.findByLogin(username);
 
-            // Zapisz zaktualizowanego klienta
-            customerRepository.save(customer);
+        String name = user.getCustomer().getFirstName();
 
-            return true; // Zwróć true, jeśli aktualizacja zakończyła się sukcesem
-        } else {
-            return false; // Zwróć false, jeśli klient nie został znaleziony
-        }
+        Customer customer = customerRepository.findByFirstName(name);
+
+        customer.setFirstName(customerUpdateRequest.getFirstName());
+        customer.setLastName(customerUpdateRequest.getLastName());
+        customer.setEmail(customerUpdateRequest.getEmail());
+        customer.setAddress(customerUpdateRequest.getAddress());
+        customer.setPhoneNumber(customerUpdateRequest.getPhoneNumber());
+
+        customerRepository.save(customer);
+
+      return true;
+
     }
 
     public boolean deleteCustomer(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String username = authentication.getName();
+
+        User user = userRepository.findByLogin(username);
+
+        String name = user.getCustomer().getFirstName();
+
+        Customer customer = customerRepository.findByFirstName(name);
+        customerRepository.delete(customer);
+        userRepository.delete(user);
+
+
         return true;
     }
 }
