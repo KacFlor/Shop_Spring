@@ -47,12 +47,6 @@ public class CustomerControllerTest{
     @MockBean
     private JwtService jwtService;
 
-    private User user1;
-
-    private User user2;
-
-    private User hAdmin;
-
     private Customer customer = new Customer();
 
     private Customer customer1 = new Customer();
@@ -61,13 +55,6 @@ public class CustomerControllerTest{
 
     @BeforeEach
     public void setup(){
-        PasswordEncoder encoder = new BCryptPasswordEncoder();
-        user1 = new User("Test1", "encodedPassword1", customer1, Role.USER);
-        user2 = new User("Test2", "encodedPassword2", customer2, Role.USER);
-        hAdmin = new User("HAdmin", encoder.encode("1234"), customer, Role.ADMIN);
-        customer1.setUser(user1);
-        customer2.setUser(user2);
-        customer.setUser(hAdmin);
         customer1.setFirstName("Test1");
         customer2.setFirstName("Test2");
         customer.setFirstName("HAdmin");
@@ -129,7 +116,7 @@ public class CustomerControllerTest{
         ObjectMapper objectMapper = new ObjectMapper();
         String requestJson = objectMapper.writeValueAsString(customerUpdateRequest);
 
-        when(customerService.dataChange(customerUpdateRequest)).thenReturn(true);
+        when(customerService.updateCustomer(customerUpdateRequest)).thenReturn(true);
 
         mockMvc.perform(patch("/customer/me")
                         .content(requestJson)
@@ -143,7 +130,7 @@ public class CustomerControllerTest{
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
     public void testDeleteCustomer() throws Exception{
 
-        when(customerService.deleteCustomer()).thenReturn(true);
+        when(customerService.deleteCurrentCustomer()).thenReturn(true);
 
         mockMvc.perform(delete("/customer/me"))
                 .andExpect(status().isOk());

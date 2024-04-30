@@ -27,6 +27,18 @@ public class CustomerService{
         this.userRepository = userRepository;
     }
 
+    public Customer getCustomerById(Integer customerId) {
+        Optional<Customer> customerOptional = customerRepository.findById(customerId);
+        Optional<User> userOptional = userRepository.findById(customerId);
+        if(customerOptional.isPresent()){
+            Customer customer = customerOptional.get();
+            User user = userOptional.get();
+            return user.getCustomer();
+        }else{
+            throw new UsernameNotFoundException("Customer not found");
+        }
+    }
+
     public boolean deleteCustomerById(Integer customerId){
         Optional<Customer> customerOptional = customerRepository.findById(customerId);
         Optional<User> userOptional = userRepository.findById(customerId);
@@ -55,7 +67,7 @@ public class CustomerService{
         return user.getCustomer();
     }
 
-    public boolean dataChange(CustomerUpdateRequest customerUpdateRequest){
+    public boolean updateCustomer(CustomerUpdateRequest customerUpdateRequest){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         String username = authentication.getName();
@@ -78,7 +90,7 @@ public class CustomerService{
 
     }
 
-    public boolean deleteCustomer(){
+    public boolean deleteCurrentCustomer(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         String username = authentication.getName();

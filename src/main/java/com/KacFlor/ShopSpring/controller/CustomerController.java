@@ -27,6 +27,13 @@ public class CustomerController{
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
+    @GetMapping("/{id}")
+    public ResponseEntity getById(@PathVariable("id") Integer id){
+        customerService.getCustomerById(id);
+        return new ResponseEntity(HttpStatus.ACCEPTED);
+    }
+
+    @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @DeleteMapping("/{id}")
     public ResponseEntity deleteById(@PathVariable("id") Integer id){
         customerService.deleteCustomerById(id);
@@ -50,14 +57,14 @@ public class CustomerController{
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PatchMapping("/me")
     public ResponseEntity<?> dataChange(@RequestBody CustomerUpdateRequest customerUpdateRequest){
-        customerService.dataChange(customerUpdateRequest);
+        customerService.updateCustomer(customerUpdateRequest);
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.USER + "')")
     @DeleteMapping("/me")
     public ResponseEntity deleteCustomer(){
-        customerService.deleteCustomer();
+        customerService.deleteCurrentCustomer();
         return new ResponseEntity(HttpStatus.OK);
     }
 }

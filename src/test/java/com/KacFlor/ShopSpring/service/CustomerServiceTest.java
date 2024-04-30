@@ -145,7 +145,7 @@ public class CustomerServiceTest{
         customerUpdateRequest.setAddress("Staffa");
         customerUpdateRequest.setPhoneNumber(123123123L);
 
-        boolean result = customerService.dataChange(customerUpdateRequest);
+        boolean result = customerService.updateCustomer(customerUpdateRequest);
         assertTrue(result);
 
         verify(customerRepository).save(customer1);
@@ -177,7 +177,7 @@ public class CustomerServiceTest{
         when(userRepository.findByLogin("Test1")).thenReturn(user1);
         when(customerRepository.findByFirstName("Test1")).thenReturn(customer1);
 
-        boolean result = customerService.deleteCustomer();
+        boolean result = customerService.deleteCurrentCustomer();
         assertTrue(result);
 
         verify(customerRepository, times(1)).delete(customer1);
