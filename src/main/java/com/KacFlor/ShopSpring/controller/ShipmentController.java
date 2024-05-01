@@ -2,6 +2,8 @@ package com.KacFlor.ShopSpring.controller;
 
 import java.util.List;
 
+import com.KacFlor.ShopSpring.controllersRequests.CustomerUpdateRequest;
+import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
 import com.KacFlor.ShopSpring.model.Customer;
 import com.KacFlor.ShopSpring.model.Role;
 import com.KacFlor.ShopSpring.model.Shipment;
@@ -35,28 +37,35 @@ public class ShipmentController{
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @GetMapping("/customer/{id}")
     public ResponseEntity<List<Shipment>> getCustomerShipments(@PathVariable("id") Integer id){
-        List<Shipment> shipments = shipmentService.getAllByCustomerId();
+        List<Shipment> shipments = shipmentService.getAllByCustomerId(id);
         return ResponseEntity.ok(shipments);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
-    @GetMapping("/customer/date/{id}")
-    public ResponseEntity<List<Shipment>> getCustomerShipmentsDate(@PathVariable("id") Integer id){
-        List<Shipment> shipments = shipmentService.getAllDateByCustomerId();
-        return ResponseEntity.ok(shipments);;
-    }
-
-    @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @GetMapping("/{id}")
-    public ResponseEntity<List<Shipment>> getShipment(@PathVariable("id") Integer id){
-        List<Shipment> shipment = shipmentService.getById();
+    public ResponseEntity<Shipment> getShipment(@PathVariable("id") Integer id){
+        Shipment shipment = shipmentService.getById(id);
         return ResponseEntity.ok(shipment);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
+    @DeleteMapping("/customer/{id}")
+    public ResponseEntity deleteAllByCustomerId(@PathVariable("id") Integer id){
+        shipmentService.deleteAllByCustomerId(id);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteAllByCustomerId(){
-        shipmentService.deleteAllByCustomerId();
+    public ResponseEntity deleteById(@PathVariable("id") Integer id){
+        shipmentService.deleteById(id);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
+    @PatchMapping("/me")
+    public ResponseEntity<?> updateShipment(@RequestBody NewShipment newShipment){
+        shipmentService.updateShipment(newShipment);
         return new ResponseEntity(HttpStatus.OK);
     }
 
