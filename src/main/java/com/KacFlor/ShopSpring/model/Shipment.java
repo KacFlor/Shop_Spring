@@ -1,5 +1,6 @@
 package com.KacFlor.ShopSpring.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -47,6 +48,7 @@ public class Shipment extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")
+    @JsonManagedReference
     private Customer customer;
 
     public Shipment(){

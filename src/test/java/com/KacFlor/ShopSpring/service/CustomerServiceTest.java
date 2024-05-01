@@ -5,10 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.KacFlor.ShopSpring.controllersRequests.CustomerUpdateRequest;
+import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
 import com.KacFlor.ShopSpring.dao.CustomerRepository;
+import com.KacFlor.ShopSpring.dao.ShipmentRepository;
 import com.KacFlor.ShopSpring.dao.UserRepository;
 import com.KacFlor.ShopSpring.model.Customer;
 import com.KacFlor.ShopSpring.model.Role;
+import com.KacFlor.ShopSpring.model.Shipment;
 import com.KacFlor.ShopSpring.model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,11 +29,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 public class CustomerServiceTest{
+
+    @Mock
+    private ShipmentRepository shipmentRepository;
 
     @Mock
     private CustomerRepository customerRepository;
@@ -40,6 +48,50 @@ public class CustomerServiceTest{
 
     @InjectMocks
     private CustomerService customerService;
+
+    @DisplayName("JUnit test for CreateShipment method")
+    @Test
+    public void testCreateShipment(){
+
+        NewShipment newShipment = new NewShipment();
+        newShipment.setShipmentDate(LocalDate.of(2024, 5, 1));
+        newShipment.setAddress("Test Address");
+        newShipment.setCity("Test City");
+        newShipment.setState("Test State");
+        newShipment.setCountry("Test Country");
+        newShipment.setZipcode("12345");
+
+        Customer customer1 = new Customer();
+
+        User user1 = new User("Test1", "encodedPassword1", customer1, Role.USER);
+
+        customer1.setUser(user1);
+        customer1.setFirstName("Test1");
+        customer1.setShipments(new ArrayList<>());
+
+        Shipment shipment = new Shipment(newShipment.getShipmentDate(), newShipment.getAddress(), newShipment.getCity(), newShipment.getState(), newShipment.getCountry(), newShipment.getZipcode());
+
+        customer1.getShipments().add(shipment);
+        shipment.setCustomer(customer1);
+
+        Authentication authentication = mock(Authentication.class);
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+
+        String username = "Test1";
+        when(authentication.getName()).thenReturn(username);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+
+        when(userRepository.findByLogin(username)).thenReturn(user1);
+
+        boolean result = customerService.createShipment(newShipment);
+        assertTrue(result);
+
+        verify(userRepository, times(1)).findByLogin(username);
+        verify(customerRepository, times(1)).save(customer1);
+        verify(shipmentRepository, times(1)).save(any(Shipment.class));
+
+    }
 
     @DisplayName("JUnit test for getById method")
     @Test

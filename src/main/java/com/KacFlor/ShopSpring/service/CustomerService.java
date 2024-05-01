@@ -1,9 +1,12 @@
 package com.KacFlor.ShopSpring.service;
 
 import com.KacFlor.ShopSpring.controllersRequests.CustomerUpdateRequest;
+import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
+import com.KacFlor.ShopSpring.dao.ShipmentRepository;
 import com.KacFlor.ShopSpring.dao.UserRepository;
 import com.KacFlor.ShopSpring.model.Customer;
 import com.KacFlor.ShopSpring.dao.CustomerRepository;
+import com.KacFlor.ShopSpring.model.Shipment;
 import com.KacFlor.ShopSpring.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -11,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,10 +25,33 @@ public class CustomerService{
 
     final private UserRepository userRepository;
 
+    final private ShipmentRepository shipmentRepository;
+
     @Autowired
-    public CustomerService(CustomerRepository customerRepository, UserRepository userRepository){
+    public CustomerService(CustomerRepository customerRepository, UserRepository userRepository, ShipmentRepository shipmentRepository){
         this.customerRepository = customerRepository;
         this.userRepository = userRepository;
+        this.shipmentRepository = shipmentRepository;
+    }
+
+    public boolean createShipment(NewShipment newShipment){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String username = authentication.getName();
+
+        User user = userRepository.findByLogin(username);
+
+        Customer customer = user.getCustomer();
+
+        Shipment shipment = new Shipment(newShipment.getShipmentDate(), newShipment.getAddress(), newShipment.getCity(), newShipment.getState(), newShipment.getCountry(), newShipment.getZipcode());
+
+        customer.getShipments().add(shipment);
+        customerRepository.save(customer);
+
+        shipment.setCustomer(customer);
+        shipmentRepository.save(shipment);
+        return true;
     }
 
     public Customer getCustomerById(Integer customerId) {

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.KacFlor.ShopSpring.controllersRequests.CustomerUpdateRequest;
+import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
 import com.KacFlor.ShopSpring.model.Customer;
 import com.KacFlor.ShopSpring.model.Role;
 import com.KacFlor.ShopSpring.service.CustomerService;
@@ -52,6 +53,13 @@ public class CustomerController{
     public ResponseEntity<Optional<Customer>> getCustomer(){
         Optional<Customer> current = Optional.ofNullable(customerService.getCurrent());
         return ResponseEntity.ok(current);
+    }
+
+    @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
+    @PostMapping("/me/shipment")
+    public ResponseEntity<?> createNewShipment(@RequestBody NewShipment newShipment){
+       customerService.createShipment(newShipment);
+        return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")

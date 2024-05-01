@@ -41,6 +41,7 @@ public class Customer extends BaseEntity{
     private List<CardData> cardDatas;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+    @JsonBackReference
     private List<Shipment> shipments;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)

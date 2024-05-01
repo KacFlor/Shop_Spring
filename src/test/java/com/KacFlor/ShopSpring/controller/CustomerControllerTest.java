@@ -7,10 +7,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.KacFlor.ShopSpring.controllersRequests.CustomerUpdateRequest;
+import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
 import com.KacFlor.ShopSpring.model.Customer;
 import com.KacFlor.ShopSpring.service.CustomerService;
 import com.KacFlor.ShopSpring.service.JwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -22,6 +24,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @SpringBootTest
@@ -37,6 +40,31 @@ public class CustomerControllerTest{
 
     @MockBean
     private JwtService jwtService;
+
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
+    void testCreateShipment() throws Exception{
+
+        NewShipment newShipment = new NewShipment();
+        newShipment.setShipmentDate(LocalDate.of(2024, 5, 1));
+        newShipment.setAddress("Test Address");
+        newShipment.setCity("Test City");
+        newShipment.setState("Test State");
+        newShipment.setCountry("Test Country");
+        newShipment.setZipcode("12345");
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+
+        String newShipmentJson = objectMapper.writeValueAsString(newShipment);
+
+        when(customerService.createShipment(newShipment)).thenReturn(true);
+
+        mockMvc.perform(post("/customer/me/shipment")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(newShipmentJson))
+                .andExpect(status().isAccepted());
+    }
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
