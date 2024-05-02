@@ -65,7 +65,7 @@ public class ShipmentController{
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateShipment(@RequestBody NewShipment newShipment, @PathVariable("id") Long id){
-        shipmentService.updateShipment(newShipment);
+        shipmentService.updateShipment(newShipment,id);
         return new ResponseEntity(HttpStatus.OK);
     }
 
