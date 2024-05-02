@@ -43,7 +43,7 @@ public class ShipmentController{
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @GetMapping("/{id}")
-    public ResponseEntity<Shipment> getShipment(@PathVariable("id") Integer id){
+    public ResponseEntity<Shipment> getShipment(@PathVariable("id") Long id){
         Shipment shipment = shipmentService.getById(id);
         return ResponseEntity.ok(shipment);
     }
@@ -57,14 +57,14 @@ public class ShipmentController{
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteById(@PathVariable("id") Integer id){
+    public ResponseEntity deleteById(@PathVariable("id") Long id){
         shipmentService.deleteById(id);
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
-    @PatchMapping("/me")
-    public ResponseEntity<?> updateShipment(@RequestBody NewShipment newShipment){
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> updateShipment(@RequestBody NewShipment newShipment, @PathVariable("id") Long id){
         shipmentService.updateShipment(newShipment);
         return new ResponseEntity(HttpStatus.OK);
     }

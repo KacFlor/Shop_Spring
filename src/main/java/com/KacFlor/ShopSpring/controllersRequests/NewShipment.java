@@ -1,8 +1,5 @@
 package com.KacFlor.ShopSpring.controllersRequests;
 
-
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
