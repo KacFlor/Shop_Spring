@@ -1,8 +1,8 @@
 package com.KacFlor.ShopSpring.controller;
 
 import java.util.List;
+import java.util.Optional;
 
-import com.KacFlor.ShopSpring.controllersRequests.CustomerUpdateRequest;
 import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
 import com.KacFlor.ShopSpring.model.Customer;
 import com.KacFlor.ShopSpring.model.Role;
@@ -30,7 +30,7 @@ public class ShipmentController{
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @GetMapping("/all")
     public ResponseEntity<List<Shipment>> getAllShipments(){
-        List<Shipment> shipments = shipmentService.getAll();
+        List<Shipment> shipments = shipmentService.getAllShipments();
         return ResponseEntity.ok(shipments);
     }
 
@@ -43,8 +43,8 @@ public class ShipmentController{
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @GetMapping("/{id}")
-    public ResponseEntity<Shipment> getShipment(@PathVariable("id") Long id){
-        Shipment shipment = shipmentService.getById(id);
+    public ResponseEntity<Optional<Shipment>> getShipment(@PathVariable("id") Integer id){
+        Optional<Shipment> shipment = Optional.ofNullable(shipmentService.getById(id));
         return ResponseEntity.ok(shipment);
     }
 
@@ -57,14 +57,14 @@ public class ShipmentController{
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteById(@PathVariable("id") Long id){
+    public ResponseEntity deleteById(@PathVariable("id") Integer id){
         shipmentService.deleteById(id);
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateShipment(@RequestBody NewShipment newShipment, @PathVariable("id") Long id){
+    public ResponseEntity<?> updateShipment(@RequestBody NewShipment newShipment, @PathVariable("id") Integer id){
         shipmentService.updateShipment(newShipment,id);
         return new ResponseEntity(HttpStatus.OK);
     }

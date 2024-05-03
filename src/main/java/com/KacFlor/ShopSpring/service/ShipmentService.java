@@ -1,15 +1,10 @@
 package com.KacFlor.ShopSpring.service;
 
-import com.KacFlor.ShopSpring.controllersRequests.CustomerUpdateRequest;
 import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
 import com.KacFlor.ShopSpring.dao.CustomerRepository;
 import com.KacFlor.ShopSpring.dao.ShipmentRepository;
-import com.KacFlor.ShopSpring.model.Customer;
 import com.KacFlor.ShopSpring.model.Shipment;
-import com.KacFlor.ShopSpring.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +25,7 @@ public class ShipmentService{
         this.customerRepository = customerRepository;
     }
 
-    public List<Shipment> getAll(){
+    public List<Shipment> getAllShipments(){
         return shipmentRepository.findAll();
     }
 
@@ -46,11 +41,15 @@ public class ShipmentService{
     }
 
 
-    public Shipment getById(Long Id) {
+    public Shipment getById(Integer Id) {
 
         Optional<Shipment> optionalShipment = shipmentRepository.findById(Id);
 
-        return optionalShipment.get();
+        if(optionalShipment.isPresent()){
+            return optionalShipment.get();
+        } else {
+            throw new UsernameNotFoundException("Shipment not found");
+        }
     }
 
 
@@ -67,7 +66,7 @@ public class ShipmentService{
         return true;
     }
 
-    public boolean deleteById(Long Id){
+    public boolean deleteById(Integer Id){
 
         Optional<Shipment> optionalShipment = shipmentRepository.findById(Id);
 
@@ -78,7 +77,7 @@ public class ShipmentService{
         return true;
     }
 
-    public boolean updateShipment(NewShipment newShipment, Long Id){
+    public boolean updateShipment(NewShipment newShipment, Integer Id){
 
         Optional<Shipment> optionalExistingShipment = shipmentRepository.findById(Id);
 
