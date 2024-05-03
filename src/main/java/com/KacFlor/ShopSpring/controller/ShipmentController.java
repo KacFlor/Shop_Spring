@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
-import com.KacFlor.ShopSpring.model.Customer;
 import com.KacFlor.ShopSpring.model.Role;
 import com.KacFlor.ShopSpring.model.Shipment;
 import com.KacFlor.ShopSpring.service.ShipmentService;
@@ -65,7 +64,7 @@ public class ShipmentController{
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateShipment(@RequestBody NewShipment newShipment, @PathVariable("id") Integer id){
-        shipmentService.updateShipment(newShipment,id);
+        shipmentService.updateShipment(newShipment, id);
         return new ResponseEntity(HttpStatus.OK);
     }
 

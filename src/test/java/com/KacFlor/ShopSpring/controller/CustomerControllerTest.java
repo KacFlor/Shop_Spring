@@ -10,7 +10,6 @@ import com.KacFlor.ShopSpring.controllersRequests.CustomerUpdateRequest;
 import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
 import com.KacFlor.ShopSpring.model.Customer;
 import com.KacFlor.ShopSpring.service.CustomerService;
-import com.KacFlor.ShopSpring.service.JwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
@@ -37,9 +36,6 @@ public class CustomerControllerTest{
 
     @MockBean
     private CustomerService customerService;
-
-    @MockBean
-    private JwtService jwtService;
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
@@ -164,7 +160,7 @@ public class CustomerControllerTest{
 
         when(customerService.deleteCurrentCustomer()).thenReturn(true);
 
-        mockMvc.perform(delete("/customer/me"))
+        mockMvc.perform(delete("{id}"))
                 .andExpect(status().isOk());
 
     }
