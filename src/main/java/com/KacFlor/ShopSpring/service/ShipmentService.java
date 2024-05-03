@@ -1,10 +1,17 @@
 package com.KacFlor.ShopSpring.service;
 
+import com.KacFlor.ShopSpring.controllersRequests.NewPayment;
 import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
 import com.KacFlor.ShopSpring.dao.CustomerRepository;
+import com.KacFlor.ShopSpring.dao.PaymentRepository;
 import com.KacFlor.ShopSpring.dao.ShipmentRepository;
+import com.KacFlor.ShopSpring.model.Customer;
+import com.KacFlor.ShopSpring.model.Payment;
 import com.KacFlor.ShopSpring.model.Shipment;
+import com.KacFlor.ShopSpring.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +24,12 @@ public class ShipmentService{
 
     private final ShipmentRepository shipmentRepository;
 
-    private final CustomerRepository customerRepository;
+    private final PaymentRepository paymentRepository;
 
     @Autowired
-    public ShipmentService(ShipmentRepository shipmentRepository, CustomerRepository customerRepository){
+    public ShipmentService(ShipmentRepository shipmentRepository, PaymentRepository paymentRepository){
         this.shipmentRepository = shipmentRepository;
-        this.customerRepository = customerRepository;
+        this.paymentRepository = paymentRepository;
     }
 
     public List<Shipment> getAllShipments(){
@@ -92,6 +99,24 @@ public class ShipmentService{
         shipment.setZipcode(newShipment.getZipcode());
 
         shipmentRepository.save(shipment);
+
+        return true;
+    }
+
+    public boolean addNewPayment(NewPayment newPayment, Integer Id){
+
+        Optional<Shipment> shipment = shipmentRepository.findById(Id);
+
+        Payment payment = new Payment(newPayment.getPaymentDate(), newPayment.getPaymentMet(), newPayment.getAmount());
+
+        Shipment currentshipment = shipment.get();
+
+        payment.setShipment(currentshipment);
+        paymentRepository.save(payment);
+
+        currentshipment.setPayment(payment);
+        shipmentRepository.save(currentshipment);
+
 
         return true;
     }

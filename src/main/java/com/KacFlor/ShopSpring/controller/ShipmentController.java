@@ -3,6 +3,7 @@ package com.KacFlor.ShopSpring.controller;
 import java.util.List;
 import java.util.Optional;
 
+import com.KacFlor.ShopSpring.controllersRequests.NewPayment;
 import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
 import com.KacFlor.ShopSpring.model.Role;
 import com.KacFlor.ShopSpring.model.Shipment;
@@ -66,6 +67,13 @@ public class ShipmentController{
     public ResponseEntity<?> updateShipment(@RequestBody NewShipment newShipment, @PathVariable("id") Integer id){
         shipmentService.updateShipment(newShipment, id);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
+    @PostMapping("/{id}/payment")
+    public ResponseEntity<?> addNewPayment(@RequestBody NewPayment newPayment, @PathVariable("id") Integer id){
+        shipmentService.addNewPayment(newPayment,id);
+        return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 
 }
