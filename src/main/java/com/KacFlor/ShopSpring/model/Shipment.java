@@ -40,6 +40,7 @@ public class Shipment extends BaseEntity{
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "payment_id")
+    @JsonManagedReference
     private Payment payment;
 
     @OneToOne(fetch = FetchType.EAGER)

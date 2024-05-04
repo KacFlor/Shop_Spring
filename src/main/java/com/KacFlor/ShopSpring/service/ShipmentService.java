@@ -103,20 +103,24 @@ public class ShipmentService{
         return true;
     }
 
-    public boolean addNewPayment(NewPayment newPayment, Integer Id){
+    public boolean addNewPayment(NewPayment newPayment, Integer id) {
 
-        Optional<Shipment> shipment = shipmentRepository.findById(Id);
+        Optional<Shipment> optionalShipment = shipmentRepository.findById(id);
+        if (optionalShipment.isEmpty()) {
+            return false;
+        }
+
+        Shipment shipment = optionalShipment.get();
+        if (shipment.getPayment() != null) {
+            return false;
+        }
 
         Payment payment = new Payment(newPayment.getPaymentDate(), newPayment.getPaymentMet(), newPayment.getAmount());
-
-        Shipment currentshipment = shipment.get();
-
-        payment.setShipment(currentshipment);
+        payment.setShipment(shipment);
         paymentRepository.save(payment);
 
-        currentshipment.setPayment(payment);
-        shipmentRepository.save(currentshipment);
-
+        shipment.setPayment(payment);
+        shipmentRepository.save(shipment);
 
         return true;
     }
