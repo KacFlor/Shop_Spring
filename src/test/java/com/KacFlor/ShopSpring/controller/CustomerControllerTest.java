@@ -160,7 +160,7 @@ public class CustomerControllerTest{
 
         when(customerService.deleteCurrentCustomer()).thenReturn(true);
 
-        mockMvc.perform(delete("{id}"))
+        mockMvc.perform(delete("customer/{id}"))
                 .andExpect(status().isOk());
 
     }
