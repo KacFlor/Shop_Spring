@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import com.KacFlor.ShopSpring.controllersRequests.NewPayment;
 import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
 import com.KacFlor.ShopSpring.model.Customer;
 import com.KacFlor.ShopSpring.model.Shipment;
@@ -21,6 +22,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -149,5 +151,23 @@ public class ShipmentControllerTest{
                 .andExpect(status().isOk());
     }
 
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
+    void testAddNewPayment() throws Exception{
+
+        Integer shipmentId = 1;
+        NewPayment newPayment = new NewPayment(LocalDate.parse("2024-05-04"), "Credit Card", 100.0);
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectNode requestJsonNode = objectMapper.createObjectNode();
+        String requestJson = objectMapper.writeValueAsString(requestJsonNode);
+
+        when(shipmentService.addNewPayment(newPayment, shipmentId)).thenReturn(true);
+
+        mockMvc.perform(post("/shipment/{id}/payment", shipmentId)
+                        .content(requestJson)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isAccepted());
+    }
 
 }
+

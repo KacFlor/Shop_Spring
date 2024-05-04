@@ -1,8 +1,11 @@
 package com.KacFlor.ShopSpring.service;
 
+import com.KacFlor.ShopSpring.controllersRequests.NewPayment;
 import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
+import com.KacFlor.ShopSpring.dao.PaymentRepository;
 import com.KacFlor.ShopSpring.dao.ShipmentRepository;
 import com.KacFlor.ShopSpring.model.Customer;
+import com.KacFlor.ShopSpring.model.Payment;
 import com.KacFlor.ShopSpring.model.Shipment;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,6 +29,9 @@ public class ShipmentServiceTest{
 
     @Mock
     private ShipmentRepository shipmentRepository;
+
+    @Mock
+    private PaymentRepository paymentRepository;
 
     @InjectMocks
     private ShipmentService shipmentService;
@@ -157,6 +163,25 @@ public class ShipmentServiceTest{
         verify(shipmentRepository, times(1)).findById(shipmentId);
         verify(shipmentRepository, times(1)).save(existingShipment);
 
+    }
+
+    @DisplayName("JUnit test for testAddNewPayment method")
+    @Test
+    public void testAddNewPayment(){
+
+        NewPayment newPayment = new NewPayment(LocalDate.parse("2024-05-04"), "Credit Card", 100.0);
+        Integer shipmentId = 1;
+        Shipment shipment = new Shipment();
+        when(shipmentRepository.findById(shipmentId)).thenReturn(Optional.of(shipment));
+
+        boolean result = shipmentService.addNewPayment(newPayment, shipmentId);
+
+        assertTrue(result);
+        verify(paymentRepository, times(1)).save(any());
+        verify(shipmentRepository, times(1)).save(any());
+        assertEquals(newPayment.getPaymentDate(), shipment.getPayment().getPaymentDate());
+        assertEquals(newPayment.getPaymentMet(), shipment.getPayment().getPaymentMet());
+        assertEquals(newPayment.getAmount(), shipment.getPayment().getAmount());
     }
 
 }
