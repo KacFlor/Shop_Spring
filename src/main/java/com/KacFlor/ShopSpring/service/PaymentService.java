@@ -46,15 +46,13 @@ public class PaymentService{
     }
 
     public boolean updatePayment(NewPayment newPayment, Integer Id){
-        Optional<Payment> payment = paymentRepository.findById(Id);
+        Payment payment = paymentRepository.findByShipmentId(Id);
 
-        Payment payment1 = payment.get();
+        payment.setPaymentDate(newPayment.getPaymentDate());
+        payment.setPaymentMet(newPayment.getPaymentMet());
+        payment.setAmount(newPayment.getAmount());
 
-        payment1.setPaymentDate(newPayment.getPaymentDate());
-        payment1.setPaymentMet(newPayment.getPaymentMet());
-        payment1.setAmount(newPayment.getAmount());
-
-        paymentRepository.save(payment1);
+        paymentRepository.save(payment);
 
         return true;
     }

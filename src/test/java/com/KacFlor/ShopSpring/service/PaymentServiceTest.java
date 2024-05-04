@@ -73,26 +73,29 @@ public class PaymentServiceTest{
     @Test
     public void testUpdatePayment(){
 
-        Integer paymentId = 1;
+        Integer shipmentId = 1;
         NewPayment newPayment = new NewPayment(LocalDate.of(2024, 5, 10), "Credit Card", 100.0);
 
         Payment existingPayment = new Payment(LocalDate.of(2021, 1, 3), "Credit Card", 140.0);
-        existingPayment.setId(paymentId);
 
-        when(paymentRepository.findById(paymentId)).thenReturn(Optional.of(existingPayment));
+        Shipment shipment = new Shipment();
+        shipment.setId(1);
+        existingPayment.setShipment(shipment);
 
-        boolean result = paymentService.updatePayment(newPayment, paymentId);
+        when(paymentRepository.findByShipmentId(shipmentId)).thenReturn(existingPayment);
+
+        boolean result = paymentService.updatePayment(newPayment, shipmentId);
         assertTrue(result);
 
         assertEquals(newPayment.getPaymentDate(), existingPayment.getPaymentDate());
         assertEquals(newPayment.getPaymentMet(), existingPayment.getPaymentMet());
         assertEquals(newPayment.getAmount(), existingPayment.getAmount());
 
-        verify(paymentRepository, times(1)).findById(paymentId);
+        verify(paymentRepository, times(1)).findByShipmentId(shipmentId);
         verify(paymentRepository, times(1)).save(existingPayment);
 
-
     }
+
 
     @DisplayName("JUnit test for deleteByShipmentId method")
     @Test
