@@ -1,5 +1,6 @@
 package com.KacFlor.ShopSpring.service;
 
+import com.KacFlor.ShopSpring.controllersRequests.NewPayment;
 import com.KacFlor.ShopSpring.dao.PaymentRepository;
 import com.KacFlor.ShopSpring.model.Payment;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,12 @@ public class PaymentService{
         this.paymentRepository = paymentRepository;
     }
 
-    public List<Payment> getPayment(){
-        return paymentRepository.findAll();
-    }
+
+    public Payment getPaymentById(Integer id){return null;}
+
+    public Payment getByShipmentId(Integer id){return null;}
+
+    public boolean updatePayment(NewPayment newPayment, Integer Id){return true;}
+
+    public boolean deleteByShipmentId(Integer Id){return true;}
 }
