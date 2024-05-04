@@ -107,12 +107,12 @@ public class ShipmentService{
 
         Optional<Shipment> optionalShipment = shipmentRepository.findById(id);
         if (optionalShipment.isEmpty()) {
-            return false;
+            throw new UsernameNotFoundException("Shipment not found");
         }
 
         Shipment shipment = optionalShipment.get();
         if (shipment.getPayment() != null) {
-            return false;
+            throw new UsernameNotFoundException("Payment exist already");
         }
 
         Payment payment = new Payment(newPayment.getPaymentDate(), newPayment.getPaymentMet(), newPayment.getAmount());

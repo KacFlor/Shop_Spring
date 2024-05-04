@@ -32,15 +32,13 @@ public class PaymentService{
 
         if(optionalPayment.isPresent()){
             return optionalPayment.get();
-        } else {
+        }else{
             throw new UsernameNotFoundException("Payment not found");
         }
     }
 
-    public Payment getByShipmentId(Integer id) {
-        List<Payment> allPayments = paymentRepository.findAll();
-
-        Optional<Payment> optionalPayment = allPayments.stream()
+    public Payment getByShipmentId(Integer id){
+        Optional<Payment> optionalPayment = paymentRepository.findAll().stream()
                 .filter(payment -> payment.getShipment() != null && payment.getShipment().getId().equals(id))
                 .findFirst();
 
@@ -52,33 +50,35 @@ public class PaymentService{
 
         Payment payment1 = payment.get();
 
-
         payment1.setPaymentDate(newPayment.getPaymentDate());
         payment1.setPaymentMet(newPayment.getPaymentMet());
         payment1.setAmount(newPayment.getAmount());
 
         paymentRepository.save(payment1);
 
-        return true;}
-
-    public boolean deleteByShipmentId(Integer id) {
-        Optional<Shipment> shipment = shipmentRepository.findById(id);
-        Shipment shipment1 = shipment.get();
-        List<Payment> paymentsToDelete = paymentRepository.findAll()
-                .stream()
-                .filter(payment -> payment.getShipment() != null && payment.getShipment().getId().equals(id))
-                .collect(Collectors.toList());
-
-        for (Payment payment : paymentsToDelete) {
-            payment.setShipment(null); // Usuwamy powiązanie z przesyłką
-        }
-
-        shipment1.setPayment(null);
-
-        // Zapisujemy zmiany w bazie danych
-        paymentRepository.saveAll(paymentsToDelete);
-        shipmentRepository.save(shipment1);
-
         return true;
+    }
+
+    public boolean deleteByShipmentId(Integer shipmentId) {
+        Optional<Shipment> optionalShipment = shipmentRepository.findById(shipmentId);
+
+        if (optionalShipment.isPresent()) {
+            Shipment shipment = optionalShipment.get();
+            Payment payment = shipment.getPayment();
+
+            if (payment != null) {
+                payment.setShipment(null);
+                shipment.setPayment(null);
+
+                paymentRepository.save(payment);
+                shipmentRepository.save(shipment);
+
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 }

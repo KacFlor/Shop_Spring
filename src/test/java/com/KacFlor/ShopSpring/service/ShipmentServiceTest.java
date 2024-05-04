@@ -93,6 +93,7 @@ public class ShipmentServiceTest{
     @DisplayName("JUnit test for testGetById method")
     @Test
     public void testGetById(){
+
         Shipment shipment = new Shipment(LocalDate.of(2024, 5, 3), "123 Main Street", "Springfield", "Ohio", "USA", "12345");
 
         Integer shipmentId = 1;
@@ -109,7 +110,6 @@ public class ShipmentServiceTest{
     @DisplayName("JUnit test for testDeleteAllByCustomerId method")
     @Test
     public void testDeleteAllByCustomerId(){
-
 
         Integer customerId = 2;
 
