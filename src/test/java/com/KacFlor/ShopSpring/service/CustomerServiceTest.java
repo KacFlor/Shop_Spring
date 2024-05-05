@@ -99,6 +99,7 @@ public class CustomerServiceTest{
     @Test
     public void testCreateOrder(){
 
+        Integer shipmentId = 1;
         NewOrder newOrder = new NewOrder();
         newOrder.setOrderDate(LocalDate.of(2024, 5, 1));
         newOrder.setTotalPrice(99.99);
@@ -129,7 +130,7 @@ public class CustomerServiceTest{
 
         when(userRepository.findByLogin(username)).thenReturn(user1);
 
-        boolean result = customerService.createOrder(newOrder);
+        boolean result = customerService.createOrder(newOrder,shipmentId);
         assertTrue(result);
 
         verify(userRepository, times(1)).findByLogin(username);

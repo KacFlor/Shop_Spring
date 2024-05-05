@@ -67,6 +67,7 @@ public class CustomerControllerTest{
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
     void testCreateOrder() throws Exception{
 
+        Integer shipmentId = 1;
         NewOrder newOrder = new NewOrder();
         newOrder.setOrderDate(LocalDate.of(2024, 5, 1));
         newOrder.setTotalPrice(99.99);
@@ -76,7 +77,7 @@ public class CustomerControllerTest{
 
         String newOrderJson = objectMapper.writeValueAsString(newOrder);
 
-        when(customerService.createOrder(newOrder)).thenReturn(true);
+        when(customerService.createOrder(newOrder, shipmentId)).thenReturn(true);
 
         mockMvc.perform(post("/customers/me/order")
                         .contentType(MediaType.APPLICATION_JSON)
