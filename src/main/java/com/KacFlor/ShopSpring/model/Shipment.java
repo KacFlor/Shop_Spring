@@ -45,6 +45,7 @@ public class Shipment extends BaseEntity{
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "order_id")
+    @JsonManagedReference
     private Order order;
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -1,11 +1,14 @@
 package com.KacFlor.ShopSpring.service;
 
 import com.KacFlor.ShopSpring.controllersRequests.CustomerUpdateRequest;
+import com.KacFlor.ShopSpring.controllersRequests.NewOrder;
 import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
+import com.KacFlor.ShopSpring.dao.OrderRepository;
 import com.KacFlor.ShopSpring.dao.ShipmentRepository;
 import com.KacFlor.ShopSpring.dao.UserRepository;
 import com.KacFlor.ShopSpring.model.Customer;
 import com.KacFlor.ShopSpring.dao.CustomerRepository;
+import com.KacFlor.ShopSpring.model.Order;
 import com.KacFlor.ShopSpring.model.Shipment;
 import com.KacFlor.ShopSpring.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +30,14 @@ public class CustomerService{
 
     final private ShipmentRepository shipmentRepository;
 
+    final private OrderRepository orderRepository;
+
     @Autowired
-    public CustomerService(CustomerRepository customerRepository, UserRepository userRepository, ShipmentRepository shipmentRepository){
+    public CustomerService(CustomerRepository customerRepository, UserRepository userRepository, ShipmentRepository shipmentRepository, OrderRepository orderRepository){
         this.customerRepository = customerRepository;
         this.userRepository = userRepository;
         this.shipmentRepository = shipmentRepository;
+        this.orderRepository = orderRepository;
     }
 
     public boolean createShipment(NewShipment newShipment){
@@ -52,6 +58,32 @@ public class CustomerService{
         shipment.setCustomer(customer);
         shipmentRepository.save(shipment);
         return true;
+    }
+
+    public boolean createOrder(NewOrder newOrder){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String username = authentication.getName();
+
+        User user = userRepository.findByLogin(username);
+
+        Customer customer = user.getCustomer();
+
+        if (customer.getShipments().isEmpty()) {
+            throw new RuntimeException("Error Shipment not detected!!!!");
+        }
+
+        else{
+            Order order = new Order(newOrder.getOrderDate(), newOrder.getTotalPrice());
+
+            customer.getOrders().add(order);
+            customerRepository.save(customer);
+
+            order.setCustomer(customer);
+            orderRepository.save(order);
+            return true;
+        }
     }
 
     public Customer getCustomerById(Integer customerId) {

@@ -35,6 +35,7 @@ public class Customer extends BaseEntity{
     private Number phoneNumber;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+    @JsonBackReference
     private List<Order> orders;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)

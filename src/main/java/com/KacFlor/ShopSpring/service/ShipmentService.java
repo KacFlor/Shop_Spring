@@ -79,7 +79,6 @@ public class ShipmentService{
 
         Shipment shipment = optionalShipment.get();
 
-
         shipmentRepository.delete(shipment);
         return true;
     }
@@ -89,7 +88,6 @@ public class ShipmentService{
         Optional<Shipment> optionalExistingShipment = shipmentRepository.findById(Id);
 
         Shipment shipment = optionalExistingShipment.get();
-
 
         shipment.setShipmentDate(newShipment.getShipmentDate());
         shipment.setAddress(newShipment.getAddress());
