@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.KacFlor.ShopSpring.controllersRequests.NewOrder;
-import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
-import com.KacFlor.ShopSpring.model.Customer;
 import com.KacFlor.ShopSpring.model.Order;
 import com.KacFlor.ShopSpring.model.Role;
 import com.KacFlor.ShopSpring.service.OrderService;

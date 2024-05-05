@@ -1,10 +1,8 @@
 package com.KacFlor.ShopSpring.service;
 
 import com.KacFlor.ShopSpring.controllersRequests.NewOrder;
-import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
 import com.KacFlor.ShopSpring.model.Order;
 import com.KacFlor.ShopSpring.dao.OrderRepository;
-import com.KacFlor.ShopSpring.model.Shipment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -32,7 +30,7 @@ public class OrderService{
 
         if(optionalOrder.isPresent()){
             return optionalOrder.get();
-        } else {
+        }else{
             throw new UsernameNotFoundException("Order not found");
         }
 
@@ -63,7 +61,6 @@ public class OrderService{
         return true;
 
     }
-
 
 
 }

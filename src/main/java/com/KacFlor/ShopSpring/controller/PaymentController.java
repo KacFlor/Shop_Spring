@@ -1,14 +1,10 @@
 package com.KacFlor.ShopSpring.controller;
 
-import java.util.List;
 import java.util.Optional;
 
 import com.KacFlor.ShopSpring.controllersRequests.NewPayment;
-import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
-import com.KacFlor.ShopSpring.model.Customer;
 import com.KacFlor.ShopSpring.model.Payment;
 import com.KacFlor.ShopSpring.model.Role;
-import com.KacFlor.ShopSpring.model.Shipment;
 import com.KacFlor.ShopSpring.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,6 +32,7 @@ public class PaymentController{
         return ResponseEntity.ok(payment);
     }
 
+    //This endpoint give payment body by shipment id assigned to this payment
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @GetMapping("/shipment/{id}")
     public ResponseEntity<Payment> getShipmentPayment(@PathVariable("id") Integer id){
@@ -43,6 +40,7 @@ public class PaymentController{
         return ResponseEntity.ok(payment);
     }
 
+    //This endpoint update payment body which has assigned shipment id in the same way as above
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PatchMapping("/shipment/{id}")
     public ResponseEntity<?> updatePaymentByShipmentId(@RequestBody NewPayment newPayment, @PathVariable("id") Integer id){
@@ -50,6 +48,7 @@ public class PaymentController{
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    //This endpoint delete payment which has assigned shipment id in the same way as above
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @DeleteMapping("/shipment/{id}")
     public ResponseEntity deleteByShipmentId(@PathVariable("id") Integer id){
