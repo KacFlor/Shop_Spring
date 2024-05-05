@@ -45,14 +45,14 @@ public class PaymentController{
     @PatchMapping("/shipment/{id}")
     public ResponseEntity<?> updatePaymentByShipmentId(@RequestBody NewPayment newPayment, @PathVariable("id") Integer id){
         paymentService.updatePayment(newPayment, id);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     //This endpoint delete payment which has assigned shipment id in the same way as above
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @DeleteMapping("/shipment/{id}")
-    public ResponseEntity deleteByShipmentId(@PathVariable("id") Integer id){
+    public ResponseEntity<?> deleteByShipmentId(@PathVariable("id") Integer id){
         paymentService.deleteByShipmentId(id);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

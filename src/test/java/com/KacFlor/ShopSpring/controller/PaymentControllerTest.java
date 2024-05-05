@@ -6,12 +6,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.KacFlor.ShopSpring.controllersRequests.NewPayment;
-import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
-import com.KacFlor.ShopSpring.model.Customer;
 import com.KacFlor.ShopSpring.model.Payment;
 import com.KacFlor.ShopSpring.model.Shipment;
 import com.KacFlor.ShopSpring.service.PaymentService;
-import com.KacFlor.ShopSpring.service.ShipmentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.jupiter.api.Test;
@@ -24,10 +21,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -74,7 +69,6 @@ public class PaymentControllerTest{
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json("{'paymentMet':'Credit Card'}"));
-
 
     }
 

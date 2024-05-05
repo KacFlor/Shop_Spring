@@ -1,17 +1,13 @@
 package com.KacFlor.ShopSpring.service;
 
+import com.KacFlor.ShopSpring.config.ExceptionsConfig;
 import com.KacFlor.ShopSpring.controllersRequests.NewPayment;
 import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
-import com.KacFlor.ShopSpring.dao.CustomerRepository;
 import com.KacFlor.ShopSpring.dao.PaymentRepository;
 import com.KacFlor.ShopSpring.dao.ShipmentRepository;
-import com.KacFlor.ShopSpring.model.Customer;
 import com.KacFlor.ShopSpring.model.Payment;
 import com.KacFlor.ShopSpring.model.Shipment;
-import com.KacFlor.ShopSpring.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -38,13 +34,9 @@ public class ShipmentService{
 
     public List<Shipment> getAllByCustomerId(Integer Id) {
 
-        List<Shipment> allShipments = shipmentRepository.findAll();
+        List<Shipment> allShipments = shipmentRepository.findAllByCustomerId(Id);
 
-        List<Shipment> shipmentsForCustomer = allShipments.stream()
-                .filter(shipment -> shipment.getCustomer() != null && shipment.getCustomer().getId().equals(Id))
-                .collect(Collectors.toList());
-
-        return shipmentsForCustomer;
+        return allShipments;
     }
 
 
@@ -54,21 +46,19 @@ public class ShipmentService{
 
         if(optionalShipment.isPresent()){
             return optionalShipment.get();
-        } else {
-            throw new UsernameNotFoundException("Shipment not found");
+        }
+        else
+        {
+            throw new ExceptionsConfig.ResourceNotFoundException("Payment not found");
         }
     }
 
 
     public boolean deleteAllByCustomerId(Integer Id){
 
-        List<Shipment> allShipments = shipmentRepository.findAll();
+        List<Shipment> allShipments = shipmentRepository.findAllByCustomerId(Id);
 
-        List<Shipment> shipmentsForCustomer = allShipments.stream()
-                .filter(shipment -> shipment.getCustomer() != null && shipment.getCustomer().getId().equals(Id))
-                .collect(Collectors.toList());
-
-        shipmentRepository.deleteAll(shipmentsForCustomer);
+        shipmentRepository.deleteAll(allShipments);
 
         return true;
     }

@@ -24,7 +24,6 @@ public class PaymentService{
         this.shipmentRepository = shipmentRepository;
     }
 
-
     public Payment getPaymentById(Integer Id){
         Optional<Payment> optionalPayment = paymentRepository.findById(Id);
 
