@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.KacFlor.ShopSpring.controllersRequests.CustomerUpdateRequest;
+import com.KacFlor.ShopSpring.controllersRequests.NewOrder;
 import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
 import com.KacFlor.ShopSpring.model.Customer;
 import com.KacFlor.ShopSpring.service.CustomerService;
@@ -56,9 +57,30 @@ public class CustomerControllerTest{
 
         when(customerService.createShipment(newShipment)).thenReturn(true);
 
-        mockMvc.perform(post("/customer/me/shipment")
+        mockMvc.perform(post("/customers/me/shipment")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(newShipmentJson))
+                .andExpect(status().isAccepted());
+    }
+
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
+    void testCreateOrder() throws Exception{
+
+        NewOrder newOrder = new NewOrder();
+        newOrder.setOrderDate(LocalDate.of(2024, 5, 1));
+        newOrder.setTotalPrice(99.99);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+
+        String newOrderJson = objectMapper.writeValueAsString(newOrder);
+
+        when(customerService.createOrder(newOrder)).thenReturn(true);
+
+        mockMvc.perform(post("/customers/me/order")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(newOrderJson))
                 .andExpect(status().isAccepted());
     }
 
@@ -72,7 +94,7 @@ public class CustomerControllerTest{
 
         given(customerService.getCustomerById(userId)).willReturn(customer1);
 
-        mockMvc.perform(get("/customer/{id}", userId))
+        mockMvc.perform(get("/customers/{id}", userId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json("{'firstName':'Test1'}"));
@@ -88,7 +110,7 @@ public class CustomerControllerTest{
         given(customerService.deleteCustomerById(userId)).willReturn(true);
 
 
-        mockMvc.perform(delete("/customer/{id}", userId))
+        mockMvc.perform(delete("/customers/{id}", userId))
                 .andExpect(status().isAccepted());
 
     }
@@ -106,11 +128,10 @@ public class CustomerControllerTest{
 
         when(customerService.getAll()).thenReturn(List.of(customer1, customer2, customer));
 
-        mockMvc.perform(get("/customer/all"))
+        mockMvc.perform(get("/customers"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json("[{'firstName':'Test1'},{'firstName':'Test2'},{'firstName':'HAdmin'}]"));
-
 
     }
 
@@ -122,7 +143,7 @@ public class CustomerControllerTest{
 
         when(customerService.getCurrent()).thenReturn(customer1);
 
-        mockMvc.perform(get("/customer/me"))
+        mockMvc.perform(get("/customers/me"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json("{'firstName':'Test1'}"));
@@ -136,9 +157,9 @@ public class CustomerControllerTest{
 
         CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest();
         customerUpdateRequest.setFirstName("Kacper");
-        customerUpdateRequest.setLastName("Florczyk");
+        customerUpdateRequest.setLastName("Florry");
         customerUpdateRequest.setEmail("cos@gmail.com");
-        customerUpdateRequest.setAddress("Staffa");
+        customerUpdateRequest.setAddress("Staff");
         customerUpdateRequest.setPhoneNumber(123123123L);
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -146,7 +167,7 @@ public class CustomerControllerTest{
 
         when(customerService.updateCustomer(customerUpdateRequest)).thenReturn(true);
 
-        mockMvc.perform(patch("/customer/me")
+        mockMvc.perform(patch("/customers/me")
                         .content(requestJson)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -160,7 +181,7 @@ public class CustomerControllerTest{
 
         when(customerService.deleteCurrentCustomer()).thenReturn(true);
 
-        mockMvc.perform(delete("/customer/me"))
+        mockMvc.perform(delete("/customers/me"))
                 .andExpect(status().isOk());
 
     }

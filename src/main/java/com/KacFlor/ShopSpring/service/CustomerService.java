@@ -1,5 +1,6 @@
 package com.KacFlor.ShopSpring.service;
 
+import com.KacFlor.ShopSpring.config.ExceptionsConfig;
 import com.KacFlor.ShopSpring.controllersRequests.CustomerUpdateRequest;
 import com.KacFlor.ShopSpring.controllersRequests.NewOrder;
 import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
@@ -14,10 +15,8 @@ import com.KacFlor.ShopSpring.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,10 +69,9 @@ public class CustomerService{
 
         Customer customer = user.getCustomer();
 
-        if (customer.getShipments().isEmpty()) {
-            throw new RuntimeException("Error Shipment not detected!!!!");
+        if(customer.getShipments().isEmpty()){
+            throw new ExceptionsConfig.ResourceNotFoundException("Shipment not found");
         }
-
         else{
             Order order = new Order(newOrder.getOrderDate(), newOrder.getTotalPrice());
 
@@ -86,27 +84,27 @@ public class CustomerService{
         }
     }
 
-    public Customer getCustomerById(Integer customerId) {
+    public Customer getCustomerById(Integer customerId){
         Optional<Customer> customerOptional = customerRepository.findById(customerId);
         if(customerOptional.isPresent()){
             return customerOptional.get();
-        } else {
-            throw new UsernameNotFoundException("Customer not found");
+        }
+        else{
+            throw new ExceptionsConfig.ResourceNotFoundException("Customer not found");
         }
     }
 
     public boolean deleteCustomerById(Integer customerId){
         Optional<Customer> customerOptional = customerRepository.findById(customerId);
         Optional<User> userOptional = userRepository.findById(customerId);
-        if(customerOptional.isPresent()){
-            Customer customer = customerOptional.get();
-            User user = userOptional.get();
-            customerRepository.delete(customer);
-            userRepository.delete(user);
-            return true;
-        }else{
-            throw new UsernameNotFoundException("Customer not found");
-        }
+
+        Customer customer = customerOptional.get();
+        User user = userOptional.get();
+        customerRepository.delete(customer);
+        userRepository.delete(user);
+        return true;
+
+
     }
 
     public List<Customer> getAll(){
@@ -156,13 +154,9 @@ public class CustomerService{
         String name = user.getCustomer().getFirstName();
 
         Customer customer = customerRepository.findByFirstName(name);
-        if(user != null && username.equals(user.getLogin()) && customer != null && name.equals(customer.getFirstName())){
-            customerRepository.delete(customer);
-            userRepository.delete(user);
-        }else{
-            throw new UsernameNotFoundException("User not found");
-        }
 
+        customerRepository.delete(customer);
+        userRepository.delete(user);
 
         return true;
     }

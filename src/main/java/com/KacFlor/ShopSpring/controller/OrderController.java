@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(
-        path = {"order"}
+        path = {"orders"}
 )
 public class OrderController{
 
@@ -27,7 +27,7 @@ public class OrderController{
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
-    @GetMapping("/all")
+    @GetMapping
     public List<Order> getAllOrders(){
         return this.orderService.getAllOrders();
     }
@@ -43,13 +43,13 @@ public class OrderController{
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateShipment(@RequestBody NewOrder newOrder, @PathVariable("id") Integer id){
         orderService.updateOrder(newOrder, id);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteById(@PathVariable("id") Integer id){
+    public ResponseEntity<?> deleteById(@PathVariable("id") Integer id){
         orderService.deleteById(id);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
