@@ -1,10 +1,10 @@
 package com.KacFlor.ShopSpring.service;
 
+import com.KacFlor.ShopSpring.config.ExceptionsConfig;
 import com.KacFlor.ShopSpring.controllersRequests.NewOrder;
 import com.KacFlor.ShopSpring.model.Order;
 import com.KacFlor.ShopSpring.dao.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,7 +31,7 @@ public class OrderService{
         if(optionalOrder.isPresent()){
             return optionalOrder.get();
         }else{
-            throw new UsernameNotFoundException("Order not found");
+            throw new ExceptionsConfig.ResourceNotFoundException("Order not found");
         }
 
     }
@@ -40,26 +40,36 @@ public class OrderService{
 
         Optional<Order> optionalOrder = orderRepository.findById(Id);
 
-        Order order = optionalOrder.get();
+        if(optionalOrder.isPresent()){
+            Order order = optionalOrder.get();
 
-        order.setOrderDate(newOrder.getOrderDate());
-        order.setTotalPrice(newOrder.getTotalPrice());
+            order.setOrderDate(newOrder.getOrderDate());
+            order.setTotalPrice(newOrder.getTotalPrice());
 
-        orderRepository.save(order);
+            orderRepository.save(order);
 
-        return true;
+            return true;
+        }
+        else{
+            throw new ExceptionsConfig.ResourceNotFoundException("Shipment not found");
+        }
 
     }
 
     public boolean deleteById(Integer Id){
 
         Optional<Order> optionalOrder = orderRepository.findById(Id);
+        if(optionalOrder.isPresent()){
 
-        Order order = optionalOrder.get();
+            Order order = optionalOrder.get();
 
-        orderRepository.delete(order);
-        return true;
+            orderRepository.delete(order);
+            return true;
 
+        }
+        else{
+            throw new ExceptionsConfig.ResourceNotFoundException("Shipment not found");
+        }
     }
 
 

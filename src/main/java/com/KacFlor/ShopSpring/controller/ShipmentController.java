@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.KacFlor.ShopSpring.controllersRequests.NewPayment;
 import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
+import com.KacFlor.ShopSpring.model.Order;
 import com.KacFlor.ShopSpring.model.Role;
 import com.KacFlor.ShopSpring.model.Shipment;
 import com.KacFlor.ShopSpring.service.ShipmentService;
@@ -32,6 +33,13 @@ public class ShipmentController{
     public ResponseEntity<List<Shipment>> getAllShipments(){
         List<Shipment> shipments = shipmentService.getAllShipments();
         return ResponseEntity.ok(shipments);
+    }
+
+    @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
+    @GetMapping("/{id}/orders")
+    public ResponseEntity<List<Order>> getAllShipmentOrders(@PathVariable("id") Integer id){
+        List<Order> orders = shipmentService.getAllShipmentOrders(id);
+        return ResponseEntity.ok(orders);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")

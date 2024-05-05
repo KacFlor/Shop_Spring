@@ -64,9 +64,9 @@ public class CustomerController{
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
-    @PostMapping("/me/order")
-    public ResponseEntity<?> createNewOrder(@RequestBody NewOrder newOrder){
-        customerService.createOrder(newOrder);
+    @PostMapping("/me/shipment/{id}/order")
+    public ResponseEntity<?> createNewOrder(@RequestBody NewOrder newOrder,@PathVariable("id") Integer id){
+        customerService.createOrder(newOrder,id);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 

@@ -287,7 +287,7 @@ public class CustomerServiceTest{
         assertThat(customer1.getAddress()).isNotNull();
         assertThat(customer1.getPhoneNumber()).isNotNull();
         assertThat(customer1.getFirstName()).isEqualTo("Kacper");
-        assertThat(customer1.getLastName()).isEqualTo("Floozy");
+        assertThat(customer1.getLastName()).isEqualTo("Florry");
         assertThat(customer1.getEmail()).isEqualTo("cos@gmail.com");
         assertThat(customer1.getAddress()).isEqualTo("Staff");
         assertThat(customer1.getPhoneNumber()).isEqualTo(123123123L);

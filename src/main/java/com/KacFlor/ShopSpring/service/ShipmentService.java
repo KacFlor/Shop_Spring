@@ -4,15 +4,18 @@ import com.KacFlor.ShopSpring.config.ExceptionsConfig;
 import com.KacFlor.ShopSpring.controllersRequests.NewPayment;
 import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
 import com.KacFlor.ShopSpring.dao.CustomerRepository;
+import com.KacFlor.ShopSpring.dao.OrderRepository;
 import com.KacFlor.ShopSpring.dao.PaymentRepository;
 import com.KacFlor.ShopSpring.dao.ShipmentRepository;
 import com.KacFlor.ShopSpring.model.Customer;
+import com.KacFlor.ShopSpring.model.Order;
 import com.KacFlor.ShopSpring.model.Payment;
 import com.KacFlor.ShopSpring.model.Shipment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,15 +28,29 @@ public class ShipmentService{
 
     private final CustomerRepository customerRepository;
 
+    private final OrderRepository orderRepository;
+
     @Autowired
-    public ShipmentService(ShipmentRepository shipmentRepository, PaymentRepository paymentRepository, CustomerRepository customerRepository){
+    public ShipmentService(OrderRepository orderRepository, ShipmentRepository shipmentRepository, PaymentRepository paymentRepository, CustomerRepository customerRepository){
         this.shipmentRepository = shipmentRepository;
         this.paymentRepository = paymentRepository;
         this.customerRepository = customerRepository;
+        this.orderRepository = orderRepository;
     }
 
     public List<Shipment> getAllShipments(){
         return shipmentRepository.findAll();
+    }
+    public List<Order> getAllShipmentOrders(Integer Id)
+    {
+        Optional<Shipment> optionalShipment = shipmentRepository.findById(Id);
+        if(optionalShipment.isPresent()){
+            Shipment shipment = optionalShipment.get();
+            return shipment.getOrders();
+        }
+        else{
+            throw new ExceptionsConfig.ResourceNotFoundException("Shipment not found");
+        }
     }
 
     public List<Shipment> getAllByCustomerId(Integer Id){

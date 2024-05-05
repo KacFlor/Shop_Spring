@@ -59,7 +59,7 @@ public class CustomerService{
         return true;
     }
 
-    public boolean createOrder(NewOrder newOrder){
+    public boolean createOrder(NewOrder newOrder, Integer shipmentId){
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -69,10 +69,13 @@ public class CustomerService{
 
         Customer customer = user.getCustomer();
 
+        Optional<Shipment> shipment = shipmentRepository.findById(shipmentId);
+
         if(customer.getShipments().isEmpty()){
             throw new ExceptionsConfig.ResourceNotFoundException("Shipment not found");
         }
         else{
+            Shipment currentShipment = shipment.get();
             Order order = new Order(newOrder.getOrderDate(), newOrder.getTotalPrice());
 
             customer.getOrders().add(order);
@@ -80,6 +83,9 @@ public class CustomerService{
 
             order.setCustomer(customer);
             orderRepository.save(order);
+
+            currentShipment.getOrders().add(order);
+            shipmentRepository.save(currentShipment);
             return true;
         }
     }

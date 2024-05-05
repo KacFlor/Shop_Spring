@@ -22,7 +22,8 @@ public class Order extends BaseEntity{
     @Column(name = "totalPrice")
     private Double totalPrice;
 
-    @OneToOne(mappedBy = "order", fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "shipment_id")
     @JsonBackReference
     private Shipment shipment;
 
