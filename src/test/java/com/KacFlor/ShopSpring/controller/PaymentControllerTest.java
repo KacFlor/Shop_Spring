@@ -112,6 +112,14 @@ public class PaymentControllerTest{
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
-    void testDeleteByShipmentId() throws Exception{}
+    void testDeleteByShipmentId() throws Exception{
+
+        Integer shipmentId = 1;
+        when(paymentService.deleteByShipmentId(shipmentId)).thenReturn(true);
+
+        mockMvc.perform(delete("/payment/shipment/{id}", shipmentId))
+                .andExpect(status().isOk());
+
+    }
 
 }
