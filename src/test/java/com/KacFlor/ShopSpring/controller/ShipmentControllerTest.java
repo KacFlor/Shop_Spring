@@ -22,7 +22,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -44,11 +43,11 @@ public class ShipmentControllerTest{
 
         Shipment shipment = new Shipment(LocalDate.of(2024, 5, 3), "123 Main Street", "Springfield", "Ohio", "USA", "12345");
         Shipment shipment2 = new Shipment(LocalDate.of(2024, 5, 5), "456 Oak Avenue", "Gotham", "Gotham City", "USA", "54321");
-        Shipment shipment3 = new Shipment(LocalDate.of(2024, 5, 7), "789 Pine Street", "Rivertown", "Riverdale", "USA", "67890");
+        Shipment shipment3 = new Shipment(LocalDate.of(2024, 5, 7), "789 Pine Street", "River-town", "Riverdale", "USA", "67890");
 
         when(shipmentService.getAllShipments()).thenReturn(List.of(shipment, shipment2, shipment3));
 
-        mockMvc.perform(get("/shipment/all"))
+        mockMvc.perform(get("/shipments"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json("[{'address':'123 Main Street'},{'address':'456 Oak Avenue'},{'address':'789 Pine Street'}]"));
@@ -63,7 +62,7 @@ public class ShipmentControllerTest{
 
         Shipment shipment = new Shipment(LocalDate.of(2024, 5, 3), "123 Main Street", "Springfield", "Ohio", "USA", "12345");
         Shipment shipment2 = new Shipment(LocalDate.of(2024, 5, 5), "456 Oak Avenue", "Gotham", "Gotham City", "USA", "54321");
-        Shipment shipment3 = new Shipment(LocalDate.of(2024, 5, 7), "789 Pine Street", "Rivertown", "Riverdale", "USA", "67890");
+        Shipment shipment3 = new Shipment(LocalDate.of(2024, 5, 7), "789 Pine Street", "River-town", "Riverdale", "USA", "67890");
 
         Customer customer = new Customer();
         customer.setId(customerId);
@@ -74,7 +73,7 @@ public class ShipmentControllerTest{
 
         when(shipmentService.getAllByCustomerId(customerId)).thenReturn(List.of(shipment, shipment2, shipment3));
 
-        mockMvc.perform(get("/shipment/customer/{id}", customerId))
+        mockMvc.perform(get("/shipments/customer/{id}", customerId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json("[{'address':'123 Main Street'},{'address':'456 Oak Avenue'},{'address':'789 Pine Street'}]"));
@@ -92,7 +91,7 @@ public class ShipmentControllerTest{
 
         when(shipmentService.getById(shipmentId)).thenReturn(shipment);
 
-        mockMvc.perform(get("/shipment/{id}", shipmentId))
+        mockMvc.perform(get("/shipments/{id}", shipmentId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json("{'address':'123 Main Street'}"));
@@ -106,7 +105,7 @@ public class ShipmentControllerTest{
         Integer customerId = 2;
         when(shipmentService.deleteAllByCustomerId(customerId)).thenReturn(true);
 
-        mockMvc.perform(delete("/shipment/customer/{id}", customerId))
+        mockMvc.perform(delete("/shipments/customer/{id}", customerId))
                 .andExpect(status().isOk());
 
     }
@@ -118,7 +117,7 @@ public class ShipmentControllerTest{
         Integer shipmentId = 2;
         when(shipmentService.deleteAllByCustomerId(shipmentId)).thenReturn(true);
 
-        mockMvc.perform(delete("/shipment/customer/{id}", shipmentId))
+        mockMvc.perform(delete("/shipments/customer/{id}", shipmentId))
                 .andExpect(status().isOk());
     }
 
@@ -144,7 +143,7 @@ public class ShipmentControllerTest{
 
         when(shipmentService.updateShipment(newShipment, shipmentId)).thenReturn(true);
 
-        mockMvc.perform(patch("/shipment/{id}", shipmentId)
+        mockMvc.perform(patch("/shipments/{id}", shipmentId)
                         .content(requestJson)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -163,7 +162,7 @@ public class ShipmentControllerTest{
 
         when(shipmentService.addNewPayment(newPayment, shipmentId)).thenReturn(true);
 
-        mockMvc.perform(post("/shipment/{id}/payment", shipmentId)
+        mockMvc.perform(post("/shipments/{id}/payment", shipmentId)
                         .content(requestJson)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isAccepted());

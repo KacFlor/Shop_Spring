@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(
-        path = {"shipment"}
+        path = {"shipments"}
 )
 public class ShipmentController{
 
@@ -28,7 +28,7 @@ public class ShipmentController{
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<Shipment>> getAllShipments(){
         List<Shipment> shipments = shipmentService.getAllShipments();
         return ResponseEntity.ok(shipments);
@@ -50,30 +50,30 @@ public class ShipmentController{
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @DeleteMapping("/customer/{id}")
-    public ResponseEntity deleteAllByCustomerId(@PathVariable("id") Integer id){
+    public ResponseEntity<?> deleteAllByCustomerId(@PathVariable("id") Integer id){
         shipmentService.deleteAllByCustomerId(id);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteById(@PathVariable("id") Integer id){
+    public ResponseEntity<?> deleteById(@PathVariable("id") Integer id){
         shipmentService.deleteById(id);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateShipment(@RequestBody NewShipment newShipment, @PathVariable("id") Integer id){
         shipmentService.updateShipment(newShipment, id);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PostMapping("/{id}/payment")
     public ResponseEntity<?> addNewPayment(@RequestBody NewPayment newPayment, @PathVariable("id") Integer id){
-        shipmentService.addNewPayment(newPayment,id);
-        return new ResponseEntity(HttpStatus.ACCEPTED);
+        shipmentService.addNewPayment(newPayment, id);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
 }
