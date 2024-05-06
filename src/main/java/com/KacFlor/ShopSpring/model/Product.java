@@ -17,6 +17,10 @@ public class Product extends BaseEntity{
     @NotBlank
     private String sku;
 
+    @Column(name = "name")
+    @NotBlank
+    private String name;
+
     @Column(name = "description")
     private String description;
 

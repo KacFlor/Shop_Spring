@@ -1,17 +1,21 @@
 package com.KacFlor.ShopSpring.controller;
 
 import java.util.List;
+import java.util.Optional;
 
+import com.KacFlor.ShopSpring.model.CardData;
 import com.KacFlor.ShopSpring.model.OrderItem;
+import com.KacFlor.ShopSpring.model.Role;
 import com.KacFlor.ShopSpring.service.OrderItemService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(
-        path = {"orderitem"}
+        path = {"order-items"}
 )
 public class OrderItemController{
 
@@ -22,8 +26,24 @@ public class OrderItemController{
         this.orderItemService = orderItemService;
     }
 
+    @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @GetMapping
-    public List<OrderItem> getOrderItem(){
-        return this.orderItemService.getOrderItem();
+    public ResponseEntity<List<OrderItem>> getAll(){
+        List<OrderItem> orderItems = orderItemService.getAll();
+        return ResponseEntity.ok(orderItems);
+    }
+
+    @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<OrderItem>> getById(@PathVariable("id") Integer id){
+        Optional<OrderItem> orderItem = Optional.ofNullable(orderItemService.getOrderItemById(id));
+        return ResponseEntity.ok(orderItem);
+    }
+
+    @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteById(@PathVariable("id") Integer id){
+        orderItemService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
