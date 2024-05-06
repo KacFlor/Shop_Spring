@@ -1,5 +1,4 @@
 package com.KacFlor.ShopSpring.controllersRequests;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,16 +8,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomerUpdateRequest{
+public class NewCardData{
 
-    private String firstName;
-
-    private String lastName;
-
-    private String email;
-
-    private String address;
-
-    private Long phoneNumber;
+    private String cardNum;
 
 }

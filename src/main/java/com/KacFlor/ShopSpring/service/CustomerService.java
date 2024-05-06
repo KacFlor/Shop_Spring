@@ -1,15 +1,12 @@
 package com.KacFlor.ShopSpring.service;
 
 import com.KacFlor.ShopSpring.config.ExceptionsConfig;
-import com.KacFlor.ShopSpring.controllersRequests.CustomerUpdateRequest;
-import com.KacFlor.ShopSpring.controllersRequests.NewOrder;
+import com.KacFlor.ShopSpring.controllersRequests.NewCardData;
+import com.KacFlor.ShopSpring.controllersRequests.NewCustomer;
 import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
-import com.KacFlor.ShopSpring.dao.OrderRepository;
-import com.KacFlor.ShopSpring.dao.ShipmentRepository;
-import com.KacFlor.ShopSpring.dao.UserRepository;
+import com.KacFlor.ShopSpring.dao.*;
+import com.KacFlor.ShopSpring.model.CardData;
 import com.KacFlor.ShopSpring.model.Customer;
-import com.KacFlor.ShopSpring.dao.CustomerRepository;
-import com.KacFlor.ShopSpring.model.Order;
 import com.KacFlor.ShopSpring.model.Shipment;
 import com.KacFlor.ShopSpring.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +28,15 @@ public class CustomerService{
 
     final private OrderRepository orderRepository;
 
+    final private CardDataRepository cardDataRepository;
+
     @Autowired
-    public CustomerService(CustomerRepository customerRepository, UserRepository userRepository, ShipmentRepository shipmentRepository, OrderRepository orderRepository){
+    public CustomerService(CardDataRepository cardDataRepository,CustomerRepository customerRepository, UserRepository userRepository, ShipmentRepository shipmentRepository, OrderRepository orderRepository){
         this.customerRepository = customerRepository;
         this.userRepository = userRepository;
         this.shipmentRepository = shipmentRepository;
         this.orderRepository = orderRepository;
+        this.cardDataRepository = cardDataRepository;
     }
 
     public boolean createShipment(NewShipment newShipment){
@@ -56,6 +56,24 @@ public class CustomerService{
 
         shipment.setCustomer(customer);
         shipmentRepository.save(shipment);
+        return true;
+    }
+
+    public boolean createCardData(NewCardData newCardData){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String username = authentication.getName();
+
+        User user = userRepository.findByLogin(username);
+
+        Customer customer = user.getCustomer();
+
+        CardData cardData = new CardData(newCardData.getCardNum(),customer);
+        customer.getCardDatas().add(cardData);
+        customerRepository.save(customer);
+
+        cardDataRepository.save(cardData);
         return true;
     }
 
@@ -96,7 +114,7 @@ public class CustomerService{
         return user.getCustomer();
     }
 
-    public boolean updateCustomer(CustomerUpdateRequest customerUpdateRequest){
+    public boolean updateCustomer(NewCustomer newCustomer){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         String username = authentication.getName();
@@ -107,11 +125,11 @@ public class CustomerService{
 
         Customer customer = customerRepository.findByFirstName(name);
 
-        customer.setFirstName(customerUpdateRequest.getFirstName());
-        customer.setLastName(customerUpdateRequest.getLastName());
-        customer.setEmail(customerUpdateRequest.getEmail());
-        customer.setAddress(customerUpdateRequest.getAddress());
-        customer.setPhoneNumber(customerUpdateRequest.getPhoneNumber());
+        customer.setFirstName(newCustomer.getFirstName());
+        customer.setLastName(newCustomer.getLastName());
+        customer.setEmail(newCustomer.getEmail());
+        customer.setAddress(newCustomer.getAddress());
+        customer.setPhoneNumber(newCustomer.getPhoneNumber());
 
         customerRepository.save(customer);
 
