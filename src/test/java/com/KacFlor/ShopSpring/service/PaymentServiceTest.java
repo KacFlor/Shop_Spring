@@ -1,5 +1,6 @@
 package com.KacFlor.ShopSpring.service;
 
+import com.KacFlor.ShopSpring.config.ExceptionsConfig;
 import com.KacFlor.ShopSpring.controllersRequests.NewPayment;
 import com.KacFlor.ShopSpring.dao.PaymentRepository;
 import com.KacFlor.ShopSpring.dao.ShipmentRepository;
@@ -16,7 +17,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,23 +35,27 @@ public class PaymentServiceTest{
     @Test
     public void testGetPaymentById(){
 
-        Payment payment = new Payment(LocalDate.of(2024, 5, 3), "Credit Card", 100.0);
-
         Integer paymentId = 1;
+        Optional<Payment> payment = Optional.of(new Payment(LocalDate.of(2024, 5, 3), "Credit Card", 100.0));
 
-        when(paymentRepository.findById(paymentId)).thenReturn(Optional.of(payment));
+        when(paymentRepository.findById(paymentId)).thenReturn(payment);
 
-        Payment actualPayment = paymentService.getPaymentById(paymentId);
-
+        Optional<Payment> actualPayment = Optional.ofNullable(paymentService.getPaymentById(paymentId));
+        assertNotNull(actualPayment);
         assertEquals(payment, actualPayment);
 
         verify(paymentRepository, times(1)).findById(paymentId);
+
+        when(paymentRepository.findById(paymentId)).thenReturn(Optional.empty());
+
+        assertThrows(ExceptionsConfig.ResourceNotFoundException.class, () -> paymentService.getPaymentById(paymentId));
+
+        verify(paymentRepository, times(2)).findById(paymentId);
     }
 
     @DisplayName("JUnit test for getByShipmentId method")
     @Test
     public void testGetByShipmentId(){
-
         Integer shipmentId = 1;
 
         Payment payment = new Payment(LocalDate.of(2024, 5, 3), "Credit Card", 100.0);
@@ -60,13 +64,18 @@ public class PaymentServiceTest{
         shipment.setId(shipmentId);
         payment.setShipment(shipment);
 
-        List<Payment> payments = List.of(payment);
-
-        when(paymentRepository.findAll()).thenReturn(payments);
+        when(paymentRepository.findByShipmentId(shipmentId)).thenReturn(payment);
 
         Payment result = paymentService.getByShipmentId(shipmentId);
+        assertEquals(result, payment);
 
-        assertEquals(shipmentId, result.getShipment().getId());
+        verify(paymentRepository, times(1)).findByShipmentId(shipmentId);
+
+        when(paymentRepository.findByShipmentId(shipmentId)).thenReturn(null);
+
+        assertThrows(ExceptionsConfig.ResourceNotFoundException.class, () -> paymentService.getByShipmentId(shipmentId));
+
+        verify(paymentRepository, times(2)).findByShipmentId(shipmentId);
     }
 
     @DisplayName("JUnit test for updatePayment method")
@@ -94,25 +103,41 @@ public class PaymentServiceTest{
         verify(paymentRepository, times(1)).findByShipmentId(shipmentId);
         verify(paymentRepository, times(1)).save(existingPayment);
 
-    }
+        when(paymentRepository.findByShipmentId(shipmentId)).thenReturn(null);
 
+        assertThrows(ExceptionsConfig.ResourceNotFoundException.class, () -> paymentService.getByShipmentId(shipmentId));
+
+        verify(paymentRepository, times(2)).findByShipmentId(shipmentId);
+
+    }
 
     @DisplayName("JUnit test for deleteByShipmentId method")
     @Test
     public void testDeleteByShipmentId(){
         Integer shipmentId = 1;
 
-        Shipment shipmentWithPayment = new Shipment();
-        shipmentWithPayment.setId(shipmentId);
+        Shipment shipment = new Shipment();
+        shipment.setId(shipmentId);
         Payment payment = new Payment();
-        shipmentWithPayment.setPayment(payment);
+        shipment.setPayment(payment);
+        payment.setShipment(shipment);
 
-        when(shipmentRepository.findById(shipmentId))
-                .thenReturn(Optional.of(shipmentWithPayment));
+        when(shipmentRepository.findById(shipmentId)).thenReturn(Optional.of(shipment));
+
+        when(paymentRepository.findByShipmentId(shipmentId)).thenReturn(payment);
 
         boolean result = paymentService.deleteByShipmentId(shipmentId);
         assertTrue(result);
-    }
+        assertNull(payment.getShipment());
 
+        verify(paymentRepository, times(1)).save(payment);
+        verify(shipmentRepository, times(1)).save(shipment);
+
+        when(paymentRepository.findByShipmentId(shipmentId)).thenReturn(null);
+
+        assertThrows(ExceptionsConfig.ResourceNotFoundException.class, () -> paymentService.getByShipmentId(shipmentId));
+
+        verify(paymentRepository, times(2)).findByShipmentId(shipmentId);
+    }
 
 }

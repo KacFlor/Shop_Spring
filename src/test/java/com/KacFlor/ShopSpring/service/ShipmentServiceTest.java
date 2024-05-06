@@ -1,12 +1,14 @@
 package com.KacFlor.ShopSpring.service;
 
+import com.KacFlor.ShopSpring.config.ExceptionsConfig;
+import com.KacFlor.ShopSpring.controllersRequests.NewOrder;
 import com.KacFlor.ShopSpring.controllersRequests.NewPayment;
 import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
+import com.KacFlor.ShopSpring.dao.CustomerRepository;
+import com.KacFlor.ShopSpring.dao.OrderRepository;
 import com.KacFlor.ShopSpring.dao.PaymentRepository;
 import com.KacFlor.ShopSpring.dao.ShipmentRepository;
-import com.KacFlor.ShopSpring.model.Customer;
-import com.KacFlor.ShopSpring.model.Payment;
-import com.KacFlor.ShopSpring.model.Shipment;
+import com.KacFlor.ShopSpring.model.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,12 +17,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
@@ -33,6 +35,12 @@ public class ShipmentServiceTest{
     @Mock
     private PaymentRepository paymentRepository;
 
+    @Mock
+    private CustomerRepository customerRepository;
+
+    @Mock
+    private OrderRepository orderRepository;
+
     @InjectMocks
     private ShipmentService shipmentService;
 
@@ -42,7 +50,7 @@ public class ShipmentServiceTest{
 
         Shipment shipment = new Shipment(LocalDate.of(2024, 5, 3), "123 Main Street", "Springfield", "Ohio", "USA", "12345");
         Shipment shipment2 = new Shipment(LocalDate.of(2024, 5, 5), "456 Oak Avenue", "Gotham", "Gotham City", "USA", "54321");
-        Shipment shipment3 = new Shipment(LocalDate.of(2024, 5, 7), "789 Pine Street", "Rivertown", "Riverdale", "USA", "67890");
+        Shipment shipment3 = new Shipment(LocalDate.of(2024, 5, 7), "789 Pine Street", "River-town", "Riverdale", "USA", "67890");
 
         Customer customer = new Customer();
 
@@ -67,26 +75,35 @@ public class ShipmentServiceTest{
     @Test
     public void testGetAllByCustomerId(){
 
-        Integer customerId = 2;
+        Integer customer1Id = 1;
+        Integer customer2Id = 2;
 
-        Shipment shipment = new Shipment(LocalDate.of(2024, 5, 3), "123 Main Street", "Springfield", "Ohio", "USA", "12345");
+        Shipment shipment1 = new Shipment(LocalDate.of(2024, 5, 3), "123 Main Street", "Springfield", "Ohio", "USA", "12345");
         Shipment shipment2 = new Shipment(LocalDate.of(2024, 5, 5), "456 Oak Avenue", "Gotham", "Gotham City", "USA", "54321");
-        Shipment shipment3 = new Shipment(LocalDate.of(2024, 5, 7), "789 Pine Street", "Rivertown", "Riverdale", "USA", "67890");
+        Shipment shipment3 = new Shipment(LocalDate.of(2024, 5, 7), "789 Pine Street", "River-town", "Riverdale", "USA", "67890");
 
-        Customer customer = new Customer();
-        customer.setId(3);
+        List<Shipment> shipments = new ArrayList<>();
+        shipments.add(shipment2);
+        shipments.add(shipment3);
+
         Customer customer1 = new Customer();
-        customer1.setId(customerId);
+        customer1.setId(customer1Id);
+        Customer customer2 = new Customer();
+        customer2.setId(customer2Id);
 
-        shipment.setCustomer(customer);
-        shipment2.setCustomer(customer1);
-        shipment3.setCustomer(customer1);
+        shipment1.setCustomer(customer1);
+        shipment2.setCustomer(customer2);
+        shipment3.setCustomer(customer2);
 
-        given(shipmentRepository.findAll()).willReturn(List.of(shipment, shipment2, shipment3));
+        when(customerRepository.findById(customer2Id)).thenReturn(Optional.of(customer2));
+        when(shipmentRepository.findAllByCustomerId(customer2Id)).thenReturn(shipments);
 
-        List<Shipment> result = shipmentService.getAllByCustomerId(customerId);
-
+        List<Shipment> result = shipmentService.getAllByCustomerId(customer2Id);
         assertEquals(2, result.size());
+
+        when(customerRepository.findById(customer2Id)).thenReturn(Optional.empty());
+
+        assertThrows(ExceptionsConfig.ResourceNotFoundException.class, () -> shipmentService.getAllByCustomerId(customer2Id));
 
     }
 
@@ -105,36 +122,52 @@ public class ShipmentServiceTest{
         assertEquals(shipment, actualShipment);
 
         verify(shipmentRepository, times(1)).findById(shipmentId);
+
+        when(shipmentRepository.findById(shipmentId)).thenReturn(Optional.empty());
+
+        assertThrows(ExceptionsConfig.ResourceNotFoundException.class, () -> shipmentService.getById(shipmentId));
+
+        verify(shipmentRepository, times(2)).findById(shipmentId);
     }
 
     @DisplayName("JUnit test for testDeleteAllByCustomerId method")
     @Test
     public void testDeleteAllByCustomerId(){
 
-        Integer customerId = 2;
+        Integer customer1Id = 1;
+        Integer customer2Id = 2;
 
-        Shipment shipment = new Shipment(LocalDate.of(2024, 5, 3), "123 Main Street", "Springfield", "Ohio", "USA", "12345");
+        Shipment shipment1 = new Shipment(LocalDate.of(2024, 5, 3), "123 Main Street", "Springfield", "Ohio", "USA", "12345");
         Shipment shipment2 = new Shipment(LocalDate.of(2024, 5, 5), "456 Oak Avenue", "Gotham", "Gotham City", "USA", "54321");
-        Shipment shipment3 = new Shipment(LocalDate.of(2024, 5, 7), "789 Pine Street", "Rivertown", "Riverdale", "USA", "67890");
+        Shipment shipment3 = new Shipment(LocalDate.of(2024, 5, 7), "789 Pine Street", "River-town", "Riverdale", "USA", "67890");
 
-        Customer customer = new Customer();
-        customer.setId(3);
+        List<Shipment> shipments = new ArrayList<>();
+        shipments.add(shipment2);
+        shipments.add(shipment3);
+
         Customer customer1 = new Customer();
-        customer1.setId(customerId);
+        customer1.setId(customer1Id);
+        Customer customer2 = new Customer();
+        customer2.setId(customer2Id);
 
-        shipment.setCustomer(customer);
-        shipment2.setCustomer(customer1);
-        shipment3.setCustomer(customer1);
+        shipment1.setCustomer(customer1);
+        shipment2.setCustomer(customer2);
+        shipment3.setCustomer(customer2);
 
-        List<Shipment> allShipments = List.of(shipment, shipment2, shipment3);
+        when(customerRepository.findById(customer2Id)).thenReturn(Optional.of(customer2));
+        when(shipmentRepository.findAllByCustomerId(customer2Id)).thenReturn(shipments);
 
-        when(shipmentRepository.findAll()).thenReturn(allShipments);
-
-        boolean result = shipmentService.deleteAllByCustomerId(customerId);
+        boolean result = shipmentService.deleteAllByCustomerId(customer2Id);
 
         verify(shipmentRepository, times(1)).deleteAll(List.of(shipment2, shipment3));
 
         assertTrue(result);
+
+        when(customerRepository.findById(customer2Id)).thenReturn(Optional.empty());
+
+        assertThrows(ExceptionsConfig.ResourceNotFoundException.class, () -> shipmentService.getAllByCustomerId(customer2Id));
+
+        verify(customerRepository, times(2)).findById(customer2Id);
 
     }
 
@@ -163,6 +196,12 @@ public class ShipmentServiceTest{
         verify(shipmentRepository, times(1)).findById(shipmentId);
         verify(shipmentRepository, times(1)).save(existingShipment);
 
+        when(shipmentRepository.findById(shipmentId)).thenReturn(Optional.empty());
+
+        assertThrows(ExceptionsConfig.ResourceNotFoundException.class, () -> shipmentService.getById(shipmentId));
+
+        verify(shipmentRepository, times(2)).findById(shipmentId);
+
     }
 
     @DisplayName("JUnit test for testAddNewPayment method")
@@ -182,6 +221,39 @@ public class ShipmentServiceTest{
         assertEquals(newPayment.getPaymentDate(), shipment.getPayment().getPaymentDate());
         assertEquals(newPayment.getPaymentMet(), shipment.getPayment().getPaymentMet());
         assertEquals(newPayment.getAmount(), shipment.getPayment().getAmount());
+
+        when(shipmentRepository.findById(shipmentId)).thenReturn(Optional.empty());
+
+        assertThrows(ExceptionsConfig.ResourceNotFoundException.class, () -> shipmentService.getById(shipmentId));
+
+        verify(shipmentRepository, times(2)).findById(shipmentId);
+    }
+
+    @DisplayName("JUnit test for  CreateOrder method")
+    @Test
+    public void testCreateOrder(){
+
+        Integer shipmentId = 1;
+
+        NewOrder newOrder = new NewOrder();
+        newOrder.setOrderDate(LocalDate.of(2024, 5, 1));
+        newOrder.setTotalPrice(99.99);
+
+        Shipment shipment = new Shipment();
+        when(shipmentRepository.findById(shipmentId)).thenReturn(Optional.of(shipment));
+        shipment.setId(1);
+        shipment.setOrders(new ArrayList<>());
+
+        Order order = new Order(newOrder.getOrderDate(), newOrder.getTotalPrice());
+        order.setShipment(shipment);
+        shipment.getOrders().add(order);
+
+        boolean result = shipmentService.createOrder(newOrder, shipmentId);
+        assertTrue(result);
+
+        verify(shipmentRepository, times(1)).save(shipment);
+        verify(orderRepository, times(1)).save(any(Order.class));
+
     }
 
 }

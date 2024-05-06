@@ -1,22 +1,21 @@
 package com.KacFlor.ShopSpring.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.KacFlor.ShopSpring.config.ExceptionsConfig;
 import com.KacFlor.ShopSpring.controllersRequests.CustomerUpdateRequest;
+import com.KacFlor.ShopSpring.controllersRequests.NewOrder;
 import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
 import com.KacFlor.ShopSpring.dao.CustomerRepository;
+import com.KacFlor.ShopSpring.dao.OrderRepository;
 import com.KacFlor.ShopSpring.dao.ShipmentRepository;
 import com.KacFlor.ShopSpring.dao.UserRepository;
-import com.KacFlor.ShopSpring.model.Customer;
-import com.KacFlor.ShopSpring.model.Role;
-import com.KacFlor.ShopSpring.model.Shipment;
-import com.KacFlor.ShopSpring.model.User;
+import com.KacFlor.ShopSpring.model.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
@@ -42,6 +41,9 @@ public class CustomerServiceTest{
 
     @Mock
     private CustomerRepository customerRepository;
+
+    @Mock
+    private OrderRepository orderRepository;
 
     @Mock
     private UserRepository userRepository;
@@ -112,6 +114,13 @@ public class CustomerServiceTest{
         assertEquals(customer1, actualCustomer);
 
         verify(customerRepository, times(1)).findById(customerId);
+
+        when(customerRepository.findById(customerId)).thenReturn(Optional.empty());
+
+        assertThrows(ExceptionsConfig.ResourceNotFoundException.class, () -> customerService.getCustomerById(customerId));
+
+        verify(customerRepository, times(2)).findById(customerId);
+
     }
 
     @DisplayName("JUnit test for deleteById method")
@@ -126,8 +135,8 @@ public class CustomerServiceTest{
 
         Integer CustomerId = 2;
 
-        when(customerRepository.findById(CustomerId)).thenReturn(Optional.ofNullable(customer1));
-        when(userRepository.findById(CustomerId)).thenReturn(Optional.ofNullable(user1));
+        when(customerRepository.findById(CustomerId)).thenReturn(Optional.of(customer1));
+        when(userRepository.findById(CustomerId)).thenReturn(Optional.of(user1));
 
         boolean result = customerService.deleteCustomerById(CustomerId);
         assertTrue(result);
@@ -219,9 +228,9 @@ public class CustomerServiceTest{
 
         CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest();
         customerUpdateRequest.setFirstName("Kacper");
-        customerUpdateRequest.setLastName("Florczyk");
+        customerUpdateRequest.setLastName("Florry");
         customerUpdateRequest.setEmail("cos@gmail.com");
-        customerUpdateRequest.setAddress("Staffa");
+        customerUpdateRequest.setAddress("Staff");
         customerUpdateRequest.setPhoneNumber(123123123L);
 
         boolean result = customerService.updateCustomer(customerUpdateRequest);
@@ -235,9 +244,9 @@ public class CustomerServiceTest{
         assertThat(customer1.getAddress()).isNotNull();
         assertThat(customer1.getPhoneNumber()).isNotNull();
         assertThat(customer1.getFirstName()).isEqualTo("Kacper");
-        assertThat(customer1.getLastName()).isEqualTo("Florczyk");
+        assertThat(customer1.getLastName()).isEqualTo("Florry");
         assertThat(customer1.getEmail()).isEqualTo("cos@gmail.com");
-        assertThat(customer1.getAddress()).isEqualTo("Staffa");
+        assertThat(customer1.getAddress()).isEqualTo("Staff");
         assertThat(customer1.getPhoneNumber()).isEqualTo(123123123L);
     }
 

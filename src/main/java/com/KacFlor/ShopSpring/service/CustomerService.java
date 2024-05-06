@@ -1,20 +1,22 @@
 package com.KacFlor.ShopSpring.service;
 
+import com.KacFlor.ShopSpring.config.ExceptionsConfig;
 import com.KacFlor.ShopSpring.controllersRequests.CustomerUpdateRequest;
+import com.KacFlor.ShopSpring.controllersRequests.NewOrder;
 import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
+import com.KacFlor.ShopSpring.dao.OrderRepository;
 import com.KacFlor.ShopSpring.dao.ShipmentRepository;
 import com.KacFlor.ShopSpring.dao.UserRepository;
 import com.KacFlor.ShopSpring.model.Customer;
 import com.KacFlor.ShopSpring.dao.CustomerRepository;
+import com.KacFlor.ShopSpring.model.Order;
 import com.KacFlor.ShopSpring.model.Shipment;
 import com.KacFlor.ShopSpring.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,11 +29,14 @@ public class CustomerService{
 
     final private ShipmentRepository shipmentRepository;
 
+    final private OrderRepository orderRepository;
+
     @Autowired
-    public CustomerService(CustomerRepository customerRepository, UserRepository userRepository, ShipmentRepository shipmentRepository){
+    public CustomerService(CustomerRepository customerRepository, UserRepository userRepository, ShipmentRepository shipmentRepository, OrderRepository orderRepository){
         this.customerRepository = customerRepository;
         this.userRepository = userRepository;
         this.shipmentRepository = shipmentRepository;
+        this.orderRepository = orderRepository;
     }
 
     public boolean createShipment(NewShipment newShipment){
@@ -54,27 +59,27 @@ public class CustomerService{
         return true;
     }
 
-    public Customer getCustomerById(Integer customerId) {
+    public Customer getCustomerById(Integer customerId){
         Optional<Customer> customerOptional = customerRepository.findById(customerId);
         if(customerOptional.isPresent()){
             return customerOptional.get();
-        } else {
-            throw new UsernameNotFoundException("Customer not found");
+        }
+        else{
+            throw new ExceptionsConfig.ResourceNotFoundException("Customer not found");
         }
     }
 
     public boolean deleteCustomerById(Integer customerId){
         Optional<Customer> customerOptional = customerRepository.findById(customerId);
         Optional<User> userOptional = userRepository.findById(customerId);
-        if(customerOptional.isPresent()){
-            Customer customer = customerOptional.get();
-            User user = userOptional.get();
-            customerRepository.delete(customer);
-            userRepository.delete(user);
-            return true;
-        }else{
-            throw new UsernameNotFoundException("Customer not found");
-        }
+
+        Customer customer = customerOptional.get();
+        User user = userOptional.get();
+        customerRepository.delete(customer);
+        userRepository.delete(user);
+        return true;
+
+
     }
 
     public List<Customer> getAll(){
@@ -124,13 +129,9 @@ public class CustomerService{
         String name = user.getCustomer().getFirstName();
 
         Customer customer = customerRepository.findByFirstName(name);
-        if(user != null && username.equals(user.getLogin()) && customer != null && name.equals(customer.getFirstName())){
-            customerRepository.delete(customer);
-            userRepository.delete(user);
-        }else{
-            throw new UsernameNotFoundException("User not found");
-        }
 
+        customerRepository.delete(customer);
+        userRepository.delete(user);
 
         return true;
     }

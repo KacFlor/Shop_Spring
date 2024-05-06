@@ -5,10 +5,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.KacFlor.ShopSpring.controllersRequests.NewPayment;
-import com.KacFlor.ShopSpring.model.Payment;
-import com.KacFlor.ShopSpring.model.Shipment;
-import com.KacFlor.ShopSpring.service.PaymentService;
+import com.KacFlor.ShopSpring.controllersRequests.NewOrder;
+import com.KacFlor.ShopSpring.model.Order;
+import com.KacFlor.ShopSpring.service.OrderService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.jupiter.api.Test;
@@ -23,81 +22,70 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
-public class PaymentControllerTest{
+public class OrderControllerTest{
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private PaymentService paymentService;
+    private OrderService orderService;
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
-    void testGetByID() throws Exception{
+    void testGetAllOrders() throws Exception{
+        Order order1 = new Order(LocalDate.of(2024, 5, 3), 2222.22);
+        Order order2 = new Order(LocalDate.of(2025, 5, 3), 3333.33);
+        Order order3 = new Order(LocalDate.of(2026, 5, 3), 4444.44);
 
-        Integer paymentId = 1;
+        when(orderService.getAllOrders()).thenReturn(List.of(order1, order2, order3));
 
-        Payment payment = new Payment(LocalDate.of(2024, 5, 3), "Credit Card", 100.0);
-
-        when(paymentService.getPaymentById(paymentId)).thenReturn(payment);
-
-        mockMvc.perform(get("/payment/{id}", paymentId))
+        mockMvc.perform(get("/orders"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("{'paymentMet':'Credit Card'}"));
+                .andExpect(content().json("[{'totalPrice':2222.22},{'totalPrice':3333.33},{'totalPrice':4444.44}]"));
 
     }
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
-    void testGetShipmentPayment() throws Exception{
+    void testGetById() throws Exception{
+        Integer orderId = 1;
 
-        Integer shipmentId = 1;
+        Order order1 = new Order(LocalDate.of(2024, 5, 3), 2222.22);
 
-        Payment payment = new Payment(LocalDate.of(2024, 5, 3), "Credit Card", 100.0);
+        when(orderService.getById(orderId)).thenReturn(order1);
 
-        Shipment shipment = new Shipment();
-        shipment.setId(1);
-
-        when(paymentService.getByShipmentId(shipmentId)).thenReturn(payment);
-
-        mockMvc.perform(get("/payment/shipment/{id}", shipmentId))
+        mockMvc.perform(get("/orders/{id}", orderId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("{'paymentMet':'Credit Card'}"));
-
+                .andExpect(content().json("{'totalPrice':2222.22}"));
     }
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
-    void testUpdatePaymentByShipmentId() throws Exception{
-
-        Integer shipmentId = 1;
-
-        Shipment shipment = new Shipment();
-        shipment.setId(1);
-
+    void testUpdateShipment() throws Exception{
+        Integer orderId = 2;
         LocalDate shipmentDate = LocalDate.of(2024, 5, 10);
-
-        NewPayment newPayment = new NewPayment(shipmentDate, "Credit Card", 100.0);
+        NewOrder newOrder = new NewOrder(shipmentDate, 2222.22);
 
         String shipmentDateString = shipmentDate.toString();
 
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode requestJsonNode = objectMapper.createObjectNode();
-        requestJsonNode.put("paymentDate", shipmentDateString);
-        requestJsonNode.put("paymentMet", newPayment.getPaymentMet());
-        requestJsonNode.put("amount", newPayment.getAmount());
+
+        requestJsonNode.put("orderDate", shipmentDateString);
+        requestJsonNode.put("totalPrice", newOrder.getTotalPrice());
 
         String requestJson = objectMapper.writeValueAsString(requestJsonNode);
 
-        when(paymentService.updatePayment(newPayment, shipmentId)).thenReturn(true);
+        when(orderService.updateOrder(newOrder, orderId)).thenReturn(true);
 
-        mockMvc.perform(patch("/payment/shipment/{id}", shipmentId)
+        mockMvc.perform(patch("/orders/{id}", orderId)
                         .content(requestJson)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -106,14 +94,13 @@ public class PaymentControllerTest{
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
-    void testDeleteByShipmentId() throws Exception{
+    void testDeleteById() throws Exception{
+        Integer orderId = 2;
+        when(orderService.deleteById(orderId)).thenReturn(true);
 
-        Integer shipmentId = 1;
-        when(paymentService.deleteByShipmentId(shipmentId)).thenReturn(true);
-
-        mockMvc.perform(delete("/payment/shipment/{id}", shipmentId))
+        mockMvc.perform(delete("/orders/{id}", orderId))
                 .andExpect(status().isOk());
-
     }
+
 
 }

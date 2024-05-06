@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(
-        path = {"customer"}
+        path = {"customers"}
 )
 public class CustomerController{
 
@@ -36,13 +36,13 @@ public class CustomerController{
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteById(@PathVariable("id") Integer id){
+    public ResponseEntity<?> deleteById(@PathVariable("id") Integer id){
         customerService.deleteCustomerById(id);
-        return new ResponseEntity(HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<Customer>> getCustomersList(){
         List<Customer> customers = customerService.getAll();
         return ResponseEntity.ok(customers);
@@ -58,21 +58,21 @@ public class CustomerController{
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PostMapping("/me/shipment")
     public ResponseEntity<?> createNewShipment(@RequestBody NewShipment newShipment){
-       customerService.createShipment(newShipment);
-        return new ResponseEntity(HttpStatus.ACCEPTED);
+        customerService.createShipment(newShipment);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PatchMapping("/me")
     public ResponseEntity<?> dataChange(@RequestBody CustomerUpdateRequest customerUpdateRequest){
         customerService.updateCustomer(customerUpdateRequest);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.USER + "')")
     @DeleteMapping("/me")
-    public ResponseEntity deleteCustomer(){
+    public ResponseEntity<?> deleteCustomer(){
         customerService.deleteCurrentCustomer();
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

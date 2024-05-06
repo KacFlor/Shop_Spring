@@ -1,17 +1,15 @@
 package com.KacFlor.ShopSpring.service;
 
+import com.KacFlor.ShopSpring.config.ExceptionsConfig;
 import com.KacFlor.ShopSpring.controllersRequests.NewPayment;
 import com.KacFlor.ShopSpring.dao.PaymentRepository;
 import com.KacFlor.ShopSpring.dao.ShipmentRepository;
 import com.KacFlor.ShopSpring.model.Payment;
 import com.KacFlor.ShopSpring.model.Shipment;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class PaymentService{
@@ -26,57 +24,65 @@ public class PaymentService{
         this.shipmentRepository = shipmentRepository;
     }
 
-
     public Payment getPaymentById(Integer Id){
         Optional<Payment> optionalPayment = paymentRepository.findById(Id);
 
         if(optionalPayment.isPresent()){
             return optionalPayment.get();
-        }else{
-            throw new UsernameNotFoundException("Payment not found");
+        }
+        else
+        {
+            throw new ExceptionsConfig.ResourceNotFoundException("Payment not found");
         }
     }
 
-    public Payment getByShipmentId(Integer id){
-        Optional<Payment> optionalPayment = paymentRepository.findAll().stream()
-                .filter(payment -> payment.getShipment() != null && payment.getShipment().getId().equals(id))
-                .findFirst();
+    public Payment getByShipmentId(Integer Id){
+        Payment payment = paymentRepository.findByShipmentId(Id);
 
-        return optionalPayment.orElse(null);
+        if(payment != null && payment.getShipment() != null){
+            return payment;
+        }
+        else
+        {
+            throw new ExceptionsConfig.ResourceNotFoundException("Payment not found");
+        }
     }
 
     public boolean updatePayment(NewPayment newPayment, Integer Id){
         Payment payment = paymentRepository.findByShipmentId(Id);
 
-        payment.setPaymentDate(newPayment.getPaymentDate());
-        payment.setPaymentMet(newPayment.getPaymentMet());
-        payment.setAmount(newPayment.getAmount());
+        if(payment != null && payment.getShipment() != null){
+            payment.setPaymentDate(newPayment.getPaymentDate());
+            payment.setPaymentMet(newPayment.getPaymentMet());
+            payment.setAmount(newPayment.getAmount());
 
-        paymentRepository.save(payment);
+            paymentRepository.save(payment);
 
-        return true;
+            return true;
+        }
+        else
+        {
+            throw new ExceptionsConfig.ResourceNotFoundException("Payment not found");
+        }
     }
 
-    public boolean deleteByShipmentId(Integer shipmentId) {
-        Optional<Shipment> optionalShipment = shipmentRepository.findById(shipmentId);
+    public boolean deleteByShipmentId(Integer Id){
+        Payment payment = paymentRepository.findByShipmentId(Id);
+        Optional<Shipment> shipment = shipmentRepository.findById(Id);
 
-        if (optionalShipment.isPresent()) {
-            Shipment shipment = optionalShipment.get();
-            Payment payment = shipment.getPayment();
+        if(payment != null && payment.getShipment() != null){
+            Shipment currentShipment = shipment.get();
 
-            if (payment != null) {
-                payment.setShipment(null);
-                shipment.setPayment(null);
+            payment.setShipment(null);
+            currentShipment.setPayment(null);
+            paymentRepository.save(payment);
+            shipmentRepository.save(currentShipment);
+            return true;
 
-                paymentRepository.save(payment);
-                shipmentRepository.save(shipment);
-
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
+        }
+        else
+        {
+            throw new ExceptionsConfig.ResourceNotFoundException("Payment not found");
         }
     }
 }
