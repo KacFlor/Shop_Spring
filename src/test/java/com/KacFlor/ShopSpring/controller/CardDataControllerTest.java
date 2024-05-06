@@ -76,7 +76,7 @@ public class CardDataControllerTest{
 
         NewCardData newCardData = new NewCardData("456-456-456-456");
 
-        when(cardDataService.updateData(newCardData, cardDataId, customerId)).thenReturn(true);
+        when(cardDataService.updateCardData(newCardData, cardDataId, customerId)).thenReturn(true);
 
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode requestJsonNode = objectMapper.createObjectNode();

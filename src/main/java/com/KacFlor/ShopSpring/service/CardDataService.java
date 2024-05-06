@@ -41,7 +41,7 @@ public class CardDataService{
         }
     }
 
-    public boolean updateData(NewCardData newCardData, Integer CDid, Integer Cid){
+    public boolean updateCardData(NewCardData newCardData, Integer CDid, Integer Cid){
 
         Optional<Customer> optionalCustomer = customerRepository.findById(Cid);
         Optional<CardData> optionalCardData = cardDataRepository.findById(CDid);

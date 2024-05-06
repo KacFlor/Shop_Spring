@@ -43,7 +43,7 @@ public class CardDataController{
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PatchMapping("/{CDid}/customer/{Cid}")
     public ResponseEntity<?> dataChangeByCustomerId(@RequestBody NewCardData newCardData, @PathVariable("Cid") Integer cardDataId, @PathVariable("CDid") Integer customerId){
-        cardDataService.updateData(newCardData, cardDataId, customerId);
+        cardDataService.updateCardData(newCardData, cardDataId, customerId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

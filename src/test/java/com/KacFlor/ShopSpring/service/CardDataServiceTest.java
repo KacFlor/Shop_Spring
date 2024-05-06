@@ -91,7 +91,7 @@ public class CardDataServiceTest{
         when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer));
         when(cardDataRepository.findById(cardDataId)).thenReturn(Optional.of(cardData));
 
-        boolean result = cardDataService.updateData(newCardData, cardDataId, customerId);
+        boolean result = cardDataService.updateCardData(newCardData, cardDataId, customerId);
         assertTrue(result);
         assertEquals("654-654-654-654", cardData.getCardNum());
 
