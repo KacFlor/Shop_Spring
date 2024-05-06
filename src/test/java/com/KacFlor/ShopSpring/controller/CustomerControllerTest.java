@@ -65,28 +65,6 @@ public class CustomerControllerTest{
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
-    void testCreateOrder() throws Exception{
-
-        Integer shipmentId = 1;
-        NewOrder newOrder = new NewOrder();
-        newOrder.setOrderDate(LocalDate.of(2024, 5, 1));
-        newOrder.setTotalPrice(99.99);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-
-        String newOrderJson = objectMapper.writeValueAsString(newOrder);
-
-        when(customerService.createOrder(newOrder, shipmentId)).thenReturn(true);
-
-        mockMvc.perform(post("/customers/me/order")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(newOrderJson))
-                .andExpect(status().isAccepted());
-    }
-
-    @Test
-    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
     public void testGetById() throws Exception{
 
         Customer customer1 = new Customer();

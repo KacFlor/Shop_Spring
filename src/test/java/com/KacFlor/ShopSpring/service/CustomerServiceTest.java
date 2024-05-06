@@ -95,50 +95,6 @@ public class CustomerServiceTest{
 
     }
 
-    @DisplayName("JUnit test for  CreateOrder method")
-    @Test
-    public void testCreateOrder(){
-
-        Integer shipmentId = 1;
-        NewOrder newOrder = new NewOrder();
-        newOrder.setOrderDate(LocalDate.of(2024, 5, 1));
-        newOrder.setTotalPrice(99.99);
-
-        Customer customer1 = new Customer();
-
-        User user1 = new User("Test1", "encodedPassword1", customer1, Role.USER);
-        Shipment shipment = new Shipment();
-
-        customer1.setShipments(new ArrayList<>());
-        customer1.setUser(user1);
-        customer1.setFirstName("Test1");
-        customer1.setOrders(new ArrayList<>());
-
-        Order order = new Order(newOrder.getOrderDate(), newOrder.getTotalPrice());
-
-        customer1.getOrders().add(order);
-        customer1.getShipments().add(shipment);
-        order.setCustomer(customer1);
-
-        Authentication authentication = mock(Authentication.class);
-        SecurityContext securityContext = mock(SecurityContext.class);
-        SecurityContextHolder.setContext(securityContext);
-
-        String username = "Test1";
-        when(authentication.getName()).thenReturn(username);
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-
-        when(userRepository.findByLogin(username)).thenReturn(user1);
-
-        boolean result = customerService.createOrder(newOrder,shipmentId);
-        assertTrue(result);
-
-        verify(userRepository, times(1)).findByLogin(username);
-        verify(customerRepository, times(1)).save(customer1);
-        verify(orderRepository, times(1)).save(any(Order.class));
-
-    }
-
     @DisplayName("JUnit test for getById method")
     @Test
     public void testGetById(){

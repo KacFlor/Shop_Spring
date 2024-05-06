@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import com.KacFlor.ShopSpring.controllersRequests.NewOrder;
 import com.KacFlor.ShopSpring.controllersRequests.NewPayment;
 import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
 import com.KacFlor.ShopSpring.model.Customer;
@@ -12,6 +13,7 @@ import com.KacFlor.ShopSpring.model.Shipment;
 import com.KacFlor.ShopSpring.service.ShipmentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -119,6 +121,28 @@ public class ShipmentControllerTest{
 
         mockMvc.perform(delete("/shipments/customer/{id}", shipmentId))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
+    void testCreateOrder() throws Exception{
+
+        Integer shipmentId = 1;
+        NewOrder newOrder = new NewOrder();
+        newOrder.setOrderDate(LocalDate.of(2024, 5, 1));
+        newOrder.setTotalPrice(99.99);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+
+        String newOrderJson = objectMapper.writeValueAsString(newOrder);
+
+        when(shipmentService.createOrder(newOrder, shipmentId)).thenReturn(true);
+
+        mockMvc.perform(post("/shipments/{id}/order",shipmentId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(newOrderJson))
+                .andExpect(status().isAccepted());
     }
 
     @Test

@@ -1,13 +1,14 @@
 package com.KacFlor.ShopSpring.service;
 
 import com.KacFlor.ShopSpring.config.ExceptionsConfig;
+import com.KacFlor.ShopSpring.controllersRequests.NewOrder;
 import com.KacFlor.ShopSpring.controllersRequests.NewPayment;
 import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
 import com.KacFlor.ShopSpring.dao.CustomerRepository;
+import com.KacFlor.ShopSpring.dao.OrderRepository;
 import com.KacFlor.ShopSpring.dao.PaymentRepository;
 import com.KacFlor.ShopSpring.dao.ShipmentRepository;
-import com.KacFlor.ShopSpring.model.Customer;
-import com.KacFlor.ShopSpring.model.Shipment;
+import com.KacFlor.ShopSpring.model.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,6 +37,9 @@ public class ShipmentServiceTest{
 
     @Mock
     private CustomerRepository customerRepository;
+
+    @Mock
+    private OrderRepository orderRepository;
 
     @InjectMocks
     private ShipmentService shipmentService;
@@ -223,6 +227,33 @@ public class ShipmentServiceTest{
         assertThrows(ExceptionsConfig.ResourceNotFoundException.class, () -> shipmentService.getById(shipmentId));
 
         verify(shipmentRepository, times(2)).findById(shipmentId);
+    }
+
+    @DisplayName("JUnit test for  CreateOrder method")
+    @Test
+    public void testCreateOrder(){
+
+        Integer shipmentId = 1;
+
+        NewOrder newOrder = new NewOrder();
+        newOrder.setOrderDate(LocalDate.of(2024, 5, 1));
+        newOrder.setTotalPrice(99.99);
+
+        Shipment shipment = new Shipment();
+        when(shipmentRepository.findById(shipmentId)).thenReturn(Optional.of(shipment));
+        shipment.setId(1);
+        shipment.setOrders(new ArrayList<>());
+
+        Order order = new Order(newOrder.getOrderDate(), newOrder.getTotalPrice());
+        order.setShipment(shipment);
+        shipment.getOrders().add(order);
+
+        boolean result = shipmentService.createOrder(newOrder, shipmentId);
+        assertTrue(result);
+
+        verify(shipmentRepository, times(1)).save(shipment);
+        verify(orderRepository, times(1)).save(any(Order.class));
+
     }
 
 }
