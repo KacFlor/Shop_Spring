@@ -1,5 +1,6 @@
 package com.KacFlor.ShopSpring.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -24,6 +25,7 @@ public class Payment extends BaseEntity{
     private Double amount;
 
     @OneToOne(mappedBy = "payment", fetch = FetchType.EAGER)
+    @JsonBackReference
     private Shipment shipment;
 
     public Payment(){

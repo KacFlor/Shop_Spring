@@ -1,5 +1,7 @@
 package com.KacFlor.ShopSpring.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -7,6 +9,7 @@ import lombok.Setter;
 import org.aspectj.weaver.ast.Or;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table
@@ -39,14 +42,16 @@ public class Shipment extends BaseEntity{
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "payment_id")
+    @JsonManagedReference
     private Payment payment;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "order_id")
-    private Order order;
+    @OneToMany(mappedBy = "shipment", fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<Order> orders;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")
+    @JsonManagedReference
     private Customer customer;
 
     public Shipment(){

@@ -1,5 +1,7 @@
 package com.KacFlor.ShopSpring.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -20,11 +22,14 @@ public class Order extends BaseEntity{
     @Column(name = "totalPrice")
     private Double totalPrice;
 
-    @OneToOne(mappedBy = "order", fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "shipment_id")
+    @JsonBackReference
     private Shipment shipment;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")
+    @JsonManagedReference
     private Customer customer;
 
     @OneToMany(mappedBy = "order")

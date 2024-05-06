@@ -1,5 +1,7 @@
 package com.KacFlor.ShopSpring.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -33,12 +35,14 @@ public class Customer extends BaseEntity{
     private Number phoneNumber;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+    @JsonBackReference
     private List<Order> orders;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
     private List<CardData> cardDatas;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+    @JsonBackReference
     private List<Shipment> shipments;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
@@ -46,6 +50,7 @@ public class Customer extends BaseEntity{
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
+    @JsonManagedReference
     private User user;
 
     @OneToOne(fetch = FetchType.EAGER)
@@ -61,5 +66,9 @@ public class Customer extends BaseEntity{
         this.lastName = lastName;
         this.email = email;
         this.address = address;
+    }
+
+    public Customer(String firstName){
+        this.firstName = firstName;
     }
 }

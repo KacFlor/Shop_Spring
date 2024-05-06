@@ -1,5 +1,6 @@
 package com.KacFlor.ShopSpring.config;
 
+import com.KacFlor.ShopSpring.dao.CustomerRepository;
 import com.KacFlor.ShopSpring.dao.UserRepository;
 import com.KacFlor.ShopSpring.model.Customer;
 import com.KacFlor.ShopSpring.model.Role;
@@ -21,18 +22,21 @@ public class UserConfig{
     }
 
     @Bean
-    CommandLineRunner commandLineRunnerUser(UserRepository userRepository){
+    CommandLineRunner commandLineRunnerUser(UserRepository userRepository, CustomerRepository customerRepository){
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         return (args) -> {
+            Customer customer = new Customer("HAdmin");
             User HeadAdmin = new User(
                     "HAdmin",
                     encoder.encode("1234"),
-                    new Customer(),
+                    customer,
                     Role.ADMIN
             );
             userRepository.saveAll(
                     List.of(HeadAdmin)
             );
+            customer.setUser(HeadAdmin);
+            customerRepository.save(customer);
         };
     }
 
