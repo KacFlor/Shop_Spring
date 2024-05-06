@@ -3,12 +3,10 @@ package com.KacFlor.ShopSpring.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.KacFlor.ShopSpring.config.ExceptionsConfig;
+import com.KacFlor.ShopSpring.controllersRequests.NewCardData;
 import com.KacFlor.ShopSpring.controllersRequests.NewCustomer;
 import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
-import com.KacFlor.ShopSpring.dao.CustomerRepository;
-import com.KacFlor.ShopSpring.dao.OrderRepository;
-import com.KacFlor.ShopSpring.dao.ShipmentRepository;
-import com.KacFlor.ShopSpring.dao.UserRepository;
+import com.KacFlor.ShopSpring.dao.*;
 import com.KacFlor.ShopSpring.model.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,13 +40,13 @@ public class CustomerServiceTest{
     private CustomerRepository customerRepository;
 
     @Mock
-    private OrderRepository orderRepository;
-
-    @Mock
     private UserRepository userRepository;
 
     @InjectMocks
     private CustomerService customerService;
+
+    @Mock
+    private CardDataRepository cardDataRepository;
 
     @DisplayName("JUnit test for CreateShipment method")
     @Test
@@ -91,6 +89,43 @@ public class CustomerServiceTest{
         verify(userRepository, times(1)).findByLogin(username);
         verify(customerRepository, times(1)).save(customer1);
         verify(shipmentRepository, times(1)).save(any(Shipment.class));
+
+    }
+
+    @DisplayName("JUnit test for CreateCardData method")
+    @Test
+    public void testCreateCardData(){
+
+        NewCardData newCardData = new NewCardData();
+        newCardData.setCardNum("123-123-123-132");
+
+        Customer customer1 = new Customer();
+
+        User user1 = new User("Test1", "encodedPassword1", customer1, Role.USER);
+
+        customer1.setUser(user1);
+        customer1.setFirstName("Test1");
+        customer1.setCardDatas(new ArrayList<>());
+
+        CardData cardData = new CardData(newCardData.getCardNum(),customer1);
+        customer1.getCardDatas().add(cardData);
+
+        Authentication authentication = mock(Authentication.class);
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+
+        String username = "Test1";
+        when(authentication.getName()).thenReturn(username);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+
+        when(userRepository.findByLogin(username)).thenReturn(user1);
+
+        boolean result = customerService.createCardData(newCardData);
+        assertTrue(result);
+
+        verify(userRepository, times(1)).findByLogin(username);
+        verify(customerRepository, times(1)).save(customer1);
+        verify(cardDataRepository, times(1)).save(any(CardData.class));
 
     }
 

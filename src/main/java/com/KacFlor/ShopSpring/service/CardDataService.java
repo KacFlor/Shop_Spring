@@ -18,7 +18,7 @@ public class CardDataService{
 
     private final CardDataRepository cardDataRepository;
 
-    private  final CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
 
     @Autowired
     public CardDataService(CustomerRepository customerRepository, CardDataRepository cardDataRepository){
@@ -66,7 +66,7 @@ public class CardDataService{
         Optional<Customer> optionalCustomer = customerRepository.findById(Cid);
         Optional<CardData> optionalCardData = cardDataRepository.findById(CDid);
 
-        if(optionalCustomer.isPresent() && optionalCardData.isPresent() && Objects.equals(optionalCardData.get().getCustomer().getId(), Cid)) {
+        if(optionalCustomer.isPresent() && optionalCardData.isPresent() && Objects.equals(optionalCardData.get().getCustomer().getId(), Cid)){
 
             Customer customer = optionalCustomer.get();
             CardData cardData = optionalCardData.get();
@@ -77,7 +77,7 @@ public class CardDataService{
 
             return true;
         }
-        else {
+        else{
             throw new ExceptionsConfig.ResourceNotFoundException("Not found");
         }
     }

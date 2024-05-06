@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.KacFlor.ShopSpring.controllersRequests.NewCardData;
-import com.KacFlor.ShopSpring.controllersRequests.NewCustomer;
 import com.KacFlor.ShopSpring.model.Role;
 import com.KacFlor.ShopSpring.service.CardDataService;
 import com.KacFlor.ShopSpring.model.CardData;
@@ -44,14 +43,14 @@ public class CardDataController{
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PatchMapping("/{CDid}/customer/{Cid}")
     public ResponseEntity<?> dataChangeByCustomerId(@RequestBody NewCardData newCardData, @PathVariable("Cid") Integer cardDataId, @PathVariable("CDid") Integer customerId){
-        cardDataService.updateData(newCardData,cardDataId,customerId);
+        cardDataService.updateData(newCardData, cardDataId, customerId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @DeleteMapping("/{CDid}/customer/{Cid}")
     public ResponseEntity<?> deleteByCustomerId(@PathVariable("CDid") Integer cardDataId, @PathVariable("Cid") Integer customerId){
-        cardDataService.deleteCardData(cardDataId,customerId);
+        cardDataService.deleteCardData(cardDataId, customerId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
