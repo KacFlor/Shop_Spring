@@ -33,16 +33,10 @@ public class OrderItem extends BaseEntity{
     @JoinColumn(name = "product_id")
     private Product product;
 
-    public OrderItem(){
-    }
-
-    public OrderItem(String name,Double quantity, Double price){
+    public OrderItem(String name, Double quantity, Double price){
         this.name = name;
         this.quantity = quantity;
         this.price = price;
     }
 
-    public OrderItem(String test1, double quantity, double price){
-        super();
-    }
 }
