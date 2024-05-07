@@ -14,22 +14,18 @@ import java.util.List;
 public class Product extends BaseEntity{
 
     @Column(name = "sku")
-    @NotBlank
     private String sku;
 
     @Column(name = "name")
-    @NotBlank
     private String name;
 
     @Column(name = "description")
     private String description;
 
     @Column(name = "price")
-    @NotBlank
     private Double price;
 
     @Column(name = "stock")
-    @NotBlank
     private Integer stock;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -59,13 +55,12 @@ public class Product extends BaseEntity{
     public Product(){
     }
 
-    public Product(String sku, String description, Double price, Integer stock, Category category, Supplier supplier, Promotion promotion){
+    public Product(String sku, String name, String description, Double price, Integer stock){
         this.sku = sku;
+        this.name = name;
         this.description = description;
         this.price = price;
         this.stock = stock;
-        this.category = category;
-        this.supplier = supplier;
-        this.promotions = promotions;
+
     }
 }
