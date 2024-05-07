@@ -72,8 +72,7 @@ public class ProductControllerTest{
         mockMvc.perform(get("/products"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("[{'sku':'Test1'},{'sku':'Test2'},{'sku':'Test3'}]"));
-
+                .andExpect(content().json("[{'sku':'Test1','name':'Old Name','description':'Old description','price':29.99,'stock':100},{'sku':'Test2','name':'Old Name','description':'Old description','price':29.99,'stock':100},{'sku':'Test3','name':'Old Name','description':'Old description','price':29.99,'stock':100}]"));
     }
 
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
@@ -89,7 +88,7 @@ public class ProductControllerTest{
         mockMvc.perform(get("/products/{id}", productId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("{'sku':'Test1'}"));
+                .andExpect(content().json("{'sku':'Test1','name':'Old Name','description':'Old description','price':29.99,'stock':100}"));
     }
 
     @Test

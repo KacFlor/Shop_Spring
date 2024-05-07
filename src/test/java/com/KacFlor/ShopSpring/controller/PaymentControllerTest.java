@@ -48,7 +48,8 @@ public class PaymentControllerTest{
         mockMvc.perform(get("/payment/{id}", paymentId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("{'paymentMet':'Credit Card'}"));
+                .andExpect(content().json("{'paymentDate':'2024-05-03','paymentMet':'Credit Card','amount':100.0}"));
+
 
     }
 
@@ -68,7 +69,7 @@ public class PaymentControllerTest{
         mockMvc.perform(get("/payment/shipment/{id}", shipmentId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("{'paymentMet':'Credit Card'}"));
+                .andExpect(content().json("{'paymentDate':'2024-05-03','paymentMet':'Credit Card','amount':100.0}"));
 
     }
 

@@ -43,7 +43,7 @@ public class OrderItemControllerTest{
         mockMvc.perform(get("/order-items"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("[{'name':'Test1'},{'name':'Test2'},{'name':'Test3'}]"));
+                .andExpect(content().json("[{'name':'Test1'},{'name':'Test2'},{'name':'Test3'}],[{'quantity':222.0},{'quantity':333.0},{'quantity':333.0}],[{'price':22.22},{'price':22.22},{'price':22.22}]"));
 
     }
 
@@ -60,7 +60,7 @@ public class OrderItemControllerTest{
         mockMvc.perform(get("/order-items/{id}", itemId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("{'name':'Test1'}"));
+                .andExpect(content().json("{'name':'Test1'},{'quantity':22.00}, {'price':2.2}"));
     }
 
     @Test
