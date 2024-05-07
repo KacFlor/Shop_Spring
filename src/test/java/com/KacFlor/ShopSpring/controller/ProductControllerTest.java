@@ -53,9 +53,7 @@ public class ProductControllerTest{
 
         when(productService.addOrderItem(newOrderItem, orderId)).thenReturn(true);
 
-        mockMvc.perform(post("/products/order/{Oid}/order-item", orderId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(newItemJason))
+        mockMvc.perform(post("/products/order/{Oid}/order-item", orderId).contentType(MediaType.APPLICATION_JSON).content(newItemJason))
                 .andExpect(status().isAccepted());
     }
 
@@ -121,9 +119,7 @@ public class ProductControllerTest{
 
         String requestJson = objectMapper.writeValueAsString(requestJsonNode);
 
-        mockMvc.perform(patch("/products/{id}", productId)
-                        .content(requestJson)
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(patch("/products/{id}", productId).content(requestJson).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -148,9 +144,7 @@ public class ProductControllerTest{
 
         String requestJson = objectMapper.writeValueAsString(requestJsonNode);
 
-        mockMvc.perform(post("/products/new")
-                        .content(requestJson)
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/products/new").content(requestJson).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isAccepted());
 

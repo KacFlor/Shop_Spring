@@ -93,9 +93,7 @@ public class CategoryControllerTest{
 
         String requestJson = objectMapper.writeValueAsString(requestJsonNode);
 
-        mockMvc.perform(patch("/categories/{id}", categoryId)
-                        .content(requestJson)
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(patch("/categories/{id}", categoryId).content(requestJson).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -116,9 +114,7 @@ public class CategoryControllerTest{
 
         String requestJson = objectMapper.writeValueAsString(requestJsonNode);
 
-        mockMvc.perform(post("/categories/new")
-                        .content(requestJson)
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/categories/new").content(requestJson).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isAccepted());
 

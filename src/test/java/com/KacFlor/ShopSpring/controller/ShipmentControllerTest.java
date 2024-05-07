@@ -139,9 +139,7 @@ public class ShipmentControllerTest{
 
         when(shipmentService.createOrder(newOrder, shipmentId)).thenReturn(true);
 
-        mockMvc.perform(post("/shipments/{id}/order",shipmentId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(newOrderJson))
+        mockMvc.perform(post("/shipments/{id}/order",shipmentId).contentType(MediaType.APPLICATION_JSON).content(newOrderJson))
                 .andExpect(status().isAccepted());
     }
 
@@ -167,9 +165,7 @@ public class ShipmentControllerTest{
 
         when(shipmentService.updateShipment(newShipment, shipmentId)).thenReturn(true);
 
-        mockMvc.perform(patch("/shipments/{id}", shipmentId)
-                        .content(requestJson)
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(patch("/shipments/{id}", shipmentId).content(requestJson).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -186,9 +182,7 @@ public class ShipmentControllerTest{
 
         when(shipmentService.addNewPayment(newPayment, shipmentId)).thenReturn(true);
 
-        mockMvc.perform(post("/shipments/{id}/payment", shipmentId)
-                        .content(requestJson)
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/shipments/{id}/payment", shipmentId).content(requestJson).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isAccepted());
     }
 

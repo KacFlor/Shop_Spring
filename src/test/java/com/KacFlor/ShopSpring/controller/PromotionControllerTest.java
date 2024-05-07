@@ -97,9 +97,7 @@ public class PromotionControllerTest{
 
         String requestJson = objectMapper.writeValueAsString(requestJsonNode);
 
-        mockMvc.perform(patch("/promotions/{id}", promotionId)
-                        .content(requestJson)
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(patch("/promotions/{id}", promotionId).content(requestJson).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -124,9 +122,7 @@ public class PromotionControllerTest{
 
         String requestJson = objectMapper.writeValueAsString(requestJsonNode);
 
-        mockMvc.perform(post("/promotions/new")
-                        .content(requestJson)
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/promotions/new").content(requestJson).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isAccepted());
 
