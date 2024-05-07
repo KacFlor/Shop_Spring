@@ -1,4 +1,5 @@
 package com.KacFlor.ShopSpring.service;
+
 import com.KacFlor.ShopSpring.config.ExceptionsConfig;
 import com.KacFlor.ShopSpring.controllersRequests.NewOrder;
 import com.KacFlor.ShopSpring.dao.OrderRepository;
@@ -30,11 +31,10 @@ public class OrderServiceTest{
 
     @DisplayName("JUnit test for getAllOrders method")
     @Test
-    public void testGetAllOrders()
-    {
-        Order order1 = new Order(LocalDate.of(2024, 5, 3),2222.22);
-        Order order2 = new Order(LocalDate.of(2025, 5, 3),3333.33);
-        Order order3 = new Order(LocalDate.of(2026, 5, 3),4444.44);
+    public void testGetAllOrders(){
+        Order order1 = new Order(LocalDate.of(2024, 5, 3), 2222.22);
+        Order order2 = new Order(LocalDate.of(2025, 5, 3), 3333.33);
+        Order order3 = new Order(LocalDate.of(2026, 5, 3), 4444.44);
 
         given(orderRepository.findAll()).willReturn(List.of(order1, order2, order3));
 
@@ -51,17 +51,16 @@ public class OrderServiceTest{
 
     @DisplayName("JUnit test for getById method")
     @Test
-    public void testGetById()
-    {
+    public void testGetById(){
 
-        Order order1 = new Order(LocalDate.of(2024, 5, 3),2222.22);
+        Order order1 = new Order(LocalDate.of(2024, 5, 3), 2222.22);
         Integer orderId = 1;
 
         when(orderRepository.findById(orderId)).thenReturn(Optional.of(order1));
 
-        Order actualOrder = orderService.getById(orderId);
+        Order order = orderService.getById(orderId);
 
-        assertEquals(order1, actualOrder);
+        assertEquals(order1, order);
 
         verify(orderRepository, times(1)).findById(orderId);
 
@@ -75,12 +74,11 @@ public class OrderServiceTest{
 
     @DisplayName("JUnit test for updateOrder method")
     @Test
-    public void testUpdateOrder()
-    {
+    public void testUpdateOrder(){
         Integer orderId = 1;
-        NewOrder newOrder = new NewOrder(LocalDate.of(2024, 5, 10),100.0);
+        NewOrder newOrder = new NewOrder(LocalDate.of(2024, 5, 10), 100.0);
 
-        Order existingOrder = new Order(LocalDate.of(2021, 1, 3),140.0);
+        Order existingOrder = new Order(LocalDate.of(2021, 1, 3), 140.0);
 
         when(orderRepository.findById(orderId)).thenReturn(Optional.of(existingOrder));
 
@@ -102,8 +100,7 @@ public class OrderServiceTest{
 
     @DisplayName("JUnit test for deleteById method")
     @Test
-    public void testDeleteById()
-    {
+    public void testDeleteById(){
         Integer orderId = 1;
 
         Order order = new Order();

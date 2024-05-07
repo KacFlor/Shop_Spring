@@ -3,7 +3,8 @@ package com.KacFlor.ShopSpring.controller;
 import java.util.List;
 import java.util.Optional;
 
-import com.KacFlor.ShopSpring.controllersRequests.CustomerUpdateRequest;
+import com.KacFlor.ShopSpring.controllersRequests.NewCardData;
+import com.KacFlor.ShopSpring.controllersRequests.NewCustomer;
 import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
 import com.KacFlor.ShopSpring.model.Customer;
 import com.KacFlor.ShopSpring.model.Role;
@@ -63,13 +64,20 @@ public class CustomerController{
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
+    @PostMapping("/me/card-data")
+    public ResponseEntity<?> createCardData(@RequestBody NewCardData newCardData){
+        customerService.createCardData(newCardData);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PatchMapping("/me")
-    public ResponseEntity<?> dataChange(@RequestBody CustomerUpdateRequest customerUpdateRequest){
-        customerService.updateCustomer(customerUpdateRequest);
+    public ResponseEntity<?> dataChange(@RequestBody NewCustomer newCustomer){
+        customerService.updateCustomer(newCustomer);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('" + Role.Fields.USER + "')")
+    @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @DeleteMapping("/me")
     public ResponseEntity<?> deleteCustomer(){
         customerService.deleteCurrentCustomer();

@@ -6,8 +6,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.KacFlor.ShopSpring.controllersRequests.CustomerUpdateRequest;
-import com.KacFlor.ShopSpring.controllersRequests.NewOrder;
+import com.KacFlor.ShopSpring.controllersRequests.NewCardData;
+import com.KacFlor.ShopSpring.controllersRequests.NewCustomer;
 import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
 import com.KacFlor.ShopSpring.model.Customer;
 import com.KacFlor.ShopSpring.service.CustomerService;
@@ -60,6 +60,26 @@ public class CustomerControllerTest{
         mockMvc.perform(post("/customers/me/shipment")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(newShipmentJson))
+                .andExpect(status().isAccepted());
+    }
+
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
+    void testCreateCardData() throws Exception{
+
+        NewCardData newCardData = new NewCardData();
+        newCardData.setCardNum("123-123-123-123");
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+
+        String newCardDataJason = objectMapper.writeValueAsString(newCardData);
+
+        when(customerService.createCardData(newCardData)).thenReturn(true);
+
+        mockMvc.perform(post("/customers/me/card-data")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(newCardDataJason))
                 .andExpect(status().isAccepted());
     }
 
@@ -134,17 +154,17 @@ public class CustomerControllerTest{
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
     public void testDataChange() throws Exception{
 
-        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest();
-        customerUpdateRequest.setFirstName("Kacper");
-        customerUpdateRequest.setLastName("Florry");
-        customerUpdateRequest.setEmail("cos@gmail.com");
-        customerUpdateRequest.setAddress("Staff");
-        customerUpdateRequest.setPhoneNumber(123123123L);
+        NewCustomer newCustomer = new NewCustomer();
+        newCustomer.setFirstName("Kacper");
+        newCustomer.setLastName("Florry");
+        newCustomer.setEmail("cos@gmail.com");
+        newCustomer.setAddress("Staff");
+        newCustomer.setPhoneNumber(123123123L);
 
         ObjectMapper objectMapper = new ObjectMapper();
-        String requestJson = objectMapper.writeValueAsString(customerUpdateRequest);
+        String requestJson = objectMapper.writeValueAsString(newCustomer);
 
-        when(customerService.updateCustomer(customerUpdateRequest)).thenReturn(true);
+        when(customerService.updateCustomer(newCustomer)).thenReturn(true);
 
         mockMvc.perform(patch("/customers/me")
                         .content(requestJson)
