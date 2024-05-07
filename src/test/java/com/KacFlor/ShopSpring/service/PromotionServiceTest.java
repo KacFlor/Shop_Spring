@@ -136,6 +136,4 @@ public class PromotionServiceTest{
         verify(promotionRepository, times(1)).save(any(Promotion.class));
     }
 
-
-
 }

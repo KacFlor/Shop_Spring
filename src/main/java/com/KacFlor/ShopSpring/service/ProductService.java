@@ -3,10 +3,7 @@ package com.KacFlor.ShopSpring.service;
 import com.KacFlor.ShopSpring.config.ExceptionsConfig;
 import com.KacFlor.ShopSpring.controllersRequests.NewOrderItem;
 import com.KacFlor.ShopSpring.controllersRequests.NewProduct;
-import com.KacFlor.ShopSpring.dao.OrderItemRepository;
-import com.KacFlor.ShopSpring.dao.OrderRepository;
-import com.KacFlor.ShopSpring.dao.ProductRepository;
-import com.KacFlor.ShopSpring.dao.PromotionRepository;
+import com.KacFlor.ShopSpring.dao.*;
 import com.KacFlor.ShopSpring.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,12 +22,15 @@ public class ProductService{
 
     private final PromotionRepository promotionRepository;
 
+    private final CategoryRepository categoryRepository;
+
     @Autowired
-    public ProductService(PromotionRepository promotionRepository, ProductRepository productRepository, OrderItemRepository orderItemRepository, OrderRepository orderRepository){
+    public ProductService(CategoryRepository categoryRepository,PromotionRepository promotionRepository, ProductRepository productRepository, OrderItemRepository orderItemRepository, OrderRepository orderRepository){
         this.productRepository = productRepository;
         this.orderItemRepository = orderItemRepository;
         this.orderRepository = orderRepository;
         this.promotionRepository = promotionRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public List<Product> getAll(){
@@ -154,6 +154,53 @@ public class ProductService{
 
             productRepository.save(product);
             promotionRepository.save(promotion);
+
+            return true;
+        }
+        else{
+            throw new ExceptionsConfig.ResourceNotFoundException("Payment not found");
+        }
+    }
+
+    public boolean addCategory(Integer PTid, Integer Cid) {
+
+        Optional<Product> optionalProduct = productRepository.findById(PTid);
+        Optional<Category> optionalCategory = categoryRepository.findById(Cid);
+
+        if (optionalProduct.isPresent() && optionalCategory.isPresent()) {
+            Product product = optionalProduct.get();
+            Category category = optionalCategory.get();
+
+            if (product.getCategory() != null) {
+                throw new IllegalStateException("Product already has a category assigned.");
+            }
+
+            product.setCategory(category);
+            category.getProducts().add(product);
+
+            categoryRepository.save(category);
+            productRepository.save(product);
+
+            return true;
+        }
+        else{
+            throw new ExceptionsConfig.ResourceNotFoundException("Payment not found");
+        }
+    }
+
+    public boolean removeCategory(Integer PTid, Integer Cid){
+        Optional<Product> optionalProduct = productRepository.findById(PTid);
+        Optional<Category> optionalCategory = categoryRepository.findById(Cid);
+
+        if (optionalProduct.isPresent() && optionalCategory.isPresent()) {
+            Product product = optionalProduct.get();
+            Category category = optionalCategory.get();
+
+            product.setCategory(null);
+            category.getProducts().remove(product);
+
+            productRepository.save(product);
+            categoryRepository.save(category);
 
             return true;
         }

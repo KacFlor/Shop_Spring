@@ -4,16 +4,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.KacFlor.ShopSpring.controllersRequests.NewOrderItem;
-import com.KacFlor.ShopSpring.controllersRequests.NewProduct;
 import com.KacFlor.ShopSpring.controllersRequests.NewPromotion;
-import com.KacFlor.ShopSpring.model.Product;
 import com.KacFlor.ShopSpring.model.Promotion;
-import com.KacFlor.ShopSpring.service.ProductService;
 import com.KacFlor.ShopSpring.service.PromotionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
