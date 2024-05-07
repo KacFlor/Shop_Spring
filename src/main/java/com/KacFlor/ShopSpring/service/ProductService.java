@@ -6,6 +6,7 @@ import com.KacFlor.ShopSpring.controllersRequests.NewProduct;
 import com.KacFlor.ShopSpring.dao.OrderItemRepository;
 import com.KacFlor.ShopSpring.dao.OrderRepository;
 import com.KacFlor.ShopSpring.dao.ProductRepository;
+import com.KacFlor.ShopSpring.dao.PromotionRepository;
 import com.KacFlor.ShopSpring.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,11 +23,14 @@ public class ProductService{
 
     private final OrderRepository orderRepository;
 
+    private final PromotionRepository promotionRepository;
+
     @Autowired
-    public ProductService(ProductRepository productRepository, OrderItemRepository orderItemRepository, OrderRepository orderRepository){
+    public ProductService(PromotionRepository promotionRepository, ProductRepository productRepository, OrderItemRepository orderItemRepository, OrderRepository orderRepository){
         this.productRepository = productRepository;
         this.orderItemRepository = orderItemRepository;
         this.orderRepository = orderRepository;
+        this.promotionRepository = promotionRepository;
     }
 
     public List<Product> getAll(){
@@ -113,5 +117,48 @@ public class ProductService{
 
         return true;
 
+    }
+
+    public boolean addPromotion(Integer PTid, Integer PNid) {
+
+        Optional<Product> optionalProduct = productRepository.findById(PTid);
+        Optional<Promotion> optionalPromotion = promotionRepository.findById(PNid);
+
+        if (optionalProduct.isPresent() && optionalPromotion.isPresent()) {
+            Product product = optionalProduct.get();
+            Promotion promotion = optionalPromotion.get();
+
+            product.getPromotions().add(promotion);
+            promotion.getProducts().add(product);
+
+            promotionRepository.save(promotion);
+            productRepository.save(product);
+
+            return true;
+        }
+        else{
+            throw new ExceptionsConfig.ResourceNotFoundException("Payment not found");
+        }
+    }
+
+    public boolean removePromotion(Integer PTid, Integer PNid){
+        Optional<Product> optionalProduct = productRepository.findById(PTid);
+        Optional<Promotion> optionalPromotion = promotionRepository.findById(PNid);
+
+        if (optionalProduct.isPresent() && optionalPromotion.isPresent()) {
+            Product product = optionalProduct.get();
+            Promotion promotion = optionalPromotion.get();
+
+            product.getPromotions().remove(promotion);
+            promotion.getProducts().remove(product);
+
+            productRepository.save(product);
+            promotionRepository.save(promotion);
+
+            return true;
+        }
+        else{
+            throw new ExceptionsConfig.ResourceNotFoundException("Payment not found");
+        }
     }
 }

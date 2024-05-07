@@ -67,4 +67,18 @@ public class ProductController{
         productService.addNewProduct(newProduct);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
+
+    @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
+    @PatchMapping("/{PTid}/promotion/{PNid}/add")
+    public ResponseEntity<?> AddPromotionToProductById(@PathVariable("PTid") Integer PTid, @PathVariable("PNid") Integer PNid){
+        productService.addPromotion(PTid, PNid);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
+    @PatchMapping("/{PDid}/promotion/{PNid}/remove")
+    public ResponseEntity<?> RemovePromotionToProductById(@PathVariable("PDid") Integer PDid, @PathVariable("PNid") Integer PNid){
+        productService.removePromotion(PDid, PNid);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

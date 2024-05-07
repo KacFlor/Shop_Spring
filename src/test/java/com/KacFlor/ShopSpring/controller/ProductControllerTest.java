@@ -156,4 +156,29 @@ public class ProductControllerTest{
 
     }
 
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
+    void testAddPromotionToProductById() throws Exception {
+        Integer productTestId = 1;
+        Integer promotionTestId = 1;
+
+        when(productService.addPromotion(productTestId, promotionTestId)).thenReturn(true);
+
+        mockMvc.perform(patch("/products/{PTid}/promotion/{PNid}/add", productTestId, promotionTestId))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
+    void testRemovePromotionToProductById() throws Exception {
+        Integer productTestId = 1;
+        Integer promotionTestId = 1;
+
+        when(productService.removePromotion(productTestId, promotionTestId)).thenReturn(true);
+
+        mockMvc.perform(patch("/products/{PDid}/promotion/{PNid}/remove", productTestId, promotionTestId))
+                .andExpect(status().isOk());
+
+    }
+
 }
