@@ -14,7 +14,7 @@ public class NewOrderItem{
 
     private String name;
 
-    private LocalDate quantity;
+    private Double quantity;
 
     private Double price;
 

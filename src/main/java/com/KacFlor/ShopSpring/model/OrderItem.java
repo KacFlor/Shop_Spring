@@ -19,7 +19,7 @@ public class OrderItem extends BaseEntity{
     private String name;
 
     @Column(name = "quantity")
-    private LocalDate quantity;
+    private Double quantity;
 
     @Column(name = "price")
     private Double price;
@@ -36,7 +36,7 @@ public class OrderItem extends BaseEntity{
     public OrderItem(){
     }
 
-    public OrderItem(String name,LocalDate quantity, Double price){
+    public OrderItem(String name,Double quantity, Double price){
         this.name = name;
         this.quantity = quantity;
         this.price = price;
