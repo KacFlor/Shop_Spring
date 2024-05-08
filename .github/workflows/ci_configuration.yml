@@ -39,7 +39,17 @@ jobs:
         run: sleep 30
 
       - name: Build with Maven
-        run: mvn clean install -U
+        run: mvn clean install -DskipTests=true
+
+      - name: Monitor PostgreSQL connections
+        run: |
+          while true; do
+            sleep 5
+            echo "Active connections:"
+            psql -h localhost -U postgres -c "SELECT COUNT(*) FROM pg_stat_activity WHERE state = 'active';" student
+          done
+        background: true
 
       - name: Run Tests
         run: mvn test
+
