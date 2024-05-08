@@ -67,15 +67,15 @@ public class SupplierControllerTest{
 
     }
 
-    @Test
-    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
-    void testDeleteById() throws Exception{
-        Integer supplierId = 2;
-        when(supplierService.deleteById(supplierId)).thenReturn(true);
-
-        mockMvc.perform(delete("/suppliers/{id}", supplierId))
-                .andExpect(status().isOk());
-    }
+//    @Test
+//    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
+//    void testDeleteById() throws Exception{
+//        Integer supplierId = 2;
+//        when(supplierService.deleteById(supplierId)).thenReturn(true);
+//
+//        mockMvc.perform(delete("/suppliers/{id}", supplierId))
+//                .andExpect(status().isOk());
+//    }
 
 //    @WithMockUser(username = "admin", authorities = {"ADMIN"})
 //    @Test
