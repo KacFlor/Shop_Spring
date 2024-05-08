@@ -3,9 +3,7 @@ package com.KacFlor.ShopSpring.controller;
 import java.util.List;
 import java.util.Optional;
 
-import com.KacFlor.ShopSpring.model.Category;
 import com.KacFlor.ShopSpring.model.Role;
-import com.KacFlor.ShopSpring.model.Shipment;
 import com.KacFlor.ShopSpring.service.CartService;
 import com.KacFlor.ShopSpring.model.Cart;
 import org.springframework.beans.factory.annotation.Autowired;

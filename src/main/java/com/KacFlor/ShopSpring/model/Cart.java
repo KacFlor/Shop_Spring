@@ -1,5 +1,6 @@
 package com.KacFlor.ShopSpring.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +20,7 @@ public class Cart extends BaseEntity{
     private Integer quantity;
 
     @OneToOne(mappedBy = "cart", fetch = FetchType.EAGER)
+    @JsonBackReference
     private Customer customer;
 
 

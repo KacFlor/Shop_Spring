@@ -56,6 +56,7 @@ public class Customer extends BaseEntity{
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cart_id")
+    @JsonManagedReference
     private Cart cart;
 
     @OneToOne(fetch = FetchType.EAGER)
