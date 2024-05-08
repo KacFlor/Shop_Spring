@@ -53,9 +53,7 @@ public class ProductControllerTest{
 
         when(productService.addOrderItem(newOrderItem, orderId)).thenReturn(true);
 
-        mockMvc.perform(post("/products/order/{Oid}/order-item", orderId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(newItemJason))
+        mockMvc.perform(post("/products/order/{Oid}/order-item", orderId).contentType(MediaType.APPLICATION_JSON).content(newItemJason))
                 .andExpect(status().isAccepted());
     }
 
@@ -121,9 +119,7 @@ public class ProductControllerTest{
 
         String requestJson = objectMapper.writeValueAsString(requestJsonNode);
 
-        mockMvc.perform(patch("/products/{id}", productId)
-                        .content(requestJson)
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(patch("/products/{id}", productId).content(requestJson).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -148,11 +144,59 @@ public class ProductControllerTest{
 
         String requestJson = objectMapper.writeValueAsString(requestJsonNode);
 
-        mockMvc.perform(post("/products/new")
-                        .content(requestJson)
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/products/new").content(requestJson).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isAccepted());
+
+    }
+
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
+    void testAddPromotionToProductById() throws Exception {
+        Integer productTestId = 1;
+        Integer promotionTestId = 1;
+
+        when(productService.addPromotion(productTestId, promotionTestId)).thenReturn(true);
+
+        mockMvc.perform(patch("/products/{PTid}/promotion/{PNid}/add", productTestId, promotionTestId))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
+    void testRemovePromotionToProductById() throws Exception {
+        Integer productTestId = 1;
+        Integer promotionTestId = 1;
+
+        when(productService.removePromotion(productTestId, promotionTestId)).thenReturn(true);
+
+        mockMvc.perform(patch("/products/{PDid}/promotion/{PNid}/remove", productTestId, promotionTestId))
+                .andExpect(status().isOk());
+
+    }
+
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
+    void testAddCategoryToProductById() throws Exception {
+        Integer productTestId = 1;
+        Integer categoryId = 1;
+
+        when(productService.addPromotion(productTestId, categoryId)).thenReturn(true);
+
+        mockMvc.perform(patch("/products/{PTid}/category/{Cid}/add", productTestId, categoryId))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
+    void testRemoveCategoryToProductById() throws Exception {
+        Integer productTestId = 1;
+        Integer categoryId = 1;
+
+        when(productService.removePromotion(productTestId, categoryId)).thenReturn(true);
+
+        mockMvc.perform(patch("/products/{PDid}/category/{PNid}/remove", productTestId, categoryId))
+                .andExpect(status().isOk());
 
     }
 

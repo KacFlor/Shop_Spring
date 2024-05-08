@@ -57,9 +57,7 @@ public class CustomerControllerTest{
 
         when(customerService.createShipment(newShipment)).thenReturn(true);
 
-        mockMvc.perform(post("/customers/me/shipment")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(newShipmentJson))
+        mockMvc.perform(post("/customers/me/shipment").contentType(MediaType.APPLICATION_JSON).content(newShipmentJson))
                 .andExpect(status().isAccepted());
     }
 
@@ -77,9 +75,7 @@ public class CustomerControllerTest{
 
         when(customerService.createCardData(newCardData)).thenReturn(true);
 
-        mockMvc.perform(post("/customers/me/card-data")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(newCardDataJason))
+        mockMvc.perform(post("/customers/me/card-data").contentType(MediaType.APPLICATION_JSON).content(newCardDataJason))
                 .andExpect(status().isAccepted());
     }
 
@@ -166,9 +162,7 @@ public class CustomerControllerTest{
 
         when(customerService.updateCustomer(newCustomer)).thenReturn(true);
 
-        mockMvc.perform(patch("/customers/me")
-                        .content(requestJson)
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(patch("/customers/me").content(requestJson).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
 

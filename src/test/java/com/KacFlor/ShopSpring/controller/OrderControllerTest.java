@@ -108,9 +108,7 @@ public class OrderControllerTest{
 
         when(orderService.updateOrder(newOrder, orderId)).thenReturn(true);
 
-        mockMvc.perform(patch("/orders/{id}", orderId)
-                        .content(requestJson)
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(patch("/orders/{id}", orderId).content(requestJson).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
     }

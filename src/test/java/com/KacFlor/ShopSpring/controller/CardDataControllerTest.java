@@ -85,9 +85,7 @@ public class CardDataControllerTest{
 
         String requestJson = objectMapper.writeValueAsString(requestJsonNode);
 
-        mockMvc.perform(patch("/cards-data/{CDid}/customer/{Cid}", cardDataId, customerId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestJson))
+        mockMvc.perform(patch("/cards-data/{CDid}/customer/{Cid}", cardDataId, customerId).contentType(MediaType.APPLICATION_JSON).content(requestJson))
                 .andExpect(status().isOk());
 
     }

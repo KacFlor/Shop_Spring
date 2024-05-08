@@ -67,4 +67,32 @@ public class ProductController{
         productService.addNewProduct(newProduct);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
+
+    @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
+    @PatchMapping("/{PTid}/promotion/{PNid}/add")
+    public ResponseEntity<?> addPromotionToProductById(@PathVariable("PTid") Integer PTid, @PathVariable("PNid") Integer PNid){
+        productService.addPromotion(PTid, PNid);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
+    @PatchMapping("/{PDid}/promotion/{PNid}/remove")
+    public ResponseEntity<?> removePromotionFromProductById(@PathVariable("PDid") Integer PDid, @PathVariable("PNid") Integer PNid){
+        productService.removePromotion(PDid, PNid);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
+    @PatchMapping("/{PTid}/category/{Cid}/add")
+    public ResponseEntity<?> addCategoryToProductById(@PathVariable("PTid") Integer PTid, @PathVariable("Cid") Integer Cid){
+        productService.addCategory(PTid, Cid);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
+    @PatchMapping("/{PDid}/category/{Cid}/remove")
+    public ResponseEntity<?> removeCategoryFromProductById(@PathVariable("PDid") Integer PDid, @PathVariable("Cid") Integer Cid){
+        productService.removeCategory(PDid, Cid);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

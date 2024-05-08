@@ -1,5 +1,7 @@
 package com.KacFlor.ShopSpring.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -40,7 +42,8 @@ public class Product extends BaseEntity{
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "products", fetch = FetchType.EAGER)
+    @JsonManagedReference
     private List<Promotion> promotions;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)

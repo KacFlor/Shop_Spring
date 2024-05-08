@@ -19,6 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +35,12 @@ public class ProductServiceTest{
 
     @Mock
     private OrderItemRepository orderItemRepository;
+
+    @Mock
+    private PromotionRepository promotionRepository;
+
+    @Mock
+    private CategoryRepository categoryRepository;
 
     @InjectMocks
     private ProductService productService;
@@ -173,6 +180,114 @@ public class ProductServiceTest{
         assertTrue(result);
 
         verify(productRepository, times(1)).save(any(Product.class));
+    }
+
+    @Test
+    void testAddPromotion() {
+        Integer productId = 1;
+        Integer promotionId = 1;
+
+        Product product = new Product();
+        product.setId(productId);
+        product.setPromotions(new ArrayList<>());
+
+        Promotion promotion = new Promotion("Test1", "Special discount for summer season", LocalDate.of(2024, 6, 1), LocalDate.of(2024, 8, 31), 0.2);
+        promotion.setId(promotionId);
+        promotion.setProducts(new ArrayList<>());
+
+        product.getPromotions().add(promotion);
+        promotion.getProducts().add(product);
+
+        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+        when(promotionRepository.findById(promotionId)).thenReturn(Optional.of(promotion));
+
+        boolean result = productService.addPromotion(productId, promotionId);
+
+        assertTrue(result);
+        verify(productRepository, times(1)).findById(productId);
+        verify(promotionRepository, times(1)).findById(promotionId);
+        verify(productRepository, times(1)).save(product);
+        verify(promotionRepository, times(1)).save(promotion);
+    }
+
+    @Test
+    void testRemovePromotion() {
+        Integer productId = 1;
+        Integer promotionId = 1;
+
+        Product product = new Product();
+        product.setId(productId);
+        product.setPromotions(new ArrayList<>());
+
+        Promotion promotion = new Promotion("Test1", "Special discount for summer season", LocalDate.of(2024, 6, 1), LocalDate.of(2024, 8, 31), 0.2);
+        promotion.setId(promotionId);
+        promotion.setProducts(new ArrayList<>());
+
+        product.getPromotions().add(promotion);
+        promotion.getProducts().add(product);
+
+        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+        when(promotionRepository.findById(promotionId)).thenReturn(Optional.of(promotion));
+
+        boolean result = productService.removePromotion(productId, promotionId);
+
+        assertTrue(result);
+        verify(productRepository, times(1)).findById(productId);
+        verify(promotionRepository, times(1)).findById(promotionId);
+        verify(productRepository, times(1)).save(product);
+        verify(promotionRepository, times(1)).save(promotion);
+    }
+
+    @Test
+    void testAddCategory() {
+        Integer productId = 1;
+        Integer categoryId = 1;
+
+        Product product = new Product();
+        product.setId(productId);
+
+        Category category = new Category("Test1");
+        category.setId(categoryId);
+        category.setProducts(new ArrayList<>());
+
+        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+        when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
+
+        boolean result = productService.addCategory(productId, categoryId);
+
+        assertTrue(result);
+        verify(productRepository, times(1)).findById(productId);
+        verify(categoryRepository, times(1)).findById(categoryId);
+        verify(productRepository, times(1)).save(product);
+        verify(categoryRepository, times(1)).save(category);
+    }
+
+    @Test
+    void testRemoveCategory() {
+        Integer productId = 1;
+        Integer categoryId = 1;
+
+        Product product = new Product();
+        product.setId(productId);
+
+
+        Category category = new Category("Test1");
+        category.setId(categoryId);
+        category.setProducts(new ArrayList<>());
+
+        product.setCategory(null);
+        category.getProducts().add(product);
+
+        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+        when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
+
+        boolean result = productService.removeCategory(productId, categoryId);
+
+        assertTrue(result);
+        verify(productRepository, times(1)).findById(productId);
+        verify(categoryRepository, times(1)).findById(categoryId);
+        verify(productRepository, times(1)).save(product);
+        verify(categoryRepository, times(1)).save(category);
     }
 
 
