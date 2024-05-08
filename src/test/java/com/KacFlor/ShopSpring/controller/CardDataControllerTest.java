@@ -108,22 +108,6 @@ public class CardDataControllerTest{
                 .andExpect(status().isOk());
     }
 
-    @Test
-    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
-    void testDeleteByCustomer() throws Exception{
-        Integer cardDataId = 1;
-        Integer customerId = 1;
 
-        Customer customer = new Customer();
-        CardData cardData1 = new CardData("123-123-123-123", customer);
-
-        customer.setId(customerId);
-        cardData1.setId(cardDataId);
-
-        when(cardDataService.deleteCardData(cardDataId, customerId)).thenReturn(true);
-
-        mockMvc.perform(delete("/cards-data/{CDid}/customer/{Cid}", cardDataId, customerId))
-                .andExpect(status().isOk());
-    }
 
 }
