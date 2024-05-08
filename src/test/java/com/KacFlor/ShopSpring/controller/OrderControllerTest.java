@@ -49,7 +49,8 @@ public class OrderControllerTest{
         mockMvc.perform(get("/orders"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("[{'totalPrice':2222.22},{'totalPrice':3333.33},{'totalPrice':4444.44}]"));
+                .andExpect(content().json("[{'orderDate':'2024-05-03','totalPrice':2222.22},{'orderDate':'2025-05-03','totalPrice':3333.33},{'orderDate':'2026-05-03','totalPrice':4444.44}]"));
+
 
     }
 
@@ -67,7 +68,8 @@ public class OrderControllerTest{
         mockMvc.perform(get("/orders/{id}/order-items", orderId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("[{'name':'Test1'},{'name':'Test2'}]"));
+                .andExpect(content().json("[{'name':'Test1','quantity':2.0,'price':10.0},{'name':'Test2','quantity':3.0,'price':15.0}]"));
+
 
         verify(orderService, times(1)).getAllOrderItems(orderId);
     }
@@ -84,7 +86,7 @@ public class OrderControllerTest{
         mockMvc.perform(get("/orders/{id}", orderId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("{'totalPrice':2222.22}"));
+                .andExpect(content().json("{'orderDate':'2024-05-03','totalPrice':2222.22}"));
     }
 
     @Test
@@ -106,9 +108,7 @@ public class OrderControllerTest{
 
         when(orderService.updateOrder(newOrder, orderId)).thenReturn(true);
 
-        mockMvc.perform(patch("/orders/{id}", orderId)
-                        .content(requestJson)
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(patch("/orders/{id}", orderId).content(requestJson).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
     }

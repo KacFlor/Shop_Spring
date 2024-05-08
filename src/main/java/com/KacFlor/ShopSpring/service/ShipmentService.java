@@ -94,33 +94,53 @@ public class ShipmentService{
         }
     }
 
-
-    public boolean deleteAllByCustomerId(Integer Id){
-
+    public boolean deleteAllByCustomerId(Integer Id) {
         Optional<Customer> customer = customerRepository.findById(Id);
-        if(customer.isPresent()){
+        if(customer.isPresent()) {
             List<Shipment> allShipments = shipmentRepository.findAllByCustomerId(Id);
 
-            shipmentRepository.deleteAll(allShipments);
+            for(Shipment shipment : allShipments) {
+                shipment.setPayment(null);
+                shipment.setOrders(null);
+                List<Payment> payments = paymentRepository.findAllByShipmentId(shipment.getId());
+                for (Payment payment : payments) {
+                    paymentRepository.delete(payment);
+                }
+
+                List<Order> orders = orderRepository.findAllByShipmentId(shipment.getId());
+                for (Order order : orders) {
+                    orderRepository.delete(order);
+                }
+
+                shipmentRepository.delete(shipment);
+            }
 
             return true;
-        }
-        else{
+        } else {
             throw new ExceptionsConfig.ResourceNotFoundException("Customer not found");
         }
     }
 
-    public boolean deleteById(Integer Id){
-
+    public boolean deleteById(Integer Id) {
         Optional<Shipment> optionalShipment = shipmentRepository.findById(Id);
-        if(optionalShipment.isPresent()){
+        if(optionalShipment.isPresent()) {
             Shipment shipment = optionalShipment.get();
+            shipment.setPayment(null);
+            shipment.setOrders(null);
 
-            shipmentRepository.delete(shipment);
+            List<Payment> payments = paymentRepository.findAllByShipmentId(shipment.getId());
+            for (Payment payment : payments) {
+                paymentRepository.delete(payment);
+            }
 
+            List<Order> orders = orderRepository.findAllByShipmentId(shipment.getId());
+            for (Order order : orders) {
+                orderRepository.delete(order);
+            }
+
+            shipmentRepository.deleteById(Id);
             return true;
-        }
-        else{
+        } else {
             throw new ExceptionsConfig.ResourceNotFoundException("Shipment not found");
         }
     }
