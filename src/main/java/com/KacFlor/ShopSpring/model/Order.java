@@ -33,6 +33,7 @@ public class Order extends BaseEntity{
     private Customer customer;
 
     @OneToMany(mappedBy = "order")
+    @JsonBackReference
     private List<OrderItem> orderItems;
 
 

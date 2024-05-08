@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.KacFlor.ShopSpring.controllersRequests.NewOrder;
 import com.KacFlor.ShopSpring.model.Order;
+import com.KacFlor.ShopSpring.model.OrderItem;
 import com.KacFlor.ShopSpring.model.Role;
 import com.KacFlor.ShopSpring.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,13 @@ public class OrderController{
         Optional<Order> order = Optional.ofNullable(orderService.getById(id));
         return ResponseEntity.ok(order);
     }
+
+    @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
+    @GetMapping("/{id}/order-items")
+    public List<OrderItem> getAllOrderItemsByOrderId(@PathVariable("id") Integer id){
+        return this.orderService.getAllOrderItems(id);
+    }
+
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PatchMapping("/{id}")

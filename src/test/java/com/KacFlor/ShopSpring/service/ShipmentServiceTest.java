@@ -134,7 +134,6 @@ public class ShipmentServiceTest{
     @Test
     public void testDeleteAllByCustomerId(){
 
-        Integer customer1Id = 1;
         Integer customer2Id = 2;
 
         Shipment shipment1 = new Shipment(LocalDate.of(2024, 5, 3), "123 Main Street", "Springfield", "Ohio", "USA", "12345");
@@ -145,12 +144,10 @@ public class ShipmentServiceTest{
         shipments.add(shipment2);
         shipments.add(shipment3);
 
-        Customer customer1 = new Customer();
-        customer1.setId(customer1Id);
         Customer customer2 = new Customer();
         customer2.setId(customer2Id);
 
-        shipment1.setCustomer(customer1);
+        shipment1.setCustomer(customer2);
         shipment2.setCustomer(customer2);
         shipment3.setCustomer(customer2);
 
@@ -159,7 +156,8 @@ public class ShipmentServiceTest{
 
         boolean result = shipmentService.deleteAllByCustomerId(customer2Id);
 
-        verify(shipmentRepository, times(1)).deleteAll(List.of(shipment2, shipment3));
+        verify(shipmentRepository, times(1)).delete(shipment2);
+        verify(shipmentRepository, times(1)).delete(shipment3);
 
         assertTrue(result);
 
@@ -168,7 +166,6 @@ public class ShipmentServiceTest{
         assertThrows(ExceptionsConfig.ResourceNotFoundException.class, () -> shipmentService.getAllByCustomerId(customer2Id));
 
         verify(customerRepository, times(2)).findById(customer2Id);
-
     }
 
     @DisplayName("JUnit test for testUpdateShipment method")

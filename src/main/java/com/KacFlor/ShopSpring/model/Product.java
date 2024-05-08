@@ -1,5 +1,7 @@
 package com.KacFlor.ShopSpring.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -14,18 +16,18 @@ import java.util.List;
 public class Product extends BaseEntity{
 
     @Column(name = "sku")
-    @NotBlank
     private String sku;
+
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "description")
     private String description;
 
     @Column(name = "price")
-    @NotBlank
     private Double price;
 
     @Column(name = "stock")
-    @NotBlank
     private Integer stock;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -40,7 +42,8 @@ public class Product extends BaseEntity{
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "products", fetch = FetchType.EAGER)
+    @JsonManagedReference
     private List<Promotion> promotions;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
@@ -55,13 +58,12 @@ public class Product extends BaseEntity{
     public Product(){
     }
 
-    public Product(String sku, String description, Double price, Integer stock, Category category, Supplier supplier, Promotion promotion){
+    public Product(String sku, String name, String description, Double price, Integer stock){
         this.sku = sku;
+        this.name = name;
         this.description = description;
         this.price = price;
         this.stock = stock;
-        this.category = category;
-        this.supplier = supplier;
-        this.promotions = promotions;
+
     }
 }

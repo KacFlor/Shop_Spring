@@ -4,6 +4,7 @@ import com.KacFlor.ShopSpring.config.ExceptionsConfig;
 import com.KacFlor.ShopSpring.controllersRequests.NewOrder;
 import com.KacFlor.ShopSpring.model.Order;
 import com.KacFlor.ShopSpring.dao.OrderRepository;
+import com.KacFlor.ShopSpring.model.OrderItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,13 +25,26 @@ public class OrderService{
         return orderRepository.findAll();
     }
 
+    public List<OrderItem> getAllOrderItems(Integer Id){
+        Optional<Order> optionalOrder = orderRepository.findById(Id);
+        if(optionalOrder.isPresent()){
+            Order order = optionalOrder.get();
+
+            return order.getOrderItems();
+        }
+        else{
+            throw new ExceptionsConfig.ResourceNotFoundException("Order not found");
+        }
+    }
+
     public Order getById(Integer Id){
 
         Optional<Order> optionalOrder = orderRepository.findById(Id);
 
         if(optionalOrder.isPresent()){
             return optionalOrder.get();
-        }else{
+        }
+        else{
             throw new ExceptionsConfig.ResourceNotFoundException("Order not found");
         }
 

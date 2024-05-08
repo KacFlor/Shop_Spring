@@ -4,6 +4,7 @@ import com.KacFlor.ShopSpring.config.ExceptionsConfig;
 import com.KacFlor.ShopSpring.controllersRequests.NewOrder;
 import com.KacFlor.ShopSpring.dao.OrderRepository;
 import com.KacFlor.ShopSpring.model.Order;
+import com.KacFlor.ShopSpring.model.OrderItem;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,6 +48,37 @@ public class OrderServiceTest{
         assertThat(result.get(0).getTotalPrice()).isEqualTo(2222.22);
         assertThat(result.get(1).getTotalPrice()).isEqualTo(3333.33);
         assertThat(result.get(2).getTotalPrice()).isEqualTo(4444.44);
+
+    }
+
+    @DisplayName("JUnit test for getAllOrderItems method")
+    @Test
+    public void testGetAllOrderItems(){
+
+        Integer orderId = 1;
+        Order order = new Order();
+        order.setId(orderId);
+        order.setOrderItems(new ArrayList<>());
+        List<OrderItem> orderItems = new ArrayList<>();
+        OrderItem orderItem1 = new OrderItem("Test1", 2.0, 10.0);
+        OrderItem orderItem2 = new OrderItem("Test2", 3.0, 15.0);
+        orderItems.add(orderItem1);
+        orderItems.add(orderItem2);
+        order.getOrderItems().add(orderItem1);
+        order.getOrderItems().add(orderItem2);
+
+        Optional<Order> optionalOrder = Optional.of(order);
+
+        when(orderRepository.findById(orderId)).thenReturn(optionalOrder);
+
+        List<OrderItem> result = orderService.getAllOrderItems(orderId);
+        assertEquals(orderItems, result);
+
+        when(orderRepository.findById(orderId)).thenReturn(Optional.empty());
+
+        assertThrows(ExceptionsConfig.ResourceNotFoundException.class, () -> orderService.getAllOrderItems(orderId));
+
+        verify(orderRepository, times(2)).findById(orderId);
 
     }
 
@@ -115,7 +148,7 @@ public class OrderServiceTest{
 
         when(orderRepository.findById(orderId)).thenReturn(Optional.empty());
 
-        assertThrows(ExceptionsConfig.ResourceNotFoundException.class, () -> orderService.getById(orderId));
+        assertThrows(ExceptionsConfig.ResourceNotFoundException.class, () -> orderService.deleteById(orderId));
 
         verify(orderRepository, times(2)).findById(orderId);
     }

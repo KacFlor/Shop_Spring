@@ -52,7 +52,7 @@ public class ShipmentControllerTest{
         mockMvc.perform(get("/shipments"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("[{'address':'123 Main Street'},{'address':'456 Oak Avenue'},{'address':'789 Pine Street'}]"));
+                .andExpect(content().json("[{'address':'123 Main Street','city':'Springfield','state':'Ohio','country':'USA','zipcode':'12345'},{'address':'456 Oak Avenue','city':'Gotham','state':'Gotham City','country':'USA','zipcode':'54321'},{'address':'789 Pine Street','city':'River-town','state':'Riverdale','country':'USA','zipcode':'67890'}]"));
 
     }
 
@@ -78,7 +78,7 @@ public class ShipmentControllerTest{
         mockMvc.perform(get("/shipments/customer/{id}", customerId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("[{'address':'123 Main Street'},{'address':'456 Oak Avenue'},{'address':'789 Pine Street'}]"));
+                .andExpect(content().json("[{'address':'123 Main Street','city':'Springfield','state':'Ohio','country':'USA','zipcode':'12345'},{'address':'456 Oak Avenue','city':'Gotham','state':'Gotham City','country':'USA','zipcode':'54321'},{'address':'789 Pine Street','city':'River-town','state':'Riverdale','country':'USA','zipcode':'67890'}]"));
 
     }
 
@@ -96,7 +96,7 @@ public class ShipmentControllerTest{
         mockMvc.perform(get("/shipments/{id}", shipmentId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("{'address':'123 Main Street'}"));
+                .andExpect(content().json("{'address':'123 Main Street','city':'Springfield','state':'Ohio','country':'USA','zipcode':'12345'}"));
 
     }
 
@@ -139,9 +139,7 @@ public class ShipmentControllerTest{
 
         when(shipmentService.createOrder(newOrder, shipmentId)).thenReturn(true);
 
-        mockMvc.perform(post("/shipments/{id}/order",shipmentId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(newOrderJson))
+        mockMvc.perform(post("/shipments/{id}/order",shipmentId).contentType(MediaType.APPLICATION_JSON).content(newOrderJson))
                 .andExpect(status().isAccepted());
     }
 
@@ -167,9 +165,7 @@ public class ShipmentControllerTest{
 
         when(shipmentService.updateShipment(newShipment, shipmentId)).thenReturn(true);
 
-        mockMvc.perform(patch("/shipments/{id}", shipmentId)
-                        .content(requestJson)
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(patch("/shipments/{id}", shipmentId).content(requestJson).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -186,9 +182,7 @@ public class ShipmentControllerTest{
 
         when(shipmentService.addNewPayment(newPayment, shipmentId)).thenReturn(true);
 
-        mockMvc.perform(post("/shipments/{id}/payment", shipmentId)
-                        .content(requestJson)
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/shipments/{id}/payment", shipmentId).content(requestJson).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isAccepted());
     }
 

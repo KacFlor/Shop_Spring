@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.KacFlor.ShopSpring.controllersRequests.NewOrder;
 import com.KacFlor.ShopSpring.model.Order;
+import com.KacFlor.ShopSpring.model.OrderItem;
 import com.KacFlor.ShopSpring.service.OrderService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -22,6 +23,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
@@ -47,8 +49,29 @@ public class OrderControllerTest{
         mockMvc.perform(get("/orders"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("[{'totalPrice':2222.22},{'totalPrice':3333.33},{'totalPrice':4444.44}]"));
+                .andExpect(content().json("[{'orderDate':'2024-05-03','totalPrice':2222.22},{'orderDate':'2025-05-03','totalPrice':3333.33},{'orderDate':'2026-05-03','totalPrice':4444.44}]"));
 
+
+    }
+
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
+    public void testGetAllOrderItemsByOrderId() throws Exception{
+
+        Integer orderId = 1;
+        List<OrderItem> orderItems = new ArrayList<>();
+        orderItems.add(new OrderItem("Test1", 2.0, 10.0));
+        orderItems.add(new OrderItem("Test2", 3.0, 15.0));
+
+        when(orderService.getAllOrderItems(orderId)).thenReturn(orderItems);
+
+        mockMvc.perform(get("/orders/{id}/order-items", orderId))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json("[{'name':'Test1','quantity':2.0,'price':10.0},{'name':'Test2','quantity':3.0,'price':15.0}]"));
+
+
+        verify(orderService, times(1)).getAllOrderItems(orderId);
     }
 
     @Test
@@ -63,7 +86,7 @@ public class OrderControllerTest{
         mockMvc.perform(get("/orders/{id}", orderId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("{'totalPrice':2222.22}"));
+                .andExpect(content().json("{'orderDate':'2024-05-03','totalPrice':2222.22}"));
     }
 
     @Test
@@ -85,9 +108,7 @@ public class OrderControllerTest{
 
         when(orderService.updateOrder(newOrder, orderId)).thenReturn(true);
 
-        mockMvc.perform(patch("/orders/{id}", orderId)
-                        .content(requestJson)
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(patch("/orders/{id}", orderId).content(requestJson).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -101,6 +122,5 @@ public class OrderControllerTest{
         mockMvc.perform(delete("/orders/{id}", orderId))
                 .andExpect(status().isOk());
     }
-
 
 }
