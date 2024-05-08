@@ -26,14 +26,17 @@ public class ProductService{
 
     private final SupplierRepository supplierRepository;
 
+    private final CartRepository cartRepository;
+
     @Autowired
-    public ProductService(SupplierRepository supplierRepository ,CategoryRepository categoryRepository,PromotionRepository promotionRepository, ProductRepository productRepository, OrderItemRepository orderItemRepository, OrderRepository orderRepository){
+    public ProductService(CartRepository cartRepository ,SupplierRepository supplierRepository ,CategoryRepository categoryRepository,PromotionRepository promotionRepository, ProductRepository productRepository, OrderItemRepository orderItemRepository, OrderRepository orderRepository){
         this.productRepository = productRepository;
         this.orderItemRepository = orderItemRepository;
         this.orderRepository = orderRepository;
         this.promotionRepository = promotionRepository;
         this.categoryRepository = categoryRepository;
         this.supplierRepository = supplierRepository;
+        this.cartRepository = cartRepository;
     }
 
     public List<Product> getAll(){
@@ -253,6 +256,46 @@ public class ProductService{
             supplierRepository.save(supplier);
 
             return true;
+        }
+        else{
+            throw new ExceptionsConfig.ResourceNotFoundException("Resource not found");
+        }
+    }
+
+    public boolean addProductToCart(Integer PTid, Integer Cid) {
+
+        Optional<Product> optionalProduct = productRepository.findById(PTid);
+        Optional<Cart> optionalCart = cartRepository.findById(Cid);
+
+        if (optionalProduct.isPresent() && optionalCart.isPresent()) {
+            Product product = optionalProduct.get();
+            Cart cart = optionalCart.get();
+
+            cart.getProducts().add(product);
+
+            cartRepository.save(cart);
+
+            return true;
+        }
+        else{
+            throw new ExceptionsConfig.ResourceNotFoundException("Resource not found");
+        }
+    }
+
+    public boolean removeProductFromCart(Integer PTid, Integer Cid){
+        Optional<Product> optionalProduct = productRepository.findById(PTid);
+        Optional<Cart> optionalCart = cartRepository.findById(Cid);
+
+        if (optionalProduct.isPresent() && optionalCart.isPresent()) {
+            Product product = optionalProduct.get();
+            Cart cart = optionalCart.get();
+            if (cart.getProducts().contains(product)) {
+                cart.getProducts().remove(product);
+                cartRepository.save(cart);
+                return true;
+            } else {
+                throw new ExceptionsConfig.ResourceNotFoundException("Resource not found");
+            }
         }
         else{
             throw new ExceptionsConfig.ResourceNotFoundException("Resource not found");
