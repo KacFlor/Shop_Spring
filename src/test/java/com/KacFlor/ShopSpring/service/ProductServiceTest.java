@@ -37,6 +37,9 @@ public class ProductServiceTest{
     private OrderItemRepository orderItemRepository;
 
     @Mock
+    private SupplierRepository supplierRepository;
+
+    @Mock
     private PromotionRepository promotionRepository;
 
     @Mock
@@ -288,6 +291,57 @@ public class ProductServiceTest{
         verify(categoryRepository, times(1)).findById(categoryId);
         verify(productRepository, times(1)).save(product);
         verify(categoryRepository, times(1)).save(category);
+    }
+
+    @Test
+    void testAddSupplier() {
+        Integer productId = 1;
+        Integer supplierId = 1;
+
+        Product product = new Product();
+        product.setId(productId);
+
+        Supplier supplier = new Supplier("Test1");
+        supplier.setId(supplierId);
+        supplier.setProducts(new ArrayList<>());
+
+        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+        when(supplierRepository.findById(supplierId)).thenReturn(Optional.of(supplier));
+
+        boolean result = productService.addSupplier(productId, supplierId);
+
+        assertTrue(result);
+        verify(productRepository, times(1)).findById(productId);
+        verify(supplierRepository, times(1)).findById(supplierId);
+        verify(productRepository, times(1)).save(product);
+        verify(supplierRepository, times(1)).save(supplier);
+    }
+
+    @Test
+    void testRemoveSupplier() {
+        Integer productId = 1;
+        Integer supplierId = 1;
+
+        Product product = new Product();
+        product.setId(productId);
+
+        Supplier supplier = new Supplier("Test1");
+        supplier.setId(supplierId);
+        supplier.setProducts(new ArrayList<>());
+
+        product.setSupplier(null);
+        supplier.getProducts().add(product);
+
+        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+        when(supplierRepository.findById(supplierId)).thenReturn(Optional.of(supplier));
+
+        boolean result = productService.removeSupplier(productId, supplierId);
+
+        assertTrue(result);
+        verify(productRepository, times(1)).findById(productId);
+        verify(supplierRepository, times(1)).findById(supplierId);
+        verify(productRepository, times(1)).save(product);
+        verify(supplierRepository, times(1)).save(supplier);
     }
 
 
