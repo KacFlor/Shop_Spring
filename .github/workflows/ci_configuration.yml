@@ -42,8 +42,10 @@ jobs:
 
       - name: Configure PostgreSQL
         run: |
+          export PGPASSWORD=1234
           psql -h localhost -U postgres -c "ALTER SYSTEM SET max_connections = 2000;"
           psql -h localhost -U postgres -c "SELECT pg_reload_conf();"
+          unset PGPASSWORD
 
       - name: Build with Maven
         run: mvn clean install -U
