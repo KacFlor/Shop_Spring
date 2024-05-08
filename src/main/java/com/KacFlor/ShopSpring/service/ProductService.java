@@ -164,7 +164,7 @@ public class ProductService{
             return true;
         }
         else{
-            throw new ExceptionsConfig.ResourceNotFoundException("Payment not found");
+            throw new ExceptionsConfig.ResourceNotFoundException("Resource not found");
         }
     }
 

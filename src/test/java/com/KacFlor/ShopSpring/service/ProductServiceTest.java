@@ -45,6 +45,9 @@ public class ProductServiceTest{
     @Mock
     private CategoryRepository categoryRepository;
 
+    @Mock
+    private CartRepository cartRepository;
+
     @InjectMocks
     private ProductService productService;
 
@@ -211,6 +214,12 @@ public class ProductServiceTest{
         verify(promotionRepository, times(1)).findById(promotionId);
         verify(productRepository, times(1)).save(product);
         verify(promotionRepository, times(1)).save(promotion);
+
+        when(promotionRepository.findById(productId)).thenReturn(Optional.empty());
+
+        assertThrows(ExceptionsConfig.ResourceNotFoundException.class, () -> productService.addPromotion(productId, promotionId));
+
+        verify(promotionRepository, times(2)).findById(productId);
     }
 
     @Test
@@ -239,6 +248,12 @@ public class ProductServiceTest{
         verify(promotionRepository, times(1)).findById(promotionId);
         verify(productRepository, times(1)).save(product);
         verify(promotionRepository, times(1)).save(promotion);
+
+        when(promotionRepository.findById(productId)).thenReturn(Optional.empty());
+
+        assertThrows(ExceptionsConfig.ResourceNotFoundException.class, () -> productService.removePromotion(productId, promotionId));
+
+        verify(promotionRepository, times(2)).findById(productId);
     }
 
     @Test
@@ -263,6 +278,12 @@ public class ProductServiceTest{
         verify(categoryRepository, times(1)).findById(categoryId);
         verify(productRepository, times(1)).save(product);
         verify(categoryRepository, times(1)).save(category);
+
+        when(categoryRepository.findById(productId)).thenReturn(Optional.empty());
+
+        assertThrows(ExceptionsConfig.ResourceNotFoundException.class, () -> productService.addCategory(productId, categoryId));
+
+        verify(categoryRepository, times(2)).findById(productId);
     }
 
     @Test
@@ -291,6 +312,12 @@ public class ProductServiceTest{
         verify(categoryRepository, times(1)).findById(categoryId);
         verify(productRepository, times(1)).save(product);
         verify(categoryRepository, times(1)).save(category);
+
+        when(categoryRepository.findById(productId)).thenReturn(Optional.empty());
+
+        assertThrows(ExceptionsConfig.ResourceNotFoundException.class, () -> productService.removeCategory(productId, categoryId));
+
+        verify(categoryRepository, times(2)).findById(productId);
     }
 
     @Test
@@ -315,6 +342,12 @@ public class ProductServiceTest{
         verify(supplierRepository, times(1)).findById(supplierId);
         verify(productRepository, times(1)).save(product);
         verify(supplierRepository, times(1)).save(supplier);
+
+        when(supplierRepository.findById(productId)).thenReturn(Optional.empty());
+
+        assertThrows(ExceptionsConfig.ResourceNotFoundException.class, () -> productService.addSupplier(productId, supplierId));
+
+        verify(supplierRepository, times(2)).findById(productId);
     }
 
     @Test
@@ -342,6 +375,61 @@ public class ProductServiceTest{
         verify(supplierRepository, times(1)).findById(supplierId);
         verify(productRepository, times(1)).save(product);
         verify(supplierRepository, times(1)).save(supplier);
+
+        when(supplierRepository.findById(productId)).thenReturn(Optional.empty());
+
+        assertThrows(ExceptionsConfig.ResourceNotFoundException.class, () -> productService.removeSupplier(productId, supplierId));
+
+        verify(supplierRepository, times(2)).findById(productId);
+    }
+
+    @Test
+    void testAddProductToCart() {
+        Integer productId = 1;
+        Integer cartId = 1;
+
+        Product product = new Product();
+        product.setId(productId);
+
+        Cart cart = new Cart(1);
+        cart.setId(cartId);
+        cart.setProducts(new ArrayList<>());
+
+        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+        when(cartRepository.findById(cartId)).thenReturn(Optional.of(cart));
+
+        boolean result = productService.addProductToCart(productId, cartId);
+
+        assertTrue(result);
+        verify(productRepository, times(1)).findById(productId);
+        verify(cartRepository, times(1)).findById(cartId);
+        verify(cartRepository, times(1)).save(cart);
+    }
+
+    @Test
+    void testRemoveProductFromCart() {
+        Integer productId = 1;
+        Integer cartId = 1;
+
+        Product product = new Product();
+        product.setId(productId);
+
+        Cart cart = new Cart(1);
+        cart.setId(cartId);
+        cart.setProducts(new ArrayList<>());
+
+        product.setCart(cart);
+        cart.getProducts().add(product);
+
+        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+        when(cartRepository.findById(cartId)).thenReturn(Optional.of(cart));
+
+        boolean result = productService.removeProductFromCart(productId, cartId);
+
+        assertTrue(result);
+        verify(productRepository, times(1)).findById(productId);
+        verify(cartRepository, times(1)).findById(cartId);
+        verify(cartRepository, times(1)).save(cart);
     }
 
 

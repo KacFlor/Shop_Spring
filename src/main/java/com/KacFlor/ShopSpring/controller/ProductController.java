@@ -111,9 +111,9 @@ public class ProductController{
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
-    @PatchMapping("/{PTid}/supplier/{Sid}/add")
-    public ResponseEntity<?> addProductToCartById(@PathVariable("PTid") Integer PTid, @PathVariable("Sid") Integer Sid){
-        productService.addProductToCart(PTid, Sid);
+    @PatchMapping("/{PTid}/cart/{Cid}/add")
+    public ResponseEntity<?> addProductToCartById(@PathVariable("PTid") Integer PTid, @PathVariable("Cid") Integer Cid){
+        productService.addProductToCart(PTid, Cid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

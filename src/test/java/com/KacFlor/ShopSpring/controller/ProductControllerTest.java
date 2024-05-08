@@ -170,7 +170,7 @@ public class ProductControllerTest{
 
         when(productService.removePromotion(productTestId, promotionTestId)).thenReturn(true);
 
-        mockMvc.perform(patch("/products/{PDid}/promotion/{PNid}/remove", productTestId, promotionTestId))
+        mockMvc.perform(patch("/products/{PTid}/promotion/{PNid}/remove", productTestId, promotionTestId))
                 .andExpect(status().isOk());
 
     }
@@ -195,7 +195,7 @@ public class ProductControllerTest{
 
         when(productService.removeCategory(productTestId, categoryId)).thenReturn(true);
 
-        mockMvc.perform(patch("/products/{PDid}/category/{Cid}/remove", productTestId, categoryId))
+        mockMvc.perform(patch("/products/{PTid}/category/{Cid}/remove", productTestId, categoryId))
                 .andExpect(status().isOk());
 
     }
@@ -220,9 +220,38 @@ public class ProductControllerTest{
 
         when(productService.removeSupplier(productTestId, supplierId)).thenReturn(true);
 
-        mockMvc.perform(patch("/products/{PDid}/supplier/{Sid}/remove", productTestId, supplierId))
+        mockMvc.perform(patch("/products/{PTid}/supplier/{Sid}/remove", productTestId, supplierId))
                 .andExpect(status().isOk());
 
     }
+
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
+    void testAddProductToCartById() throws Exception {
+        Integer productTestId = 1;
+        Integer cartId = 1;
+
+        when(productService.addProductToCart(productTestId, cartId)).thenReturn(true);
+
+        mockMvc.perform(patch("/products/{PTid}/cart/{Cid}/add", productTestId, cartId))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
+    void testRemoveProductFromCartById() throws Exception {
+        Integer productTestId = 1;
+        Integer cartId = 1;
+
+        when(productService.removeProductFromCart(productTestId, cartId)).thenReturn(true);
+
+        mockMvc.perform(patch("/products/{PTid}/cart/{Cid}/remove", productTestId, cartId))
+                .andExpect(status().isOk());
+
+    }
+
+
+
+
 
 }
