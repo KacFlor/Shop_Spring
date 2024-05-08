@@ -22,8 +22,8 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: 1234
           POSTGRES_DB: student
-          POSTGRES_MAX_OPEN_CONNS: "2000"
-          POSTGRES_MAX_IDLE_CONNS: "500"
+          POSTGRES_MAX_OPEN_CONNS: "200"
+          POSTGRES_MAX_IDLE_CONNS: "50"
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 30s --health-retries 5
 
     steps:
@@ -42,7 +42,7 @@ jobs:
       - name: Configure PostgreSQL
         run: |
           export PGPASSWORD=1234
-          psql -h localhost -U postgres -c "ALTER SYSTEM SET max_connections = 2000;"
+          psql -h localhost -U postgres -c "ALTER SYSTEM SET max_connections = 200;"
           psql -h localhost -U postgres -c "SELECT pg_reload_conf();"
           unset PGPASSWORD
 
