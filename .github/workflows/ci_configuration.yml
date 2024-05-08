@@ -23,6 +23,7 @@ jobs:
           POSTGRES_PASSWORD: 1234
           POSTGRES_DB: student
           POSTGRES_MAX_CONNECTIONS: 2000
+          POSTGRES_MAX_OPEN_CONNS: 150
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 30s --health-retries 5
 
     steps:
