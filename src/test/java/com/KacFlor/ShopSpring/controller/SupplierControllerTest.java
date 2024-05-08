@@ -10,6 +10,7 @@ import com.KacFlor.ShopSpring.model.Supplier;
 import com.KacFlor.ShopSpring.service.SupplierService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -19,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -26,6 +28,7 @@ import java.util.List;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
+@DirtiesContext
 public class SupplierControllerTest{
 
     @Autowired
@@ -67,56 +70,56 @@ public class SupplierControllerTest{
 
     }
 
-//    @Test
-//    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
-//    void testDeleteById() throws Exception{
-//        Integer supplierId = 2;
-//        when(supplierService.deleteById(supplierId)).thenReturn(true);
-//
-//        mockMvc.perform(delete("/suppliers/{id}", supplierId))
-//                .andExpect(status().isOk());
-//    }
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
+    void testDeleteById() throws Exception{
+        Integer supplierId = 2;
+        when(supplierService.deleteById(supplierId)).thenReturn(true);
 
-//    @WithMockUser(username = "admin", authorities = {"ADMIN"})
-//    @Test
-//    void testUpdateSupplier() throws Exception{
-//
-//        NewSupplier newSupplier = new NewSupplier("Summer");
-//        Integer supplierId = 1;
-//
-//        when(supplierService.updateSupplier(newSupplier, supplierId)).thenReturn(true);
-//
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        ObjectNode requestJsonNode = objectMapper.createObjectNode();
-//
-//        requestJsonNode.put("name", newSupplier.getName());
-//
-//        String requestJson = objectMapper.writeValueAsString(requestJsonNode);
-//
-//        mockMvc.perform(patch("/suppliers/{id}", supplierId).content(requestJson).contentType(MediaType.APPLICATION_JSON))
-//                .andDo(print())
-//                .andExpect(status().isOk());
-//
-//    }
-//
-//    @WithMockUser(username = "admin", authorities = {"ADMIN"})
-//    @Test
-//    void testCreateNewSupplier() throws Exception{
-//
-//        NewSupplier newSupplier = new NewSupplier("Summer");
-//
-//        when(supplierService.addNewSupplier(newSupplier)).thenReturn(true);
-//
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        ObjectNode requestJsonNode = objectMapper.createObjectNode();
-//
-//        requestJsonNode.put("name", newSupplier.getName());
-//
-//        String requestJson = objectMapper.writeValueAsString(requestJsonNode);
-//
-//        mockMvc.perform(post("/suppliers/new").content(requestJson).contentType(MediaType.APPLICATION_JSON))
-//                .andDo(print())
-//                .andExpect(status().isAccepted());
-//
-//    }
+        mockMvc.perform(delete("/suppliers/{id}", supplierId))
+                .andExpect(status().isOk());
+    }
+
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    @Test
+    void testUpdateSupplier() throws Exception{
+
+        NewSupplier newSupplier = new NewSupplier("Summer");
+        Integer supplierId = 1;
+
+        when(supplierService.updateSupplier(newSupplier, supplierId)).thenReturn(true);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectNode requestJsonNode = objectMapper.createObjectNode();
+
+        requestJsonNode.put("name", newSupplier.getName());
+
+        String requestJson = objectMapper.writeValueAsString(requestJsonNode);
+
+        mockMvc.perform(patch("/suppliers/{id}", supplierId).content(requestJson).contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+    }
+
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    @Test
+    void testCreateNewSupplier() throws Exception{
+
+        NewSupplier newSupplier = new NewSupplier("Summer");
+
+        when(supplierService.addNewSupplier(newSupplier)).thenReturn(true);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectNode requestJsonNode = objectMapper.createObjectNode();
+
+        requestJsonNode.put("name", newSupplier.getName());
+
+        String requestJson = objectMapper.writeValueAsString(requestJsonNode);
+
+        mockMvc.perform(post("/suppliers/new").content(requestJson).contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isAccepted());
+
+    }
 }
