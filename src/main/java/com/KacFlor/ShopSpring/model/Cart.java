@@ -27,7 +27,7 @@ public class Cart extends BaseEntity{
     public Cart(){
     }
 
-    public Cart(List<Product> products){
-        this.products = products;
+    public Cart(Integer quantity){
+        this.quantity = quantity;
     }
 }
