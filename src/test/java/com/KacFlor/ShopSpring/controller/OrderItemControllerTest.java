@@ -33,7 +33,7 @@ public class OrderItemControllerTest{
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
-    void testGetAll() throws Exception{
+    void testGetAll() throws Exception {
         OrderItem orderItem1 = new OrderItem("Test1", 222.0, 22.22);
         OrderItem orderItem2 = new OrderItem("Test2", 333.0, 22.22);
         OrderItem orderItem3 = new OrderItem("Test3", 333.0, 22.22);
@@ -43,12 +43,13 @@ public class OrderItemControllerTest{
         mockMvc.perform(get("/order-items"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("[{'name':'Test1'},{'name':'Test2'},{'name':'Test3'}]"));
+                .andExpect(content().json("[{'name':'Test1','quantity':222.0,'price':22.22},{'name':'Test2','quantity':333.0,'price':22.22},{'name':'Test3','quantity':333.0,'price':22.22}]"));
     }
+
 
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
     @Test
-    void testGetById() throws Exception{
+    void testGetById() throws Exception {
         Integer itemId = 1;
 
         OrderItem orderItem = new OrderItem("Test1", 22.00, 2.22);
@@ -62,6 +63,7 @@ public class OrderItemControllerTest{
                 .andExpect(content().json("{'name':'Test1','quantity':22.00,'price':2.22}"));
     }
 
+
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
     void testDeleteById() throws Exception{
@@ -71,4 +73,5 @@ public class OrderItemControllerTest{
         mockMvc.perform(delete("/order-items/{id}", itemId))
                 .andExpect(status().isOk());
     }
+
 }
