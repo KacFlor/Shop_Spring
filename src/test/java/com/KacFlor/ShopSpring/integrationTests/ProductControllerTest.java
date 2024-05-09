@@ -250,8 +250,29 @@ public class ProductControllerTest{
 
     }
 
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
+    void testAddProductToWishlistById() throws Exception {
+        Integer productTestId = 1;
+        Integer wishlistId = 1;
 
+        when(productService.addProductToWishlist(productTestId, wishlistId)).thenReturn(true);
 
+        mockMvc.perform(patch("/products/{PTid}/wishlist/{Wid}/add", productTestId, wishlistId))
+                .andExpect(status().isOk());
+    }
 
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
+    void testRemoveProductFromWishlistById() throws Exception {
+        Integer productTestId = 1;
+        Integer wishlistId = 1;
+
+        when(productService.removeProductFromWishlist(productTestId, wishlistId)).thenReturn(true);
+
+        mockMvc.perform(patch("/products/{PTid}/wishlist/{Wid}/remove", productTestId, wishlistId))
+                .andExpect(status().isOk());
+
+    }
 
 }

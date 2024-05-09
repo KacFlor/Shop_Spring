@@ -21,7 +21,7 @@ public class Wishlist extends BaseEntity{
 
     @OneToMany(mappedBy = "wishlist", fetch = FetchType.EAGER)
     @JsonManagedReference
-    private List<Product> product;
+    private List<Product> products;
 
     public Wishlist(){
     }

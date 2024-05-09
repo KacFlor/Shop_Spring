@@ -26,10 +26,12 @@ public class ProductService{
 
     private final SupplierRepository supplierRepository;
 
+    private final WishlistRepository wishlistRepository;
+
     private final CartRepository cartRepository;
 
     @Autowired
-    public ProductService(CartRepository cartRepository ,SupplierRepository supplierRepository ,CategoryRepository categoryRepository,PromotionRepository promotionRepository, ProductRepository productRepository, OrderItemRepository orderItemRepository, OrderRepository orderRepository){
+    public ProductService(WishlistRepository wishlistRepository, CartRepository cartRepository ,SupplierRepository supplierRepository ,CategoryRepository categoryRepository,PromotionRepository promotionRepository, ProductRepository productRepository, OrderItemRepository orderItemRepository, OrderRepository orderRepository){
         this.productRepository = productRepository;
         this.orderItemRepository = orderItemRepository;
         this.orderRepository = orderRepository;
@@ -37,6 +39,7 @@ public class ProductService{
         this.categoryRepository = categoryRepository;
         this.supplierRepository = supplierRepository;
         this.cartRepository = cartRepository;
+        this.wishlistRepository = wishlistRepository;
     }
 
     public List<Product> getAll(){
@@ -333,6 +336,55 @@ public class ProductService{
         if (cart.getProducts().contains(product)) {
             cart.getProducts().remove(product);
             cartRepository.save(cart);
+            return true;
+        } else {
+            throw new ExceptionsConfig.ResourceNotFoundException("Resource not found");
+        }
+
+    }
+
+    public boolean addProductToWishlist(Integer PTid, Integer Wid) {
+
+        Optional<Product> optionalProduct = productRepository.findById(PTid);
+        Optional<Wishlist> optionalWishlist = wishlistRepository.findById(Wid);
+
+        if (optionalProduct.isEmpty()) {
+            throw new ExceptionsConfig.ResourceNotFoundException("Product not found");
+        }
+
+        if (optionalWishlist.isEmpty()) {
+            throw new ExceptionsConfig.ResourceNotFoundException("Wishlist not found");
+        }
+
+        Product product = optionalProduct.get();
+        Wishlist wishlist = optionalWishlist.get();
+
+        wishlist.getProducts().add(product);
+
+        wishlistRepository.save(wishlist);
+
+        return true;
+
+    }
+
+    public boolean removeProductFromWishlist(Integer PTid, Integer Wid){
+        Optional<Product> optionalProduct = productRepository.findById(PTid);
+        Optional<Wishlist> optionalWishlist = wishlistRepository.findById(Wid);
+
+        if (optionalProduct.isEmpty()) {
+            throw new ExceptionsConfig.ResourceNotFoundException("Product not found");
+        }
+
+        if (optionalWishlist.isEmpty()) {
+            throw new ExceptionsConfig.ResourceNotFoundException("Wishlist not found");
+        }
+
+
+        Product product = optionalProduct.get();
+        Wishlist wishlist = optionalWishlist.get();
+        if (wishlist.getProducts().contains(product)) {
+            wishlist.getProducts().remove(product);
+            wishlistRepository.save(wishlist);
             return true;
         } else {
             throw new ExceptionsConfig.ResourceNotFoundException("Resource not found");
