@@ -1,9 +1,12 @@
 package com.KacFlor.ShopSpring.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Table()
@@ -16,9 +19,9 @@ public class Wishlist extends BaseEntity{
     @JsonBackReference
     private Customer customer;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @OneToMany(mappedBy = "wishlist", fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<Product> product;
 
     public Wishlist(){
     }
