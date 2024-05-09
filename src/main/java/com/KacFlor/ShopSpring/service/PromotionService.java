@@ -27,47 +27,49 @@ public class PromotionService{
     public Promotion getById(Integer Id){
 
         Optional<Promotion> optionalPromotion = promotionRepository.findById(Id);
-        if(optionalPromotion.isPresent()){
-            return optionalPromotion.get();
-        }
-        else{
+
+        if (optionalPromotion.isEmpty()) {
             throw new ExceptionsConfig.ResourceNotFoundException("Promotion not found");
         }
+
+        return optionalPromotion.get();
+
     }
 
     public boolean deleteById(Integer Id){
 
         Optional<Promotion> optionalPromotion = promotionRepository.findById(Id);
-        if(optionalPromotion.isPresent()){
-            Promotion promotion = optionalPromotion.get();
 
-            promotionRepository.delete(promotion);
-
-            return true;
-        }
-        else{
+        if (optionalPromotion.isEmpty()) {
             throw new ExceptionsConfig.ResourceNotFoundException("Promotion not found");
         }
+
+        Promotion promotion = optionalPromotion.get();
+
+        promotionRepository.delete(promotion);
+
+        return true;
+
     }
 
     public boolean updatePromotion(NewPromotion newPromotion, Integer Id){
         Optional<Promotion> optionalPromotion = promotionRepository.findById(Id);
 
-        if(optionalPromotion.isPresent()){
-            Promotion promotion = optionalPromotion.get();
-            promotion.setName(newPromotion.getName());
-            promotion.setDescription(newPromotion.getDescription());
-            promotion.setStartDate(newPromotion.getStartDate());
-            promotion.setEndDate(newPromotion.getEndDate());
-            promotion.setDiscount(newPromotion.getDiscount());
-
-            promotionRepository.save(promotion);
-
-            return true;
-        }
-        else{
+        if (optionalPromotion.isEmpty()) {
             throw new ExceptionsConfig.ResourceNotFoundException("Promotion not found");
         }
+
+        Promotion promotion = optionalPromotion.get();
+        promotion.setName(newPromotion.getName());
+        promotion.setDescription(newPromotion.getDescription());
+        promotion.setStartDate(newPromotion.getStartDate());
+        promotion.setEndDate(newPromotion.getEndDate());
+        promotion.setDiscount(newPromotion.getDiscount());
+
+        promotionRepository.save(promotion);
+
+        return true;
+
     }
 
     public boolean addNewPromotion(NewPromotion newPromotion){

@@ -78,21 +78,30 @@ public class CustomerService{
     }
 
     public Customer getCustomerById(Integer customerId){
-        Optional<Customer> customerOptional = customerRepository.findById(customerId);
-        if(customerOptional.isPresent()){
-            return customerOptional.get();
-        }
-        else{
+        Optional<Customer> optionalCustomer = customerRepository.findById(customerId);
+
+        if (optionalCustomer.isEmpty()) {
             throw new ExceptionsConfig.ResourceNotFoundException("Customer not found");
         }
+
+        return optionalCustomer.get();
+
     }
 
     public boolean deleteCustomerById(Integer customerId){
-        Optional<Customer> customerOptional = customerRepository.findById(customerId);
-        Optional<User> userOptional = userRepository.findById(customerId);
+        Optional<Customer> optionalCustomer = customerRepository.findById(customerId);
+        Optional<User> optionalUser = userRepository.findById(customerId);
 
-        Customer customer = customerOptional.get();
-        User user = userOptional.get();
+        if (optionalCustomer.isEmpty()) {
+            throw new ExceptionsConfig.ResourceNotFoundException("Customer not found");
+        }
+
+        if (optionalUser.isEmpty()) {
+            throw new ExceptionsConfig.ResourceNotFoundException("User not found");
+        }
+
+        Customer customer = optionalCustomer.get();
+        User user = optionalUser.get();
         customerRepository.delete(customer);
         userRepository.delete(user);
         return true;

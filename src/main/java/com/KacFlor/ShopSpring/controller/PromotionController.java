@@ -48,14 +48,14 @@ public class PromotionController{
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updatePromotion(@RequestBody NewPromotion newPromotion, @PathVariable("id") Integer id){
+    public ResponseEntity<?> update(@RequestBody NewPromotion newPromotion, @PathVariable("id") Integer id){
         promotionService.updatePromotion(newPromotion, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @PostMapping("/new")
-    public ResponseEntity<?> createNewPromotion(@RequestBody NewPromotion newPromotion){
+    public ResponseEntity<?> create(@RequestBody NewPromotion newPromotion){
         promotionService.addNewPromotion(newPromotion);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }

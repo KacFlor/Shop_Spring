@@ -31,7 +31,7 @@ public class ShipmentController{
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @GetMapping
-    public ResponseEntity<List<Shipment>> getAllShipments(){
+    public ResponseEntity<List<Shipment>> getAll(){
         List<Shipment> shipments = shipmentService.getAllShipments();
         return ResponseEntity.ok(shipments);
     }
@@ -45,21 +45,21 @@ public class ShipmentController{
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @GetMapping("/{id}/orders")
-    public ResponseEntity<List<Order>> getAllShipmentOrders(@PathVariable("id") Integer id){
+    public ResponseEntity<List<Order>> getAllOrdersById(@PathVariable("id") Integer id){
         List<Order> orders = shipmentService.getAllShipmentOrders(id);
         return ResponseEntity.ok(orders);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @GetMapping("/customer/{id}")
-    public ResponseEntity<List<Shipment>> getCustomerShipments(@PathVariable("id") Integer id){
+    public ResponseEntity<List<Shipment>> getCustomerById(@PathVariable("id") Integer id){
         List<Shipment> shipments = shipmentService.getAllByCustomerId(id);
         return ResponseEntity.ok(shipments);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Shipment>> getShipment(@PathVariable("id") Integer id){
+    public ResponseEntity<Optional<Shipment>> getById(@PathVariable("id") Integer id){
         Optional<Shipment> shipment = Optional.ofNullable(shipmentService.getById(id));
         return ResponseEntity.ok(shipment);
     }
@@ -80,14 +80,14 @@ public class ShipmentController{
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateShipment(@RequestBody NewShipment newShipment, @PathVariable("id") Integer id){
+    public ResponseEntity<?> update(@RequestBody NewShipment newShipment, @PathVariable("id") Integer id){
         shipmentService.updateShipment(newShipment, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PostMapping("/{id}/payment")
-    public ResponseEntity<?> addNewPayment(@RequestBody NewPayment newPayment, @PathVariable("id") Integer id){
+    public ResponseEntity<?> create(@RequestBody NewPayment newPayment, @PathVariable("id") Integer id){
         shipmentService.addNewPayment(newPayment, id);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }

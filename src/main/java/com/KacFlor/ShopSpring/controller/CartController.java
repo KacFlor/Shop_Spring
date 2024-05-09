@@ -42,7 +42,7 @@ public class CartController{
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @GetMapping("/customer/{id}")
-    public ResponseEntity<Optional<Cart>> getCustomerCart(@PathVariable("id") Integer id){
+    public ResponseEntity<Optional<Cart>> getByCustomerId(@PathVariable("id") Integer id){
         Optional<Cart> cart = Optional.ofNullable(cartService.getCartByCustomerId(id));
         return ResponseEntity.ok(cart);
     }

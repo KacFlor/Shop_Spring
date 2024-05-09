@@ -33,12 +33,13 @@ public class CardDataService{
     public CardData getCardDataById(Integer Id){
 
         Optional<CardData> optionalCardData = cardDataRepository.findById(Id);
-        if(optionalCardData.isPresent()){
-            return optionalCardData.get();
-        }
-        else{
+
+        if (optionalCardData.isEmpty()) {
             throw new ExceptionsConfig.ResourceNotFoundException("CardData not found");
         }
+
+        return optionalCardData.get();
+
     }
 
     public boolean updateCardData(NewCardData newCardData, Integer CDid, Integer Cid){
@@ -46,7 +47,15 @@ public class CardDataService{
         Optional<Customer> optionalCustomer = customerRepository.findById(Cid);
         Optional<CardData> optionalCardData = cardDataRepository.findById(CDid);
 
-        if(optionalCustomer.isPresent() && optionalCardData.isPresent() && Objects.equals(optionalCardData.get().getCustomer().getId(), Cid)){
+        if (optionalCustomer.isEmpty()) {
+            throw new ExceptionsConfig.ResourceNotFoundException("Customer not found");
+        }
+
+        if (optionalCardData.isEmpty()) {
+            throw new ExceptionsConfig.ResourceNotFoundException("CardData not found");
+        }
+
+        if(Objects.equals(optionalCardData.get().getCustomer().getId(), Cid)){
 
             CardData cardData = optionalCardData.get();
             cardData.setCardNum(newCardData.getCardNum());
@@ -56,7 +65,7 @@ public class CardDataService{
             return true;
         }
         else{
-            throw new ExceptionsConfig.ResourceNotFoundException("Not found");
+            throw new ExceptionsConfig.ResourceNotFoundException("CardData not found for that Customer");
         }
 
     }
@@ -66,7 +75,15 @@ public class CardDataService{
         Optional<Customer> optionalCustomer = customerRepository.findById(Cid);
         Optional<CardData> optionalCardData = cardDataRepository.findById(CDid);
 
-        if(optionalCustomer.isPresent() && optionalCardData.isPresent() && Objects.equals(optionalCardData.get().getCustomer().getId(), Cid)){
+        if (optionalCustomer.isEmpty()) {
+            throw new ExceptionsConfig.ResourceNotFoundException("Customer not found");
+        }
+
+        if (optionalCardData.isEmpty()) {
+            throw new ExceptionsConfig.ResourceNotFoundException("CardData not found");
+        }
+
+        if (Objects.equals(optionalCardData.get().getCustomer().getId(), Cid)){
 
             Customer customer = optionalCustomer.get();
             CardData cardData = optionalCardData.get();
@@ -78,7 +95,7 @@ public class CardDataService{
             return true;
         }
         else{
-            throw new ExceptionsConfig.ResourceNotFoundException("Not found");
+            throw new ExceptionsConfig.ResourceNotFoundException("CardData not found for that Customer");
         }
     }
 

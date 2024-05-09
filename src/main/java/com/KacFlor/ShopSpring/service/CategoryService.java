@@ -27,43 +27,44 @@ public class CategoryService{
     public Category getById(Integer Id){
 
         Optional<Category> optionalCategory = categoryRepository.findById(Id);
-        if(optionalCategory.isPresent()){
-            return optionalCategory.get();
+
+        if (optionalCategory.isEmpty()) {
+            throw new ExceptionsConfig.ResourceNotFoundException("Category not found");
         }
-        else{
-            throw new ExceptionsConfig.ResourceNotFoundException("Promotion not found");
-        }
+
+        return optionalCategory.get();
+
     }
 
     public boolean deleteById(Integer Id){
 
         Optional<Category> optionalCategory = categoryRepository.findById(Id);
-        if(optionalCategory.isPresent()){
-            Category category = optionalCategory.get();
 
-            categoryRepository.delete(category);
+        if (optionalCategory.isEmpty()) {
+            throw new ExceptionsConfig.ResourceNotFoundException("Category not found");
+        }
 
-            return true;
-        }
-        else{
-            throw new ExceptionsConfig.ResourceNotFoundException("Promotion not found");
-        }
+        Category category = optionalCategory.get();
+
+        categoryRepository.delete(category);
+        return true;
+
     }
 
     public boolean updateCategory(NewCategory newCategory, Integer Id){
         Optional<Category> optionalCategory = categoryRepository.findById(Id);
 
-        if(optionalCategory.isPresent()){
-            Category category = optionalCategory.get();
-            category.setName(newCategory.getName());
-
-            categoryRepository.save(category);
-
-            return true;
+        if (optionalCategory.isEmpty()) {
+            throw new ExceptionsConfig.ResourceNotFoundException("Category not found");
         }
-        else{
-            throw new ExceptionsConfig.ResourceNotFoundException("Promotion not found");
-        }
+
+        Category category = optionalCategory.get();
+        category.setName(newCategory.getName());
+
+        categoryRepository.save(category);
+
+        return true;
+
     }
 
     public boolean addNewCategory(NewCategory newCategory){

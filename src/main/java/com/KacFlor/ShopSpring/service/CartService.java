@@ -33,22 +33,24 @@ public class CartService{
     public Cart getById(Integer Id){
 
         Optional<Cart> optionalCart = cartRepository.findById(Id);
-        if(optionalCart.isPresent()){
-            return optionalCart.get();
-        }
-        else{
+
+        if (optionalCart.isEmpty()) {
             throw new ExceptionsConfig.ResourceNotFoundException("Cart not found");
         }
+
+        return optionalCart.get();
+
     }
 
     public Cart getCartByCustomerId(Integer Id){
 
-        Optional<Customer> customer = customerRepository.findById(Id);
-        if(customer.isPresent()){
-            return cartRepository.findByCustomerId(Id);
-        }
-        else{
+        Optional<Customer> optionalCustomer = customerRepository.findById(Id);
+
+        if (optionalCustomer.isEmpty()) {
             throw new ExceptionsConfig.ResourceNotFoundException("Customer not found");
         }
+
+        return cartRepository.findByCustomerId(Id);
+
     }
 }

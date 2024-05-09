@@ -56,70 +56,70 @@ public class ProductController{
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateProduct(@RequestBody NewProduct newProduct, @PathVariable("id") Integer id){
+    public ResponseEntity<?> update(@RequestBody NewProduct newProduct, @PathVariable("id") Integer id){
         productService.updateProduct(newProduct, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @PostMapping("/new")
-    public ResponseEntity<?> createNewProduct(@RequestBody NewProduct newProduct){
+    public ResponseEntity<?> create(@RequestBody NewProduct newProduct){
         productService.addNewProduct(newProduct);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @PatchMapping("/{PTid}/promotion/{PNid}/add")
-    public ResponseEntity<?> addPromotionToProductById(@PathVariable("PTid") Integer PTid, @PathVariable("PNid") Integer PNid){
+    public ResponseEntity<?> addPromotionById(@PathVariable("PTid") Integer PTid, @PathVariable("PNid") Integer PNid){
         productService.addPromotion(PTid, PNid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @PatchMapping("/{PTid}/promotion/{PNid}/remove")
-    public ResponseEntity<?> removePromotionFromProductById(@PathVariable("PTid") Integer PTid, @PathVariable("PNid") Integer PNid){
+    public ResponseEntity<?> removePromotionById(@PathVariable("PTid") Integer PTid, @PathVariable("PNid") Integer PNid){
         productService.removePromotion(PTid, PNid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @PatchMapping("/{PTid}/category/{Cid}/add")
-    public ResponseEntity<?> addCategoryToProductById(@PathVariable("PTid") Integer PTid, @PathVariable("Cid") Integer Cid){
+    public ResponseEntity<?> addCategoryById(@PathVariable("PTid") Integer PTid, @PathVariable("Cid") Integer Cid){
         productService.addCategory(PTid, Cid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @PatchMapping("/{PTid}/category/{Cid}/remove")
-    public ResponseEntity<?> removeCategoryFromProductById(@PathVariable("PTid") Integer PTid, @PathVariable("Cid") Integer Cid){
+    public ResponseEntity<?> removeCategoryById(@PathVariable("PTid") Integer PTid, @PathVariable("Cid") Integer Cid){
         productService.removeCategory(PTid, Cid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @PatchMapping("/{PTid}/supplier/{Sid}/add")
-    public ResponseEntity<?> addSupplierToProductById(@PathVariable("PTid") Integer PTid, @PathVariable("Sid") Integer Sid){
+    public ResponseEntity<?> addSupplierById(@PathVariable("PTid") Integer PTid, @PathVariable("Sid") Integer Sid){
         productService.addSupplier(PTid, Sid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @PatchMapping("/{PTid}/supplier/{Sid}/remove")
-    public ResponseEntity<?> removeSupplierFromProductById(@PathVariable("PTid") Integer PTid, @PathVariable("Sid") Integer Sid){
+    public ResponseEntity<?> removeSupplierById(@PathVariable("PTid") Integer PTid, @PathVariable("Sid") Integer Sid){
         productService.removeSupplier(PTid, Sid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PatchMapping("/{PTid}/cart/{Cid}/add")
-    public ResponseEntity<?> addProductToCartById(@PathVariable("PTid") Integer PTid, @PathVariable("Cid") Integer Cid){
+    public ResponseEntity<?> addToCartById(@PathVariable("PTid") Integer PTid, @PathVariable("Cid") Integer Cid){
         productService.addProductToCart(PTid, Cid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PatchMapping("/{PTid}/cart/{Cid}/remove")
-    public ResponseEntity<?> removeProductFromCartById(@PathVariable("PTid") Integer PTid, @PathVariable("Cid") Integer Cid){
+    public ResponseEntity<?> removeFromCartById(@PathVariable("PTid") Integer PTid, @PathVariable("Cid") Integer Cid){
         productService.removeProductFromCart(PTid, Cid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
