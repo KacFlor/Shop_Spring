@@ -1,5 +1,6 @@
 package com.KacFlor.ShopSpring.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,8 +12,8 @@ import lombok.Setter;
 public class Wishlist extends BaseEntity{
 
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "customer_id")
+    @OneToOne(mappedBy = "wishlist", fetch = FetchType.EAGER)
+    @JsonBackReference
     private Customer customer;
 
     @ManyToOne(fetch = FetchType.EAGER)

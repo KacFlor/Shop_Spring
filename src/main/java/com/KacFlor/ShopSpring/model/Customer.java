@@ -61,6 +61,7 @@ public class Customer extends BaseEntity{
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "wishlist_id")
+    @JsonManagedReference
     private Wishlist wishlist;
 
     public Customer(String firstName, String lastName, String email, String address){
