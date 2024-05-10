@@ -29,7 +29,7 @@ public class OrderController{
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @GetMapping
-    public List<Order> getAllOrders(){
+    public List<Order> getAll(){
         return this.orderService.getAllOrders();
     }
 
@@ -42,7 +42,7 @@ public class OrderController{
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @GetMapping("/{id}/order-items")
-    public List<OrderItem> getAllOrderItemsByOrderId(@PathVariable("id") Integer id){
+    public List<OrderItem> getAllOrderItemsById(@PathVariable("id") Integer id){
         return this.orderService.getAllOrderItems(id);
     }
 

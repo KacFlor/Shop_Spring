@@ -27,43 +27,45 @@ public class SupplierService{
     public Supplier getById(Integer Id){
 
         Optional<Supplier> optionalSupplier = supplierRepository.findById(Id);
-        if(optionalSupplier.isPresent()){
-            return optionalSupplier.get();
-        }
-        else{
+
+        if (optionalSupplier.isEmpty()) {
             throw new ExceptionsConfig.ResourceNotFoundException("Supplier not found");
         }
+
+        return optionalSupplier.get();
+
     }
 
     public boolean deleteById(Integer Id){
 
         Optional<Supplier> optionalSupplier = supplierRepository.findById(Id);
-        if(optionalSupplier.isPresent()){
-            Supplier supplier = optionalSupplier.get();
 
-            supplierRepository.delete(supplier);
-
-            return true;
-        }
-        else{
+        if (optionalSupplier.isEmpty()) {
             throw new ExceptionsConfig.ResourceNotFoundException("Supplier not found");
         }
+
+        Supplier supplier = optionalSupplier.get();
+
+        supplierRepository.delete(supplier);
+
+        return true;
+
     }
 
     public boolean updateSupplier(NewSupplier newSupplier, Integer Id){
         Optional<Supplier> optionalSupplier = supplierRepository.findById(Id);
 
-        if(optionalSupplier.isPresent()){
-            Supplier supplier = optionalSupplier.get();
-            supplier.setName(newSupplier.getName());
-
-            supplierRepository.save(supplier);
-
-            return true;
+        if (optionalSupplier.isEmpty()) {
+            throw new ExceptionsConfig.ResourceNotFoundException("Supplier not found");
         }
-        else{
-            throw new ExceptionsConfig.ResourceNotFoundException("Promotion not found");
-        }
+
+        Supplier supplier = optionalSupplier.get();
+        supplier.setName(newSupplier.getName());
+
+        supplierRepository.save(supplier);
+
+        return true;
+
     }
 
     public boolean addNewSupplier(NewSupplier newSupplier){

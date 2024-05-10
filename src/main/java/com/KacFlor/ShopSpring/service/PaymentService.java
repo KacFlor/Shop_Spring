@@ -27,13 +27,11 @@ public class PaymentService{
     public Payment getPaymentById(Integer Id){
         Optional<Payment> optionalPayment = paymentRepository.findById(Id);
 
-        if(optionalPayment.isPresent()){
-            return optionalPayment.get();
-        }
-        else
-        {
+        if (optionalPayment.isEmpty()) {
             throw new ExceptionsConfig.ResourceNotFoundException("Payment not found");
         }
+
+        return optionalPayment.get();
     }
 
     public Payment getByShipmentId(Integer Id){
@@ -68,10 +66,14 @@ public class PaymentService{
 
     public boolean deleteByShipmentId(Integer Id){
         Payment payment = paymentRepository.findByShipmentId(Id);
-        Optional<Shipment> shipment = shipmentRepository.findById(Id);
+        Optional<Shipment> optionalShipment = shipmentRepository.findById(Id);
+
+        if (optionalShipment.isEmpty()) {
+            throw new ExceptionsConfig.ResourceNotFoundException("Shipment not found");
+        }
 
         if(payment != null && payment.getShipment() != null){
-            Shipment currentShipment = shipment.get();
+            Shipment currentShipment = optionalShipment.get();
 
             payment.setShipment(null);
             currentShipment.setPayment(null);

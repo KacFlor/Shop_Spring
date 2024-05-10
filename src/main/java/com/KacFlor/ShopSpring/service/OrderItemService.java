@@ -28,26 +28,28 @@ public class OrderItemService{
     public OrderItem getOrderItemById(Integer Id){
 
         Optional<OrderItem> optionalOrderItem = orderItemRepository.findById(Id);
-        if(optionalOrderItem.isPresent()){
-            return optionalOrderItem.get();
+
+        if (optionalOrderItem.isEmpty()) {
+            throw new ExceptionsConfig.ResourceNotFoundException("OrderItem not found");
         }
-        else{
-            throw new ExceptionsConfig.ResourceNotFoundException("CardData not found");
-        }
+
+        return optionalOrderItem.get();
+
     }
 
     public boolean deleteById(Integer Id){
 
         Optional<OrderItem> optionalOrderItem = orderItemRepository.findById(Id);
-        if(optionalOrderItem.isPresent()){
-            OrderItem orderItem = optionalOrderItem.get();
 
-            orderItemRepository.delete(orderItem);
+        if (optionalOrderItem.isEmpty()) {
+            throw new ExceptionsConfig.ResourceNotFoundException("OrderItem not found");
+        }
 
-            return true;
-        }
-        else{
-            throw new ExceptionsConfig.ResourceNotFoundException("Shipment not found");
-        }
+        OrderItem orderItem = optionalOrderItem.get();
+
+        orderItemRepository.delete(orderItem);
+
+        return true;
+
     }
 }
