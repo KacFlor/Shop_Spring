@@ -35,7 +35,7 @@ public class PaymentController{
     //This endpoint give payment body by shipment id assigned to this payment
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @GetMapping("/shipment/{id}")
-    public ResponseEntity<Payment> getShipmentPayment(@PathVariable("id") Integer id){
+    public ResponseEntity<Payment> getByShipmentId(@PathVariable("id") Integer id){
         Payment payment = paymentService.getByShipmentId(id);
         return ResponseEntity.ok(payment);
     }
@@ -43,7 +43,7 @@ public class PaymentController{
     //This endpoint update payment body which has assigned shipment id in the same way as above
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PatchMapping("/shipment/{id}")
-    public ResponseEntity<?> updatePaymentByShipmentId(@RequestBody NewPayment newPayment, @PathVariable("id") Integer id){
+    public ResponseEntity<?> updateByShipmentId(@RequestBody NewPayment newPayment, @PathVariable("id") Integer id){
         paymentService.updatePayment(newPayment, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

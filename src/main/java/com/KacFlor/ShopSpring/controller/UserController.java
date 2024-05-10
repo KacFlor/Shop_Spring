@@ -31,14 +31,14 @@ public class UserController{
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getUsersList(){
+    public ResponseEntity<List<User>> getAll(){
         List<User> userList = userService.getAllUsers();
         return ResponseEntity.ok(userList);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @GetMapping("/me")
-    public ResponseEntity<User> getUser(){
+    public ResponseEntity<User> getCurrent(){
         User currentUser = userService.getCurrentUser();
         return ResponseEntity.ok(currentUser);
     }
@@ -52,7 +52,7 @@ public class UserController{
 
     @PreAuthorize("hasAuthority('" + Role.Fields.USER + "')")
     @DeleteMapping("/me")
-    public ResponseEntity deleteUser(){
+    public ResponseEntity delete(){
         userService.deleteUser();
         return new ResponseEntity(HttpStatus.OK);
     }

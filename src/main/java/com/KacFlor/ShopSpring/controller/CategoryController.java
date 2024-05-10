@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.KacFlor.ShopSpring.controllersRequests.NewCategory;
-import com.KacFlor.ShopSpring.controllersRequests.NewPromotion;
-import com.KacFlor.ShopSpring.model.Promotion;
 import com.KacFlor.ShopSpring.model.Role;
 import com.KacFlor.ShopSpring.service.CategoryService;
 import com.KacFlor.ShopSpring.model.Category;
@@ -50,14 +48,14 @@ public class CategoryController{
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateCategory(@RequestBody NewCategory newCategory, @PathVariable("id") Integer id){
+    public ResponseEntity<?> update(@RequestBody NewCategory newCategory, @PathVariable("id") Integer id){
         categoryService.updateCategory(newCategory, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @PostMapping("/new")
-    public ResponseEntity<?> createNewCategory(@RequestBody NewCategory newCategory){
+    public ResponseEntity<?> createNew(@RequestBody NewCategory newCategory){
         categoryService.addNewCategory(newCategory);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }

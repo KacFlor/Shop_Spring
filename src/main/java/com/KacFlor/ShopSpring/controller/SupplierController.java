@@ -49,14 +49,14 @@ public class SupplierController{
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateSupplier(@RequestBody NewSupplier newSupplier, @PathVariable("id") Integer id){
+    public ResponseEntity<?> update(@RequestBody NewSupplier newSupplier, @PathVariable("id") Integer id){
         supplierService.updateSupplier(newSupplier, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @PostMapping("/new")
-    public ResponseEntity<?> createNewSupplier(@RequestBody NewSupplier newSupplier){
+    public ResponseEntity<?> create(@RequestBody NewSupplier newSupplier){
         supplierService.addNewSupplier(newSupplier);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }

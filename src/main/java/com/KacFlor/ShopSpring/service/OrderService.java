@@ -27,26 +27,26 @@ public class OrderService{
 
     public List<OrderItem> getAllOrderItems(Integer Id){
         Optional<Order> optionalOrder = orderRepository.findById(Id);
-        if(optionalOrder.isPresent()){
-            Order order = optionalOrder.get();
 
-            return order.getOrderItems();
-        }
-        else{
+        if (optionalOrder.isEmpty()) {
             throw new ExceptionsConfig.ResourceNotFoundException("Order not found");
         }
+
+        Order order = optionalOrder.get();
+
+        return order.getOrderItems();
+
     }
 
     public Order getById(Integer Id){
 
         Optional<Order> optionalOrder = orderRepository.findById(Id);
 
-        if(optionalOrder.isPresent()){
-            return optionalOrder.get();
-        }
-        else{
+        if (optionalOrder.isEmpty()) {
             throw new ExceptionsConfig.ResourceNotFoundException("Order not found");
         }
+
+        return optionalOrder.get();
 
     }
 
@@ -54,37 +54,34 @@ public class OrderService{
 
         Optional<Order> optionalOrder = orderRepository.findById(Id);
 
-        if(optionalOrder.isPresent()){
-            Order order = optionalOrder.get();
-
-            order.setOrderDate(newOrder.getOrderDate());
-            order.setTotalPrice(newOrder.getTotalPrice());
-
-            orderRepository.save(order);
-
-            return true;
+        if (optionalOrder.isEmpty()) {
+            throw new ExceptionsConfig.ResourceNotFoundException("Order not found");
         }
-        else{
-            throw new ExceptionsConfig.ResourceNotFoundException("Shipment not found");
-        }
+
+        Order order = optionalOrder.get();
+
+        order.setOrderDate(newOrder.getOrderDate());
+        order.setTotalPrice(newOrder.getTotalPrice());
+
+        orderRepository.save(order);
+
+        return true;
 
     }
 
     public boolean deleteById(Integer Id){
 
         Optional<Order> optionalOrder = orderRepository.findById(Id);
-        if(optionalOrder.isPresent()){
 
-            Order order = optionalOrder.get();
-
-            orderRepository.delete(order);
-            return true;
-
+        if (optionalOrder.isEmpty()) {
+            throw new ExceptionsConfig.ResourceNotFoundException("Order not found");
         }
-        else{
-            throw new ExceptionsConfig.ResourceNotFoundException("Shipment not found");
-        }
+
+        Order order = optionalOrder.get();
+
+        orderRepository.delete(order);
+        return true;
+
     }
-
 
 }

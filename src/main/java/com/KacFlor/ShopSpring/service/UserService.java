@@ -1,5 +1,6 @@
 package com.KacFlor.ShopSpring.service;
 
+import com.KacFlor.ShopSpring.config.ExceptionsConfig;
 import com.KacFlor.ShopSpring.dao.UserRepository;
 import com.KacFlor.ShopSpring.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,14 +48,16 @@ public class UserService{
     }
 
     public boolean deleteUserById(Integer userId){
-        Optional<User> userOptional = userRepository.findById(userId);
-        if(userOptional.isPresent()){
-            User user = userOptional.get();
-            userRepository.delete(user);
-            return true;
-        }else{
-            throw new UsernameNotFoundException("User not found");
+        Optional<User> optionalUser = userRepository.findById(userId);
+
+        if (optionalUser.isEmpty()) {
+            throw new ExceptionsConfig.ResourceNotFoundException("User not found");
         }
+
+        User user = optionalUser.get();
+        userRepository.delete(user);
+        return true;
+
     }
 
     public boolean deleteUser(){

@@ -40,6 +40,7 @@ public class Product extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cart_id")
+    @JsonBackReference
     private Cart cart;
 
     @ManyToMany(mappedBy = "products", fetch = FetchType.EAGER)

@@ -44,21 +44,21 @@ public class CustomerController{
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @GetMapping
-    public ResponseEntity<List<Customer>> getCustomersList(){
+    public ResponseEntity<List<Customer>> getAll(){
         List<Customer> customers = customerService.getAll();
         return ResponseEntity.ok(customers);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @GetMapping("/me")
-    public ResponseEntity<Optional<Customer>> getCustomer(){
+    public ResponseEntity<Optional<Customer>> getCurrent(){
         Optional<Customer> current = Optional.ofNullable(customerService.getCurrent());
         return ResponseEntity.ok(current);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PostMapping("/me/shipment")
-    public ResponseEntity<?> createNewShipment(@RequestBody NewShipment newShipment){
+    public ResponseEntity<?> createShipment(@RequestBody NewShipment newShipment){
         customerService.createShipment(newShipment);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
@@ -72,14 +72,14 @@ public class CustomerController{
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PatchMapping("/me")
-    public ResponseEntity<?> dataChange(@RequestBody NewCustomer newCustomer){
+    public ResponseEntity<?> update(@RequestBody NewCustomer newCustomer){
         customerService.updateCustomer(newCustomer);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @DeleteMapping("/me")
-    public ResponseEntity<?> deleteCustomer(){
+    public ResponseEntity<?> delete(){
         customerService.deleteCurrentCustomer();
         return new ResponseEntity<>(HttpStatus.OK);
     }
