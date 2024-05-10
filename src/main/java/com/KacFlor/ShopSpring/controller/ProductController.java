@@ -95,4 +95,18 @@ public class ProductController{
         productService.removeCategory(PDid, Cid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
+    @PatchMapping("/{PTid}/supplier/{Sid}/add")
+    public ResponseEntity<?> addSupplierToProductById(@PathVariable("PTid") Integer PTid, @PathVariable("Sid") Integer Sid){
+        productService.addSupplier(PTid, Sid);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
+    @PatchMapping("/{PDid}/supplier/{Sid}/remove")
+    public ResponseEntity<?> removeSupplierFromProductById(@PathVariable("PDid") Integer PDid, @PathVariable("Sid") Integer Sid){
+        productService.removeSupplier(PDid, Sid);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

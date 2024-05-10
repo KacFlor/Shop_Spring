@@ -24,13 +24,16 @@ public class ProductService{
 
     private final CategoryRepository categoryRepository;
 
+    private final SupplierRepository supplierRepository;
+
     @Autowired
-    public ProductService(CategoryRepository categoryRepository,PromotionRepository promotionRepository, ProductRepository productRepository, OrderItemRepository orderItemRepository, OrderRepository orderRepository){
+    public ProductService(SupplierRepository supplierRepository ,CategoryRepository categoryRepository,PromotionRepository promotionRepository, ProductRepository productRepository, OrderItemRepository orderItemRepository, OrderRepository orderRepository){
         this.productRepository = productRepository;
         this.orderItemRepository = orderItemRepository;
         this.orderRepository = orderRepository;
         this.promotionRepository = promotionRepository;
         this.categoryRepository = categoryRepository;
+        this.supplierRepository = supplierRepository;
     }
 
     public List<Product> getAll(){
@@ -184,7 +187,7 @@ public class ProductService{
             return true;
         }
         else{
-            throw new ExceptionsConfig.ResourceNotFoundException("Payment not found");
+            throw new ExceptionsConfig.ResourceNotFoundException("Supplier not found");
         }
     }
 
@@ -206,6 +209,53 @@ public class ProductService{
         }
         else{
             throw new ExceptionsConfig.ResourceNotFoundException("Payment not found");
+        }
+    }
+
+    public boolean addSupplier(Integer PTid, Integer Sid) {
+
+        Optional<Product> optionalProduct = productRepository.findById(PTid);
+        Optional<Supplier> optionalSupplier = supplierRepository.findById(Sid);
+
+        if (optionalProduct.isPresent() && optionalSupplier.isPresent()) {
+            Product product = optionalProduct.get();
+            Supplier supplier = optionalSupplier.get();
+
+            if (product.getSupplier() != null) {
+                throw new IllegalStateException("Product already has a supplier assigned.");
+            }
+
+            product.setSupplier(supplier);
+            supplier.getProducts().add(product);
+
+            supplierRepository.save(supplier);
+            productRepository.save(product);
+
+            return true;
+        }
+        else{
+            throw new ExceptionsConfig.ResourceNotFoundException("Resource not found");
+        }
+    }
+
+    public boolean removeSupplier(Integer PTid, Integer Sid){
+        Optional<Product> optionalProduct = productRepository.findById(PTid);
+        Optional<Supplier> optionalSupplier = supplierRepository.findById(Sid);
+
+        if (optionalProduct.isPresent() && optionalSupplier.isPresent()) {
+            Product product = optionalProduct.get();
+            Supplier supplier = optionalSupplier.get();
+
+            product.setCategory(null);
+            supplier.getProducts().remove(product);
+
+            productRepository.save(product);
+            supplierRepository.save(supplier);
+
+            return true;
+        }
+        else{
+            throw new ExceptionsConfig.ResourceNotFoundException("Resource not found");
         }
     }
 }
