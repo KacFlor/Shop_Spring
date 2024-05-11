@@ -1,6 +1,6 @@
 package com.KacFlor.ShopSpring.service;
 
-import com.KacFlor.ShopSpring.config.ExceptionsConfig;
+import com.KacFlor.ShopSpring.Exceptions.ExceptionsConfig;
 import com.KacFlor.ShopSpring.controllersRequests.NewOrder;
 import com.KacFlor.ShopSpring.model.Order;
 import com.KacFlor.ShopSpring.dao.OrderRepository;

@@ -1,14 +1,11 @@
 package com.KacFlor.ShopSpring.service;
 
-import com.KacFlor.ShopSpring.config.ExceptionsConfig;
+import com.KacFlor.ShopSpring.Exceptions.ExceptionsConfig;
 import com.KacFlor.ShopSpring.controllersRequests.NewCardData;
 import com.KacFlor.ShopSpring.controllersRequests.NewCustomer;
 import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
 import com.KacFlor.ShopSpring.dao.*;
-import com.KacFlor.ShopSpring.model.CardData;
-import com.KacFlor.ShopSpring.model.Customer;
-import com.KacFlor.ShopSpring.model.Shipment;
-import com.KacFlor.ShopSpring.model.User;
+import com.KacFlor.ShopSpring.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,13 +27,22 @@ public class CustomerService{
 
     final private CardDataRepository cardDataRepository;
 
+    private final WishlistRepository wishlistRepository;
+
+    private final CartRepository cartRepository;
+
+    private final ReviewRepository reviewRepository;
+
     @Autowired
-    public CustomerService(CardDataRepository cardDataRepository,CustomerRepository customerRepository, UserRepository userRepository, ShipmentRepository shipmentRepository, OrderRepository orderRepository){
+    public CustomerService(ReviewRepository reviewRepository, CartRepository cartRepository, WishlistRepository wishlistRepository, CardDataRepository cardDataRepository,CustomerRepository customerRepository, UserRepository userRepository, ShipmentRepository shipmentRepository, OrderRepository orderRepository){
         this.customerRepository = customerRepository;
         this.userRepository = userRepository;
         this.shipmentRepository = shipmentRepository;
         this.orderRepository = orderRepository;
         this.cardDataRepository = cardDataRepository;
+        this.wishlistRepository = wishlistRepository;
+        this.cartRepository = cartRepository;
+        this.reviewRepository = reviewRepository;
     }
 
     public boolean createShipment(NewShipment newShipment){
@@ -102,10 +108,10 @@ public class CustomerService{
 
         Customer customer = optionalCustomer.get();
         User user = optionalUser.get();
+
         customerRepository.delete(customer);
         userRepository.delete(user);
         return true;
-
 
     }
 
@@ -148,19 +154,15 @@ public class CustomerService{
 
     public boolean deleteCurrentCustomer(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         String username = authentication.getName();
-
         User user = userRepository.findByLogin(username);
-
-        String name = user.getCustomer().getFirstName();
-
-        Customer customer = customerRepository.findByFirstName(name);
+        Customer customer = user.getCustomer();
 
         customerRepository.delete(customer);
         userRepository.delete(user);
 
         return true;
     }
+
 }
 

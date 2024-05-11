@@ -101,8 +101,9 @@ public class ReviewControllerTest{
         Integer Pid = 1;
         when(reviewService.deleteById(reviewId, Cid, Pid)).thenReturn(true);
 
-        mockMvc.perform(delete("/reviews/{id}/customer/{Cid}/product{Pid}", reviewId, Cid, Pid))
+        mockMvc.perform(delete("/reviews/{id}", reviewId).param("Cid", String.valueOf(Cid)).param("Pid", String.valueOf(Pid)))
                 .andExpect(status().isOk());
+
     }
 
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
@@ -123,7 +124,8 @@ public class ReviewControllerTest{
 
         String requestJson = objectMapper.writeValueAsString(requestJsonNode);
 
-        mockMvc.perform(post("/reviews/new/customer/{Cid}/product{Pid}", Cid, Pid).content(requestJson).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/reviews/new").param("Cid", String.valueOf(Cid)).param("Pid", String.valueOf(Pid))
+                        .content(requestJson).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isAccepted());
 

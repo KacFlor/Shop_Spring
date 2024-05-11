@@ -1,11 +1,9 @@
 package com.KacFlor.ShopSpring.unitTests;
-import com.KacFlor.ShopSpring.config.ExceptionsConfig;
-import com.KacFlor.ShopSpring.controllersRequests.NewPromotion;
+import com.KacFlor.ShopSpring.Exceptions.ExceptionsConfig;
 import com.KacFlor.ShopSpring.controllersRequests.NewReview;
 import com.KacFlor.ShopSpring.dao.*;
 import com.KacFlor.ShopSpring.model.*;
 import com.KacFlor.ShopSpring.service.ReviewService;
-import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

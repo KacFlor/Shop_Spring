@@ -1,12 +1,10 @@
 package com.KacFlor.ShopSpring.service;
 
-import com.KacFlor.ShopSpring.config.ExceptionsConfig;
+import com.KacFlor.ShopSpring.Exceptions.ExceptionsConfig;
 import com.KacFlor.ShopSpring.dao.CustomerRepository;
 import com.KacFlor.ShopSpring.model.Cart;
 import com.KacFlor.ShopSpring.dao.CartRepository;
-import com.KacFlor.ShopSpring.model.Category;
 import com.KacFlor.ShopSpring.model.Customer;
-import com.KacFlor.ShopSpring.model.Shipment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

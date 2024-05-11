@@ -3,7 +3,7 @@ package com.KacFlor.ShopSpring.controller;
 import java.util.List;
 import java.util.Optional;
 
-import com.KacFlor.ShopSpring.controllersRequests.NewOrderItem;
+import com.KacFlor.ShopSpring.controllersRequests.NewItem;
 import com.KacFlor.ShopSpring.controllersRequests.NewProduct;
 import com.KacFlor.ShopSpring.model.Product;
 import com.KacFlor.ShopSpring.model.Role;
@@ -34,9 +34,9 @@ public class ProductController{
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
-    @PostMapping("/order/{Oid}/order-item")
-    public ResponseEntity<?> addOrderItem(@RequestBody NewOrderItem newOrderItem, @PathVariable("Oid") Integer id){
-        productService.addOrderItem(newOrderItem, id);
+    @PostMapping("/{id}/order-item")
+    public ResponseEntity<?> addOrderItem(@RequestBody NewItem newItem, @PathVariable("id") Integer id, @RequestParam("Oid") Integer Oid){
+        productService.addOrderItem(newItem, id, Oid);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
@@ -56,8 +56,8 @@ public class ProductController{
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @PatchMapping("/{id}")
-    public ResponseEntity<?> update(@RequestBody NewProduct newProduct, @PathVariable("id") Integer id){
-        productService.updateProduct(newProduct, id);
+    public ResponseEntity<?> update(@RequestBody NewProduct updatedProduct, @PathVariable("id") Integer id){
+        productService.updateProduct(updatedProduct, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -69,72 +69,73 @@ public class ProductController{
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
-    @PatchMapping("/{PTid}/promotion/{PNid}/add")
-    public ResponseEntity<?> addPromotionById(@PathVariable("PTid") Integer PTid, @PathVariable("PNid") Integer PNid){
-        productService.addPromotion(PTid, PNid);
+    @PostMapping("/{id}/promotion")
+    public ResponseEntity<?> addPromotionById(@PathVariable("id") Integer id, @RequestParam("PNid") Integer PNid){
+        productService.addPromotion(id, PNid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
-    @PatchMapping("/{PTid}/promotion/{PNid}/remove")
-    public ResponseEntity<?> removePromotionById(@PathVariable("PTid") Integer PTid, @PathVariable("PNid") Integer PNid){
-        productService.removePromotion(PTid, PNid);
+    @DeleteMapping("/{id}/promotion")
+    public ResponseEntity<?> removePromotionById(@PathVariable("id") Integer id, @RequestParam("PNid") Integer PNid){
+        productService.removePromotion(id, PNid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
-    @PatchMapping("/{PTid}/category/{Cid}/add")
-    public ResponseEntity<?> addCategoryById(@PathVariable("PTid") Integer PTid, @PathVariable("Cid") Integer Cid){
-        productService.addCategory(PTid, Cid);
+    @PostMapping("/{id}/category")
+    public ResponseEntity<?> addCategoryById(@PathVariable("id") Integer id, @RequestParam("CYid") Integer CYid){
+        productService.addCategory(id, CYid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
-    @PatchMapping("/{PTid}/category/{Cid}/remove")
-    public ResponseEntity<?> removeCategoryById(@PathVariable("PTid") Integer PTid, @PathVariable("Cid") Integer Cid){
-        productService.removeCategory(PTid, Cid);
+    @DeleteMapping("/{id}/category")
+    public ResponseEntity<?> removeCategoryById(@PathVariable("id") Integer id, @RequestParam("CYid") Integer CYid){
+        productService.removeCategory(id, CYid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
-    @PatchMapping("/{PTid}/supplier/{Sid}/add")
-    public ResponseEntity<?> addSupplierById(@PathVariable("PTid") Integer PTid, @PathVariable("Sid") Integer Sid){
-        productService.addSupplier(PTid, Sid);
+    @PostMapping("/{id}/supplier")
+    public ResponseEntity<?> addSupplierById(@PathVariable("id") Integer id, @RequestParam("Sid") Integer Sid){
+        productService.addSupplier(id, Sid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
-    @PatchMapping("/{PTid}/supplier/{Sid}/remove")
-    public ResponseEntity<?> removeSupplierById(@PathVariable("PTid") Integer PTid, @PathVariable("Sid") Integer Sid){
-        productService.removeSupplier(PTid, Sid);
+    @DeleteMapping("/{id}/supplier")
+    public ResponseEntity<?> removeSupplierById(@PathVariable("id") Integer id, @RequestParam("Sid") Integer Sid){
+        productService.removeSupplier(id, Sid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
-    @PatchMapping("/{PTid}/cart/{Cid}/add")
-    public ResponseEntity<?> addToCartById(@PathVariable("PTid") Integer PTid, @PathVariable("Cid") Integer Cid){
-        productService.addProductToCart(PTid, Cid);
+    @PostMapping("/{id}/cart")
+    public ResponseEntity<?> addToCartById(@RequestBody NewItem newItem, @PathVariable("id") Integer id, @RequestParam("Cid") Integer Cid){
+        productService.addProductToCart(newItem ,id, Cid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
-    @PatchMapping("/{PTid}/cart/{Cid}/remove")
-    public ResponseEntity<?> removeFromCartById(@PathVariable("PTid") Integer PTid, @PathVariable("Cid") Integer Cid){
-        productService.removeProductFromCart(PTid, Cid);
+    @DeleteMapping("/{id}/cart")
+    public ResponseEntity<?> removeFromCartById(@RequestBody NewItem newItem,@PathVariable("id") Integer id, @RequestParam("Cid") Integer Cid){
+        productService.removeProductFromCart(newItem ,id, Cid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
-    @PatchMapping("/{PTid}/wishlist/{Wid}/add")
-    public ResponseEntity<?> addToWishlistById(@PathVariable("PTid") Integer PTid, @PathVariable("Wid") Integer Wid){
-        productService.addProductToWishlist(PTid, Wid);
+    @PostMapping("/{id}/wishlist")
+    public ResponseEntity<?> addToWishlistById(@PathVariable("id") Integer id, @RequestParam("Wid") Integer Wid){
+        productService.addProductToWishlist(id, Wid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
-    @PatchMapping("/{PTid}/wishlist/{Wid}/remove")
-    public ResponseEntity<?> removeFromWishlistById(@PathVariable("PTid") Integer PTid, @PathVariable("Wid") Integer Wid){
-        productService.removeProductFromWishlist(PTid, Wid);
+    @DeleteMapping("/{id}/wishlist")
+    public ResponseEntity<?> removeFromWishlistById(@PathVariable("id") Integer id, @RequestParam("Wid") Integer Wid) {
+        productService.removeProductFromWishlist(id, Wid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 }

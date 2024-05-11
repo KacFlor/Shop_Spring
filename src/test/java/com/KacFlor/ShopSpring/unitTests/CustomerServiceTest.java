@@ -2,7 +2,7 @@ package com.KacFlor.ShopSpring.unitTests;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.KacFlor.ShopSpring.config.ExceptionsConfig;
+import com.KacFlor.ShopSpring.Exceptions.ExceptionsConfig;
 import com.KacFlor.ShopSpring.controllersRequests.NewCardData;
 import com.KacFlor.ShopSpring.controllersRequests.NewCustomer;
 import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
@@ -304,7 +304,6 @@ public class CustomerServiceTest{
         when(securityContext.getAuthentication()).thenReturn(authentication);
 
         when(userRepository.findByLogin("Test1")).thenReturn(user1);
-        when(customerRepository.findByFirstName("Test1")).thenReturn(customer1);
 
         boolean result = customerService.deleteCurrentCustomer();
         assertTrue(result);

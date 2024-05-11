@@ -27,13 +27,8 @@ public class Order extends BaseEntity{
     @JsonBackReference
     private Shipment shipment;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "customer_id")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private Customer customer;
-
-    @OneToMany(mappedBy = "order")
-    @JsonBackReference
     private List<OrderItem> orderItems;
 
 

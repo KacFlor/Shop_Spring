@@ -43,8 +43,8 @@ public class PaymentController{
     //This endpoint update payment body which has assigned shipment id in the same way as above
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PatchMapping("/shipment/{id}")
-    public ResponseEntity<?> updateByShipmentId(@RequestBody NewPayment newPayment, @PathVariable("id") Integer id){
-        paymentService.updatePayment(newPayment, id);
+    public ResponseEntity<?> updateByShipmentId(@RequestBody NewPayment updatedPayment, @PathVariable("id") Integer id){
+        paymentService.updatePayment(updatedPayment, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

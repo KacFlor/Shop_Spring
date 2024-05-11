@@ -19,7 +19,7 @@ public class Cart extends BaseEntity{
     private List<Product> products;
 
     @Column(name = "quantity")
-    private Integer quantity;
+    private Double quantity;
 
     @OneToOne(mappedBy = "cart", fetch = FetchType.EAGER)
     @JsonBackReference
@@ -29,7 +29,7 @@ public class Cart extends BaseEntity{
     public Cart(){
     }
 
-    public Cart(Integer quantity){
+    public Cart(Double quantity){
         this.quantity = quantity;
     }
 }

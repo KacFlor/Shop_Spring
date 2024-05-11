@@ -1,8 +1,8 @@
 package com.KacFlor.ShopSpring.unitTests;
 
 
-import com.KacFlor.ShopSpring.config.ExceptionsConfig;
-import com.KacFlor.ShopSpring.controllersRequests.NewOrderItem;
+import com.KacFlor.ShopSpring.Exceptions.ExceptionsConfig;
+import com.KacFlor.ShopSpring.controllersRequests.NewItem;
 import com.KacFlor.ShopSpring.controllersRequests.NewProduct;
 import com.KacFlor.ShopSpring.dao.*;
 import com.KacFlor.ShopSpring.model.*;
@@ -19,6 +19,7 @@ import static org.mockito.Mockito.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.parameters.P;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -58,20 +59,27 @@ public class ProductServiceTest{
     @DisplayName("JUnit test for addOrderItem method")
     @Test
     public void testAddOrderItem(){
+        Integer Pid = 1;
         Integer orderId = 1;
+
+        Product product = new Product();
+        product.setId(Pid);
+        product.setStock(1.00);
+        product.setOrderItems(new ArrayList<>());
+        product.setPrice(1.00);
 
         Order order = new Order();
         order.setId(orderId);
         order.setOrderItems(new ArrayList<>());
+        order.setTotalPrice(10.00);
 
-        NewOrderItem newOrderItem = new NewOrderItem();
-        newOrderItem.setName("Test1");
-        newOrderItem.setQuantity(22.00);
-        newOrderItem.setPrice(250.0);
+        NewItem newItem = new NewItem();
+        newItem.setQuantity(22.00);
 
         when(orderRepository.findById(orderId)).thenReturn(Optional.of(order));
+        when(productRepository.findById(orderId)).thenReturn(Optional.of(product));
 
-        boolean result = productService.addOrderItem(newOrderItem, orderId);
+        boolean result = productService.addOrderItem(newItem, Pid,orderId);
         assertTrue(result);
 
         verify(orderRepository, times(1)).findById(orderId);
@@ -80,7 +88,7 @@ public class ProductServiceTest{
 
         when(orderRepository.findById(orderId)).thenReturn(Optional.empty());
 
-        assertThrows(ExceptionsConfig.ResourceNotFoundException.class, () -> productService.addOrderItem(newOrderItem, orderId));
+        assertThrows(ExceptionsConfig.ResourceNotFoundException.class, () -> productService.addOrderItem(newItem, Pid, orderId));
 
         verify(orderRepository, times(2)).findById(orderId);
     }
@@ -88,9 +96,9 @@ public class ProductServiceTest{
     @DisplayName("JUnit test for getAll method")
     @Test
     public void testGetAll(){
-        Product product1 = new Product("Test1", "Old Name", "Old description", 29.99, 100);
-        Product product2 = new Product("Test2", "Old Name", "Old description", 29.99, 100);
-        Product product3 = new Product("Test3", "Old Name", "Old description", 29.99, 100);
+        Product product1 = new Product("Test1", "Old Name", "Old description", 29.99, 100.00);
+        Product product2 = new Product("Test2", "Old Name", "Old description", 29.99, 100.00);
+        Product product3 = new Product("Test3", "Old Name", "Old description", 29.99, 100.00);
 
         given(productRepository.findAll()).willReturn(List.of(product1, product2, product3));
 
@@ -108,7 +116,7 @@ public class ProductServiceTest{
     @Test
     public void testGetById(){
 
-        Product product1 = new Product("Test1", "Old Name", "Old description", 29.99, 100);
+        Product product1 = new Product("Test1", "Old Name", "Old description", 29.99, 100.00);
         Integer productId = 1;
 
         when(productRepository.findById(productId)).thenReturn(Optional.of(product1));
@@ -132,7 +140,7 @@ public class ProductServiceTest{
     public void testDeleteById(){
         Integer productId = 1;
 
-        Product product1 = new Product("Test1", "Old Name", "Old description", 29.99, 100);
+        Product product1 = new Product("Test1", "Old Name", "Old description", 29.99, 100.00);
 
         when(productRepository.findById(productId)).thenReturn(Optional.of(product1));
 
@@ -154,9 +162,9 @@ public class ProductServiceTest{
     public void testUpdateProduct(){
 
         Integer productId = 1;
-        NewProduct newProduct = new NewProduct("Test1", "Updated Product", "Updated description", 39.99, 50);
+        NewProduct newProduct = new NewProduct("Test1", "Updated Product", "Updated description", 39.99, 50.00);
 
-        Product existingProduct = new Product("OldSKU", "Old Name", "Old description", 29.99, 100);
+        Product existingProduct = new Product("OldSKU", "Old Name", "Old description", 29.99, 100.00);
         existingProduct.setId(productId);
 
         when(productRepository.findById(productId)).thenReturn(Optional.of(existingProduct));
@@ -184,7 +192,7 @@ public class ProductServiceTest{
     @Test
     public void testAddNewProduct(){
 
-        NewProduct newProduct = new NewProduct("Test1", "New Product", "Description for new product", 19.99, 20);
+        NewProduct newProduct = new NewProduct("Test1", "New Product", "Description for new product", 19.99, 20.00);
 
         boolean result = productService.addNewProduct(newProduct);
         assertTrue(result);
@@ -392,17 +400,19 @@ public class ProductServiceTest{
         Integer productId = 1;
         Integer cartId = 1;
 
+        NewItem newItem = new NewItem(2.00);
+
         Product product = new Product();
         product.setId(productId);
 
-        Cart cart = new Cart(1);
+        Cart cart = new Cart(1.00);
         cart.setId(cartId);
         cart.setProducts(new ArrayList<>());
 
         when(productRepository.findById(productId)).thenReturn(Optional.of(product));
         when(cartRepository.findById(cartId)).thenReturn(Optional.of(cart));
 
-        boolean result = productService.addProductToCart(productId, cartId);
+        boolean result = productService.addProductToCart(newItem ,productId,cartId);
 
         assertTrue(result);
         verify(productRepository, times(1)).findById(productId);
@@ -414,11 +424,12 @@ public class ProductServiceTest{
     void testRemoveProductFromCart() {
         Integer productId = 1;
         Integer cartId = 1;
+        NewItem newItem = new NewItem(2.00);
 
         Product product = new Product();
         product.setId(productId);
 
-        Cart cart = new Cart(1);
+        Cart cart = new Cart(1.00);
         cart.setId(cartId);
         cart.setProducts(new ArrayList<>());
 
@@ -428,7 +439,7 @@ public class ProductServiceTest{
         when(productRepository.findById(productId)).thenReturn(Optional.of(product));
         when(cartRepository.findById(cartId)).thenReturn(Optional.of(cart));
 
-        boolean result = productService.removeProductFromCart(productId, cartId);
+        boolean result = productService.removeProductFromCart(newItem ,productId, cartId);
 
         assertTrue(result);
         verify(productRepository, times(1)).findById(productId);

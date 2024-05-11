@@ -1,8 +1,7 @@
 package com.KacFlor.ShopSpring.unitTests;
-import com.KacFlor.ShopSpring.config.ExceptionsConfig;
+import com.KacFlor.ShopSpring.Exceptions.ExceptionsConfig;
 import com.KacFlor.ShopSpring.dao.*;
 import com.KacFlor.ShopSpring.model.*;
-import com.KacFlor.ShopSpring.service.CartService;
 import com.KacFlor.ShopSpring.service.WishlistService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

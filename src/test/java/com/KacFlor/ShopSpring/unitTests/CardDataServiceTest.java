@@ -1,6 +1,6 @@
 package com.KacFlor.ShopSpring.unitTests;
 
-import com.KacFlor.ShopSpring.config.ExceptionsConfig;
+import com.KacFlor.ShopSpring.Exceptions.ExceptionsConfig;
 import com.KacFlor.ShopSpring.controllersRequests.NewCardData;
 import com.KacFlor.ShopSpring.dao.CardDataRepository;
 import com.KacFlor.ShopSpring.dao.CustomerRepository;

@@ -1,14 +1,12 @@
 package com.KacFlor.ShopSpring.service;
 
-import com.KacFlor.ShopSpring.config.ExceptionsConfig;
-import com.KacFlor.ShopSpring.controllersRequests.NewPromotion;
+import com.KacFlor.ShopSpring.Exceptions.ExceptionsConfig;
 import com.KacFlor.ShopSpring.controllersRequests.NewReview;
 import com.KacFlor.ShopSpring.dao.CustomerRepository;
 import com.KacFlor.ShopSpring.dao.ProductRepository;
 import com.KacFlor.ShopSpring.dao.ReviewRepository;
 import com.KacFlor.ShopSpring.model.Customer;
 import com.KacFlor.ShopSpring.model.Product;
-import com.KacFlor.ShopSpring.model.Promotion;
 import com.KacFlor.ShopSpring.model.Review;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

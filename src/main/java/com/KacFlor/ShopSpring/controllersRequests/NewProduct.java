@@ -19,6 +19,6 @@ public class NewProduct{
 
     private Double price;
 
-    private Integer stock;
+    private Double stock;
 
 }

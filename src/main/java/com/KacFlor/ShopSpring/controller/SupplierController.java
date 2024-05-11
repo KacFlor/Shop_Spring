@@ -49,8 +49,8 @@ public class SupplierController{
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @PatchMapping("/{id}")
-    public ResponseEntity<?> update(@RequestBody NewSupplier newSupplier, @PathVariable("id") Integer id){
-        supplierService.updateSupplier(newSupplier, id);
+    public ResponseEntity<?> update(@RequestBody NewSupplier updatedSupplier, @PathVariable("id") Integer id){
+        supplierService.updateSupplier(updatedSupplier, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

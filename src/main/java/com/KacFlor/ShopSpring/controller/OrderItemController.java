@@ -3,7 +3,7 @@ package com.KacFlor.ShopSpring.controller;
 import java.util.List;
 import java.util.Optional;
 
-import com.KacFlor.ShopSpring.model.CardData;
+import com.KacFlor.ShopSpring.controllersRequests.NewItem;
 import com.KacFlor.ShopSpring.model.OrderItem;
 import com.KacFlor.ShopSpring.model.Role;
 import com.KacFlor.ShopSpring.service.OrderItemService;
@@ -42,8 +42,8 @@ public class OrderItemController{
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteById(@PathVariable("id") Integer id){
-        orderItemService.deleteById(id);
+    public ResponseEntity<?> deleteById(@RequestBody NewItem newItem, @PathVariable("id") Integer id, @RequestParam("Oid") Integer Oid, @RequestParam("Pid") Integer Pid){
+        orderItemService.deleteById(newItem,id, Oid, Pid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

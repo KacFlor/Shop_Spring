@@ -41,15 +41,15 @@ public class CardDataController{
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
-    @PatchMapping("/{CDid}/customer/{Cid}")
-    public ResponseEntity<?> dataChangeByCustomerId(@RequestBody NewCardData newCardData, @PathVariable("Cid") Integer cardDataId, @PathVariable("CDid") Integer customerId){
+    @PatchMapping("/{id}/customer")
+    public ResponseEntity<?> dataChangeByCustomerId(@RequestBody NewCardData newCardData, @PathVariable("id") Integer cardDataId, @RequestParam("Cid") Integer customerId){
         cardDataService.updateCardData(newCardData, cardDataId, customerId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
-    @DeleteMapping("/{CDid}/customer/{Cid}")
-    public ResponseEntity<?> deleteByCustomerId(@PathVariable("CDid") Integer cardDataId, @PathVariable("Cid") Integer customerId){
+    @DeleteMapping("/{id}/customer")
+    public ResponseEntity<?> deleteByCustomerId(@PathVariable("id") Integer cardDataId, @RequestParam("Cid") Integer customerId){
         cardDataService.deleteCardData(cardDataId, customerId);
         return new ResponseEntity<>(HttpStatus.OK);
     }

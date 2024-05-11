@@ -29,9 +29,6 @@ public class UserConfig{
             Cart cart = new Cart();
             Wishlist wishlist = new Wishlist();
 
-            cartRepository.save(cart);
-            wishlistRepository.save(wishlist);
-
             customer.setCart(cart);
             customer.setWishlist(wishlist);
 
@@ -41,16 +38,14 @@ public class UserConfig{
                     customer,
                     Role.ADMIN
             );
-            userRepository.saveAll(
-                    List.of(HeadAdmin)
-            );
-            customer.setUser(HeadAdmin);
-            customerRepository.save(customer);
+
             cart.setCustomer(customer);
-            cartRepository.save(cart);
             wishlist.setCustomer(customer);
-            wishlistRepository.save(wishlist);
+
+            userRepository.save(HeadAdmin);
+            customerRepository.save(customer);
         };
     }
+
 
 }
