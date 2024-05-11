@@ -36,16 +36,16 @@ public class CartControllerTest{
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
     void testGetAll() throws Exception{
-        Cart cart1 = new Cart(1);
-        Cart cart2 = new Cart(2);
-        Cart cart3 = new Cart(3);
+        Cart cart1 = new Cart(1.00);
+        Cart cart2 = new Cart(2.00);
+        Cart cart3 = new Cart(3.00);
 
         when(cartService.getAll()).thenReturn(List.of(cart1, cart2, cart3));
 
         mockMvc.perform(get("/carts"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("[{'quantity': 1 }, {'quantity': 2 }, {'quantity': 3 }]"));
+                .andExpect(content().json("[{'quantity': 1.00 }, {'quantity': 2.00 }, {'quantity': 3.00 }]"));
     }
 
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
@@ -53,7 +53,7 @@ public class CartControllerTest{
     void testGetById() throws Exception{
         Integer cartId = 1;
 
-        Cart cart1 = new Cart(1);
+        Cart cart1 = new Cart(1.00);
 
         cart1.setId(cartId);
 
@@ -72,7 +72,7 @@ public class CartControllerTest{
 
         Integer customerId = 2;
 
-        Cart cart1 = new Cart(1);
+        Cart cart1 = new Cart(1.00);
 
         when(cartService.getCartByCustomerId(customerId)).thenReturn(cart1);
 

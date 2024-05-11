@@ -37,9 +37,9 @@ public class CartServiceTest{
     @DisplayName("JUnit test for getAll method")
     @Test
     public void testGetAll(){
-        Cart cart1 = new Cart(1);
-        Cart cart2 = new Cart(2);
-        Cart cart3 = new Cart(3);
+        Cart cart1 = new Cart(1.00);
+        Cart cart2 = new Cart(2.00);
+        Cart cart3 = new Cart(3.00);
 
         given(cartRepository.findAll()).willReturn(List.of(cart1, cart2, cart3));
 
@@ -56,7 +56,7 @@ public class CartServiceTest{
     @Test
     public void testGetById(){
 
-        Cart cart1 = new Cart(1);
+        Cart cart1 = new Cart(1.00);
         Integer cartId = 1;
 
         when(cartRepository.findById(cartId)).thenReturn(Optional.of(cart1));
@@ -82,7 +82,7 @@ public class CartServiceTest{
         Integer customer1Id = 1;
         Customer customer = new Customer();
 
-        Cart cart1 = new Cart(1);
+        Cart cart1 = new Cart(1.00);
 
         cart1.setCustomer(customer);
         customer.setCart(cart1);

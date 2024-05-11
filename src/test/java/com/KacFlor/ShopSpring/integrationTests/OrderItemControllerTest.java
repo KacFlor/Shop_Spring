@@ -4,8 +4,10 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import com.KacFlor.ShopSpring.controllersRequests.NewItem;
 import com.KacFlor.ShopSpring.model.OrderItem;
 import com.KacFlor.ShopSpring.service.OrderItemService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -68,12 +70,21 @@ public class OrderItemControllerTest{
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
-    void testDeleteById() throws Exception{
+    void testDeleteById() throws Exception {
         Integer itemId = 2;
-        when(orderItemService.deleteById(itemId)).thenReturn(true);
+        Integer Oid = 2;
+        Integer Pid = 2;
 
-        mockMvc.perform(delete("/order-items/{id}", itemId))
+        NewItem newItem = new NewItem(2.00);
+
+        when(orderItemService.deleteById(newItem, itemId, Oid, Pid)).thenReturn(true);
+
+        mockMvc.perform(delete("/order-items/{id}",itemId)
+                        .content(new ObjectMapper().writeValueAsString(newItem)).contentType(MediaType.APPLICATION_JSON)
+                        .param("Oid", String.valueOf(Oid))
+                        .param("Pid", String.valueOf(Pid)))
                 .andExpect(status().isOk());
     }
+
 
 }

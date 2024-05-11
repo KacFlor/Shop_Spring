@@ -40,29 +40,28 @@ public class ProductControllerTest{
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
     void testAddOrderItem() throws Exception{
         Integer orderId = 1;
+        Integer id = 1;
 
         NewItem newItem = new NewItem();
-        newItem.setName("Test1");
         newItem.setQuantity(22.00);
-        newItem.setPrice(250.0);
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
 
         String newItemJason = objectMapper.writeValueAsString(newItem);
 
-        when(productService.addOrderItem(newItem, orderId)).thenReturn(true);
+        when(productService.addOrderItem(newItem, id, orderId)).thenReturn(true);
 
-        mockMvc.perform(post("/products/order/{Oid}/order-item", orderId).contentType(MediaType.APPLICATION_JSON).content(newItemJason))
+        mockMvc.perform(post("/products/{id}/order-item", id ).param("Oid", String.valueOf(orderId)).contentType(MediaType.APPLICATION_JSON).content(newItemJason))
                 .andExpect(status().isAccepted());
     }
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
     void testGetAll() throws Exception{
-        Product product1 = new Product("Test1", "Old Name", "Old description", 29.99, 100);
-        Product product2 = new Product("Test2", "Old Name", "Old description", 29.99, 100);
-        Product product3 = new Product("Test3", "Old Name", "Old description", 29.99, 100);
+        Product product1 = new Product("Test1", "Old Name", "Old description", 29.99, 100.00);
+        Product product2 = new Product("Test2", "Old Name", "Old description", 29.99, 100.00);
+        Product product3 = new Product("Test3", "Old Name", "Old description", 29.99, 100.00);
 
 
         when(productService.getAll()).thenReturn(List.of(product1, product2, product3));
@@ -78,7 +77,7 @@ public class ProductControllerTest{
     void testGetById() throws Exception{
         Integer productId = 1;
 
-        Product product1 = new Product("Test1", "Old Name", "Old description", 29.99, 100);
+        Product product1 = new Product("Test1", "Old Name", "Old description", 29.99, 100.00);
         product1.setId(productId);
 
         when(productService.getById(productId)).thenReturn(product1);
@@ -103,7 +102,7 @@ public class ProductControllerTest{
     @Test
     void testUpdateProduct() throws Exception {
 
-        NewProduct newProduct = new NewProduct("Test1", "Updated Product", "Updated description", 39.99, 50);
+        NewProduct newProduct = new NewProduct("Test1", "Updated Product", "Updated description", 39.99, 50.00);
         Integer productId = 1;
 
         when(productService.updateProduct(newProduct, productId)).thenReturn(true);
@@ -129,7 +128,7 @@ public class ProductControllerTest{
     @Test
     void testCreateNewProduct() throws Exception {
 
-        NewProduct newProduct = new NewProduct("Test1", "New Product", "Description for new product", 19.99, 20);
+        NewProduct newProduct = new NewProduct("Test1", "New Product", "Description for new product", 19.99, 20.00);
 
         when(productService.addNewProduct(newProduct)).thenReturn(true);
 
@@ -231,11 +230,15 @@ public class ProductControllerTest{
         Integer productTestId = 1;
         Integer cartId = 1;
 
-        when(productService.addProductToCart(productTestId, cartId)).thenReturn(true);
+        NewItem newItem = new NewItem();
+        newItem.setQuantity(22.00);
 
-        mockMvc.perform(post("/products/{PTid}/cart", productTestId).param("Cid", String.valueOf(cartId)))
+        when(productService.addProductToCart(newItem, productTestId, cartId)).thenReturn(true);
+
+        mockMvc.perform(post("/products/{id}/cart", productTestId).param("Cid", String.valueOf(cartId)).content(new ObjectMapper().writeValueAsString(newItem)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
+
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
@@ -243,12 +246,15 @@ public class ProductControllerTest{
         Integer productTestId = 1;
         Integer cartId = 1;
 
-        when(productService.removeProductFromCart(productTestId, cartId)).thenReturn(true);
+        NewItem newItem = new NewItem();
+        newItem.setQuantity(22.00);
 
-        mockMvc.perform(delete("/products/{PTid}/cart", productTestId).param("Cid", String.valueOf(cartId)))
+        when(productService.removeProductFromCart(newItem, productTestId, cartId)).thenReturn(true);
+
+        mockMvc.perform(delete("/products/{id}/cart", productTestId).param("Cid", String.valueOf(cartId)).content(new ObjectMapper().writeValueAsString(newItem)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-
     }
+
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
