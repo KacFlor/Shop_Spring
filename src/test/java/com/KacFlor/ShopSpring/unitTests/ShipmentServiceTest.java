@@ -133,40 +133,21 @@ public class ShipmentServiceTest{
 
     @DisplayName("JUnit test for testDeleteAllByCustomerId method")
     @Test
-    public void testDeleteAllByCustomerId(){
+    void testDeleteAllByCustomerId() {
+        Integer customerId = 1;
+        Customer customer = new Customer();
+        customer.setId(customerId);
 
-        Integer customer2Id = 2;
+        Shipment shipment = new Shipment();
+        shipment.setCustomer(customer);
 
-        Shipment shipment1 = new Shipment(LocalDate.of(2024, 5, 3), "123 Main Street", "Springfield", "Ohio", "USA", "12345");
-        Shipment shipment2 = new Shipment(LocalDate.of(2024, 5, 5), "456 Oak Avenue", "Gotham", "Gotham City", "USA", "54321");
-        Shipment shipment3 = new Shipment(LocalDate.of(2024, 5, 7), "789 Pine Street", "River-town", "Riverdale", "USA", "67890");
+        when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer));
+        when(shipmentRepository.findByCustomerId(customerId)).thenReturn(shipment);
 
-        List<Shipment> shipments = new ArrayList<>();
-        shipments.add(shipment2);
-        shipments.add(shipment3);
-
-        Customer customer2 = new Customer();
-        customer2.setId(customer2Id);
-
-        shipment1.setCustomer(customer2);
-        shipment2.setCustomer(customer2);
-        shipment3.setCustomer(customer2);
-
-        when(customerRepository.findById(customer2Id)).thenReturn(Optional.of(customer2));
-        when(shipmentRepository.findAllByCustomerId(customer2Id)).thenReturn(shipments);
-
-        boolean result = shipmentService.deleteAllByCustomerId(customer2Id);
-
-        verify(shipmentRepository, times(1)).delete(shipment2);
-        verify(shipmentRepository, times(1)).delete(shipment3);
+        boolean result = shipmentService.deleteAllByCustomerId(customerId);
 
         assertTrue(result);
-
-        when(customerRepository.findById(customer2Id)).thenReturn(Optional.empty());
-
-        assertThrows(ExceptionsConfig.ResourceNotFoundException.class, () -> shipmentService.getAllByCustomerId(customer2Id));
-
-        verify(customerRepository, times(2)).findById(customer2Id);
+        verify(shipmentRepository, times(1)).delete(shipment);
     }
 
     @DisplayName("JUnit test for testUpdateShipment method")

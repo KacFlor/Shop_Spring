@@ -1,5 +1,6 @@
 package com.KacFlor.ShopSpring.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -21,6 +22,7 @@ public class Supplier extends BaseEntity{
     private String name;
 
     @OneToMany(mappedBy = "supplier")
+    @JsonBackReference
     private List<Product> products;
 
     public Supplier(){

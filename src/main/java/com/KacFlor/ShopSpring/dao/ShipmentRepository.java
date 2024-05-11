@@ -9,6 +9,7 @@ import java.util.List;
 @Repository
 public interface ShipmentRepository extends JpaRepository<Shipment, Integer>{
 
+    Shipment findByCustomerId(Integer id);
     List<Shipment> findAllByCustomerId(Integer id);
 
 }

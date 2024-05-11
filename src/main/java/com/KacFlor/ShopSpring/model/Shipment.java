@@ -40,12 +40,12 @@ public class Shipment extends BaseEntity{
     @NotBlank
     private String zipcode;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "payment_id")
     @JsonManagedReference
     private Payment payment;
 
-    @OneToMany(mappedBy = "shipment", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "shipment", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Order> orders;
 

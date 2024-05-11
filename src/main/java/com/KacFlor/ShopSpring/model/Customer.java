@@ -36,10 +36,6 @@ public class Customer extends BaseEntity{
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER , cascade = CascadeType.ALL)
     @JsonBackReference
-    private List<Order> orders;
-
-    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER , cascade = CascadeType.ALL)
-    @JsonBackReference
     private List<CardData> cardDatas;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER , cascade = CascadeType.ALL)
@@ -50,7 +46,7 @@ public class Customer extends BaseEntity{
     @JsonBackReference
     private List<Review> reviews;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     @JsonManagedReference
     private User user;
