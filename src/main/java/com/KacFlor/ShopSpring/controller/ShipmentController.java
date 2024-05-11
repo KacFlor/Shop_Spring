@@ -38,8 +38,8 @@ public class ShipmentController{
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PostMapping("/{id}/order")
-    public ResponseEntity<?> createNewOrder(@RequestBody NewOrder newOrder, @PathVariable("id") Integer id){
-        shipmentService.createOrder(newOrder,id);
+    public ResponseEntity<?> createNewOrder(@RequestBody NewOrder updatedOrder, @PathVariable("id") Integer id){
+        shipmentService.createOrder(updatedOrder,id);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
@@ -87,8 +87,8 @@ public class ShipmentController{
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PostMapping("/{id}/payment")
-    public ResponseEntity<?> create(@RequestBody NewPayment newPayment, @PathVariable("id") Integer id){
-        shipmentService.addNewPayment(newPayment, id);
+    public ResponseEntity<?> create(@RequestBody NewPayment updatedPayment, @PathVariable("id") Integer id){
+        shipmentService.addNewPayment(updatedPayment, id);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 

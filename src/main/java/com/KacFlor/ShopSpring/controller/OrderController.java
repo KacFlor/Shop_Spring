@@ -49,8 +49,8 @@ public class OrderController{
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateShipment(@RequestBody NewOrder newOrder, @PathVariable("id") Integer id){
-        orderService.updateOrder(newOrder, id);
+    public ResponseEntity<?> updateShipment(@RequestBody NewOrder updatedOrder, @PathVariable("id") Integer id){
+        orderService.updateOrder(updatedOrder, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

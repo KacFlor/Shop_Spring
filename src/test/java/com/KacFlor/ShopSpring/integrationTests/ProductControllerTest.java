@@ -158,7 +158,7 @@ public class ProductControllerTest{
 
         when(productService.addPromotion(productTestId, promotionTestId)).thenReturn(true);
 
-        mockMvc.perform(patch("/products/{PTid}/promotion/{PNid}/add", productTestId, promotionTestId))
+        mockMvc.perform(post("/products/{PTid}/promotion/{PNid}", productTestId, promotionTestId))
                 .andExpect(status().isOk());
     }
 
@@ -170,7 +170,7 @@ public class ProductControllerTest{
 
         when(productService.removePromotion(productTestId, promotionTestId)).thenReturn(true);
 
-        mockMvc.perform(patch("/products/{PTid}/promotion/{PNid}/remove", productTestId, promotionTestId))
+        mockMvc.perform(delete("/products/{PTid}/promotion/{PNid}", productTestId, promotionTestId))
                 .andExpect(status().isOk());
 
     }
@@ -183,7 +183,7 @@ public class ProductControllerTest{
 
         when(productService.addCategory(productTestId, categoryId)).thenReturn(true);
 
-        mockMvc.perform(patch("/products/{PTid}/category/{Cid}/add", productTestId, categoryId))
+        mockMvc.perform(post("/products/{PTid}/category/{Cid}", productTestId, categoryId))
                 .andExpect(status().isOk());
     }
 
@@ -195,7 +195,7 @@ public class ProductControllerTest{
 
         when(productService.removeCategory(productTestId, categoryId)).thenReturn(true);
 
-        mockMvc.perform(patch("/products/{PTid}/category/{Cid}/remove", productTestId, categoryId))
+        mockMvc.perform(delete("/products/{PTid}/category/{Cid}", productTestId, categoryId))
                 .andExpect(status().isOk());
 
     }
@@ -208,7 +208,7 @@ public class ProductControllerTest{
 
         when(productService.addSupplier(productTestId, supplierId)).thenReturn(true);
 
-        mockMvc.perform(patch("/products/{PTid}/supplier/{Sid}/add", productTestId, supplierId))
+        mockMvc.perform(post("/products/{PTid}/supplier/{Sid}", productTestId, supplierId))
                 .andExpect(status().isOk());
     }
 
@@ -220,7 +220,7 @@ public class ProductControllerTest{
 
         when(productService.removeSupplier(productTestId, supplierId)).thenReturn(true);
 
-        mockMvc.perform(patch("/products/{PTid}/supplier/{Sid}/remove", productTestId, supplierId))
+        mockMvc.perform(delete("/products/{PTid}/supplier/{Sid}", productTestId, supplierId))
                 .andExpect(status().isOk());
 
     }
@@ -233,7 +233,7 @@ public class ProductControllerTest{
 
         when(productService.addProductToCart(productTestId, cartId)).thenReturn(true);
 
-        mockMvc.perform(patch("/products/{PTid}/cart/{Cid}/add", productTestId, cartId))
+        mockMvc.perform(post("/products/{PTid}/cart/{Cid}", productTestId, cartId))
                 .andExpect(status().isOk());
     }
 
@@ -245,7 +245,7 @@ public class ProductControllerTest{
 
         when(productService.removeProductFromCart(productTestId, cartId)).thenReturn(true);
 
-        mockMvc.perform(patch("/products/{PTid}/cart/{Cid}/remove", productTestId, cartId))
+        mockMvc.perform(delete("/products/{PTid}/cart/{Cid}", productTestId, cartId))
                 .andExpect(status().isOk());
 
     }
@@ -258,7 +258,7 @@ public class ProductControllerTest{
 
         when(productService.addProductToWishlist(productTestId, wishlistId)).thenReturn(true);
 
-        mockMvc.perform(patch("/products/{PTid}/wishlist/{Wid}/add", productTestId, wishlistId))
+        mockMvc.perform(post("/products/{PTid}/wishlist/{Wid}", productTestId, wishlistId))
                 .andExpect(status().isOk());
     }
 
@@ -270,7 +270,7 @@ public class ProductControllerTest{
 
         when(productService.removeProductFromWishlist(productTestId, wishlistId)).thenReturn(true);
 
-        mockMvc.perform(patch("/products/{PTid}/wishlist/{Wid}/remove", productTestId, wishlistId))
+        mockMvc.perform(delete("/products/{PTid}/wishlist/{Wid}", productTestId, wishlistId))
                 .andExpect(status().isOk());
 
     }

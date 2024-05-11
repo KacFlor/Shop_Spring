@@ -35,8 +35,8 @@ public class ProductController{
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PostMapping("/order/{Oid}/order-item")
-    public ResponseEntity<?> addOrderItem(@RequestBody NewOrderItem newOrderItem, @PathVariable("Oid") Integer id){
-        productService.addOrderItem(newOrderItem, id);
+    public ResponseEntity<?> addOrderItem(@RequestBody NewOrderItem updatedOrderItem, @PathVariable("Oid") Integer id){
+        productService.addOrderItem(updatedOrderItem, id);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
@@ -56,15 +56,15 @@ public class ProductController{
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @PatchMapping("/{id}")
-    public ResponseEntity<?> update(@RequestBody NewProduct newProduct, @PathVariable("id") Integer id){
-        productService.updateProduct(newProduct, id);
+    public ResponseEntity<?> update(@RequestBody NewProduct updatedProduct, @PathVariable("id") Integer id){
+        productService.updateProduct(updatedProduct, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @PostMapping("/new")
-    public ResponseEntity<?> create(@RequestBody NewProduct newProduct){
-        productService.addNewProduct(newProduct);
+    public ResponseEntity<?> create(@RequestBody NewProduct updatedProduct){
+        productService.addNewProduct(updatedProduct);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 

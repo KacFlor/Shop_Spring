@@ -50,15 +50,15 @@ public class ReviewController{
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @PatchMapping("/{id}")
-    public ResponseEntity<?> update(@RequestBody NewReview newReview, @PathVariable("id") Integer id){
-        reviewService.updateReview(newReview, id);
+    public ResponseEntity<?> update(@RequestBody NewReview updatedReview, @PathVariable("id") Integer id){
+        reviewService.updateReview(updatedReview, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @PostMapping("/new/customer/{Cid}/product{Pid}")
-    public ResponseEntity<?> create(@RequestBody NewReview newReview, @PathVariable("Cid") Integer Cid, @PathVariable("Pid") Integer Pid){
-        reviewService.addNewReview(newReview, Cid, Pid);
+    public ResponseEntity<?> create(@RequestBody NewReview updatedReview, @PathVariable("Cid") Integer Cid, @PathVariable("Pid") Integer Pid){
+        reviewService.addNewReview(updatedReview, Cid, Pid);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 }
