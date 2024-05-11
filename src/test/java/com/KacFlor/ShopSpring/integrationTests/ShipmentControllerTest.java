@@ -75,7 +75,7 @@ public class ShipmentControllerTest{
 
         when(shipmentService.getAllByCustomerId(customerId)).thenReturn(List.of(shipment, shipment2, shipment3));
 
-        mockMvc.perform(get("/shipments/customer/{id}", customerId))
+        mockMvc.perform(get("/shipments/customer").param("id", String.valueOf(customerId)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json("[{'address':'123 Main Street','city':'Springfield','state':'Ohio','country':'USA','zipcode':'12345'},{'address':'456 Oak Avenue','city':'Gotham','state':'Gotham City','country':'USA','zipcode':'54321'},{'address':'789 Pine Street','city':'River-town','state':'Riverdale','country':'USA','zipcode':'67890'}]"));
@@ -107,7 +107,7 @@ public class ShipmentControllerTest{
         Integer customerId = 2;
         when(shipmentService.deleteAllByCustomerId(customerId)).thenReturn(true);
 
-        mockMvc.perform(delete("/shipments/customer/{id}", customerId))
+        mockMvc.perform(delete("/shipments/customer").param("id", String.valueOf(customerId)))
                 .andExpect(status().isOk());
 
     }
@@ -117,9 +117,9 @@ public class ShipmentControllerTest{
     void testDeleteById() throws Exception{
 
         Integer shipmentId = 2;
-        when(shipmentService.deleteAllByCustomerId(shipmentId)).thenReturn(true);
+        when(shipmentService.deleteById(shipmentId)).thenReturn(true);
 
-        mockMvc.perform(delete("/shipments/customer/{id}", shipmentId))
+        mockMvc.perform(delete("/shipments/{id}", shipmentId))
                 .andExpect(status().isOk());
     }
 

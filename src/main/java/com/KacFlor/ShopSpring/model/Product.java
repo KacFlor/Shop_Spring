@@ -56,6 +56,7 @@ public class Product extends BaseEntity{
     private Wishlist wishlist;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
+    @JsonBackReference
     private List<Review> reviews;
 
     public Product(){

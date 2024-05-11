@@ -51,8 +51,8 @@ public class ShipmentController{
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
-    @GetMapping("/customer/{id}")
-    public ResponseEntity<List<Shipment>> getCustomerById(@PathVariable("id") Integer id){
+    @GetMapping("/customer")
+    public ResponseEntity<List<Shipment>> getCustomerById(@RequestParam("id") Integer id){
         List<Shipment> shipments = shipmentService.getAllByCustomerId(id);
         return ResponseEntity.ok(shipments);
     }
@@ -65,8 +65,8 @@ public class ShipmentController{
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
-    @DeleteMapping("/customer/{id}")
-    public ResponseEntity<?> deleteAllByCustomerId(@PathVariable("id") Integer id){
+    @DeleteMapping("/customer")
+    public ResponseEntity<?> deleteAllByCustomerId(@RequestParam("id") Integer id){
         shipmentService.deleteAllByCustomerId(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

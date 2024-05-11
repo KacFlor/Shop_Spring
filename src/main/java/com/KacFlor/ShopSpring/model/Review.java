@@ -1,5 +1,6 @@
 package com.KacFlor.ShopSpring.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -16,15 +17,16 @@ public class Review extends BaseEntity{
     private Integer rating;
 
     @Column(name = "comment")
-    @NotBlank
     private String comment;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
+    @JsonManagedReference
     private Customer customer;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
+    @JsonManagedReference
     private Product product;
 
     public Review(){

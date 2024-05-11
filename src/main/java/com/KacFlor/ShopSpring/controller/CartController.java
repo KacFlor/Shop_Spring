@@ -9,10 +9,7 @@ import com.KacFlor.ShopSpring.model.Cart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(
@@ -41,9 +38,9 @@ public class CartController{
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
-    @GetMapping("/customer/{id}")
-    public ResponseEntity<Optional<Cart>> getByCustomerId(@PathVariable("id") Integer id){
-        Optional<Cart> cart = Optional.ofNullable(cartService.getCartByCustomerId(id));
+    @GetMapping("/customer")
+    public ResponseEntity<Optional<Cart>> getByCustomerId(@RequestParam("Cid") Integer Cid){
+        Optional<Cart> cart = Optional.ofNullable(cartService.getCartByCustomerId(Cid));
         return ResponseEntity.ok(cart);
     }
 }

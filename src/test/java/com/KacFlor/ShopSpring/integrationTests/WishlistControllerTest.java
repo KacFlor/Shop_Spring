@@ -73,7 +73,7 @@ public class WishlistControllerTest{
 
         when(wishlistService.getCartByCustomerId(wishlistId)).thenReturn(wishlist1);
 
-        mockMvc.perform(get("/wishlists/customer/{id}", wishlistId))
+        mockMvc.perform(get("/wishlists/customer").param("id", String.valueOf(wishlistId)))
                 .andExpect(status().isOk());
 
     }

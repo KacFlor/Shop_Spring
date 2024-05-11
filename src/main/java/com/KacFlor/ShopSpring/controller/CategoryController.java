@@ -48,8 +48,8 @@ public class CategoryController{
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @PatchMapping("/{id}")
-    public ResponseEntity<?> update(@RequestBody NewCategory newCategory, @PathVariable("id") Integer id){
-        categoryService.updateCategory(newCategory, id);
+    public ResponseEntity<?> update(@RequestBody NewCategory updateCategory, @PathVariable("id") Integer id){
+        categoryService.updateCategory(updateCategory, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

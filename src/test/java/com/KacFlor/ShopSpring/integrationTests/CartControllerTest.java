@@ -76,7 +76,7 @@ public class CartControllerTest{
 
         when(cartService.getCartByCustomerId(customerId)).thenReturn(cart1);
 
-        mockMvc.perform(get("/carts/customer/{id}", customerId))
+        mockMvc.perform(get("/carts/customer").param("Cid", String.valueOf(customerId)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json("{'quantity': 1 }"));

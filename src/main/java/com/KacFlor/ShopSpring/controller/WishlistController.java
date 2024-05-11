@@ -10,10 +10,7 @@ import com.KacFlor.ShopSpring.service.WishlistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(
@@ -42,8 +39,8 @@ public class WishlistController{
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
-    @GetMapping("/customer/{id}")
-    public ResponseEntity<Optional<Wishlist>> getByCustomerId(@PathVariable("id") Integer id){
+    @GetMapping("/customer")
+    public ResponseEntity<Optional<Wishlist>> getByCustomerId(@RequestParam("id") Integer id){
         Optional<Wishlist> wishlist = Optional.ofNullable(wishlistService.getCartByCustomerId(id));
         return ResponseEntity.ok(wishlist);
     }

@@ -42,8 +42,8 @@ public class ReviewController{
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
-    @DeleteMapping("/{id}/customer/{Cid}/product{Pid}")
-    public ResponseEntity<?> deleteById(@PathVariable("id") Integer id, @PathVariable("Cid") Integer Cid, @PathVariable("Pid") Integer Pid){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteById(@PathVariable("id") Integer id, @RequestParam("Cid") Integer Cid, @RequestParam("Pid") Integer Pid){
         reviewService.deleteById(id, Cid, Pid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -56,8 +56,8 @@ public class ReviewController{
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
-    @PostMapping("/new/customer/{Cid}/product{Pid}")
-    public ResponseEntity<?> create(@RequestBody NewReview updatedReview, @PathVariable("Cid") Integer Cid, @PathVariable("Pid") Integer Pid){
+    @PostMapping("/new")
+    public ResponseEntity<?> create(@RequestBody NewReview updatedReview, @RequestParam("Cid") Integer Cid, @RequestParam("Pid") Integer Pid){
         reviewService.addNewReview(updatedReview, Cid, Pid);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }

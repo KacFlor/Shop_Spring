@@ -47,6 +47,7 @@ public class Customer extends BaseEntity{
     private List<Shipment> shipments;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<Review> reviews;
 
     @OneToOne(fetch = FetchType.EAGER)

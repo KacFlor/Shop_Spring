@@ -158,7 +158,7 @@ public class ProductControllerTest{
 
         when(productService.addPromotion(productTestId, promotionTestId)).thenReturn(true);
 
-        mockMvc.perform(post("/products/{PTid}/promotion/{PNid}", productTestId, promotionTestId))
+        mockMvc.perform(post("/products/{PTid}/promotion", productTestId).param("PNid", String.valueOf(productTestId)))
                 .andExpect(status().isOk());
     }
 
@@ -170,7 +170,7 @@ public class ProductControllerTest{
 
         when(productService.removePromotion(productTestId, promotionTestId)).thenReturn(true);
 
-        mockMvc.perform(delete("/products/{PTid}/promotion/{PNid}", productTestId, promotionTestId))
+        mockMvc.perform(delete("/products/{PTid}/promotion", productTestId).param("PNid", String.valueOf(productTestId)))
                 .andExpect(status().isOk());
 
     }
@@ -183,7 +183,7 @@ public class ProductControllerTest{
 
         when(productService.addCategory(productTestId, categoryId)).thenReturn(true);
 
-        mockMvc.perform(post("/products/{PTid}/category/{Cid}", productTestId, categoryId))
+        mockMvc.perform(post("/products/{PTid}/category", productTestId).param("CYid", String.valueOf(categoryId)))
                 .andExpect(status().isOk());
     }
 
@@ -195,7 +195,7 @@ public class ProductControllerTest{
 
         when(productService.removeCategory(productTestId, categoryId)).thenReturn(true);
 
-        mockMvc.perform(delete("/products/{PTid}/category/{Cid}", productTestId, categoryId))
+        mockMvc.perform(delete("/products/{PTid}/category", productTestId).param("CYid", String.valueOf(categoryId)))
                 .andExpect(status().isOk());
 
     }
@@ -208,7 +208,7 @@ public class ProductControllerTest{
 
         when(productService.addSupplier(productTestId, supplierId)).thenReturn(true);
 
-        mockMvc.perform(post("/products/{PTid}/supplier/{Sid}", productTestId, supplierId))
+        mockMvc.perform(post("/products/{PTid}/supplier", productTestId).param("Sid", String.valueOf(supplierId)))
                 .andExpect(status().isOk());
     }
 
@@ -220,7 +220,7 @@ public class ProductControllerTest{
 
         when(productService.removeSupplier(productTestId, supplierId)).thenReturn(true);
 
-        mockMvc.perform(delete("/products/{PTid}/supplier/{Sid}", productTestId, supplierId))
+        mockMvc.perform(delete("/products/{PTid}/supplier", productTestId).param("Sid", String.valueOf(supplierId)))
                 .andExpect(status().isOk());
 
     }
@@ -233,7 +233,7 @@ public class ProductControllerTest{
 
         when(productService.addProductToCart(productTestId, cartId)).thenReturn(true);
 
-        mockMvc.perform(post("/products/{PTid}/cart/{Cid}", productTestId, cartId))
+        mockMvc.perform(post("/products/{PTid}/cart", productTestId).param("Cid", String.valueOf(cartId)))
                 .andExpect(status().isOk());
     }
 
@@ -245,7 +245,7 @@ public class ProductControllerTest{
 
         when(productService.removeProductFromCart(productTestId, cartId)).thenReturn(true);
 
-        mockMvc.perform(delete("/products/{PTid}/cart/{Cid}", productTestId, cartId))
+        mockMvc.perform(delete("/products/{PTid}/cart", productTestId).param("Cid", String.valueOf(cartId)))
                 .andExpect(status().isOk());
 
     }
@@ -258,7 +258,7 @@ public class ProductControllerTest{
 
         when(productService.addProductToWishlist(productTestId, wishlistId)).thenReturn(true);
 
-        mockMvc.perform(post("/products/{PTid}/wishlist/{Wid}", productTestId, wishlistId))
+        mockMvc.perform(post("/products/{PTid}/wishlist", productTestId).param("Wid", String.valueOf(wishlistId)))
                 .andExpect(status().isOk());
     }
 
@@ -270,7 +270,7 @@ public class ProductControllerTest{
 
         when(productService.removeProductFromWishlist(productTestId, wishlistId)).thenReturn(true);
 
-        mockMvc.perform(delete("/products/{PTid}/wishlist/{Wid}", productTestId, wishlistId))
+        mockMvc.perform(delete("/products/{PTid}/wishlist", productTestId).param("Wid", String.valueOf(wishlistId)))
                 .andExpect(status().isOk());
 
     }
