@@ -1,7 +1,7 @@
 package com.KacFlor.ShopSpring.service;
 
 import com.KacFlor.ShopSpring.Exceptions.ExceptionsConfig;
-import com.KacFlor.ShopSpring.controllersRequests.NewOrderItem;
+import com.KacFlor.ShopSpring.controllersRequests.NewItem;
 import com.KacFlor.ShopSpring.controllersRequests.NewProduct;
 import com.KacFlor.ShopSpring.dao.*;
 import com.KacFlor.ShopSpring.model.*;
@@ -46,20 +46,31 @@ public class ProductService{
         return productRepository.findAll();
     }
 
-    public boolean addOrderItem(NewOrderItem newOrderItem, Integer Oid){
+    public boolean addOrderItem(NewItem newItem, Integer Pid, Integer Oid){
         Optional<Order> optionalOrder = orderRepository.findById(Oid);
+        Optional<Product> optionalProduct = productRepository.findById(Pid);
 
         if (optionalOrder.isEmpty()) {
             throw new ExceptionsConfig.ResourceNotFoundException("Order not found");
         }
 
+        if (optionalProduct.isEmpty()) {
+            throw new ExceptionsConfig.ResourceNotFoundException("Product not found");
+        }
+
         Order order = optionalOrder.get();
-        OrderItem orderItem = new OrderItem(newOrderItem.getName(), newOrderItem.getQuantity(), newOrderItem.getPrice());
+        Product product = optionalProduct.get();
+        OrderItem orderItem = new OrderItem(product.getName(), newItem.getQuantity(), product.getPrice());
+
+        product.setStock(product.getStock() - orderItem.getQuantity());
+        product.getOrderItems().add(orderItem);
+        productRepository.save(product);
 
         orderItem.setOrder(order);
         orderItemRepository.save(orderItem);
 
         order.getOrderItems().add(orderItem);
+        order.setTotalPrice(order.getTotalPrice() + orderItem.getQuantity() * orderItem.getPrice());
         orderRepository.save(order);
 
         return true;
@@ -294,7 +305,7 @@ public class ProductService{
 
     }
 
-    public boolean addProductToCart(Integer PTid, Integer Cid) {
+    public boolean addProductToCart(NewItem newItem ,Integer PTid, Integer Cid) {
 
         Optional<Product> optionalProduct = productRepository.findById(PTid);
         Optional<Cart> optionalCart = cartRepository.findById(Cid);
@@ -310,6 +321,7 @@ public class ProductService{
         Product product = optionalProduct.get();
         Cart cart = optionalCart.get();
 
+        cart.setQuantity(cart.getQuantity() + newItem.getQuantity());
         cart.getProducts().add(product);
         product.setCart(cart);
 
@@ -319,7 +331,7 @@ public class ProductService{
 
     }
 
-    public boolean removeProductFromCart(Integer PTid, Integer Cid){
+    public boolean removeProductFromCart(NewItem newItem ,Integer PTid, Integer Cid){
         Optional<Product> optionalProduct = productRepository.findById(PTid);
         Optional<Cart> optionalCart = cartRepository.findById(Cid);
 
@@ -334,12 +346,19 @@ public class ProductService{
 
         Product product = optionalProduct.get();
         Cart cart = optionalCart.get();
+        cart.setQuantity(cart.getQuantity() - newItem.getQuantity());
         if (cart.getProducts().contains(product)) {
-            cart.getProducts().remove(product);
+            if(cart.getQuantity() <= 0){
+                cart.getProducts().remove(product);
 
-            product.setCart(null);
-            cartRepository.save(cart);
-            return true;
+                product.setCart(null);
+                cartRepository.save(cart);
+                return true;
+            }
+            else
+            {
+                return true;
+            }
         } else {
             throw new ExceptionsConfig.ResourceNotFoundException("Resource not found");
         }

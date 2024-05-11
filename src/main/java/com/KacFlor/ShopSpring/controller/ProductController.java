@@ -3,7 +3,7 @@ package com.KacFlor.ShopSpring.controller;
 import java.util.List;
 import java.util.Optional;
 
-import com.KacFlor.ShopSpring.controllersRequests.NewOrderItem;
+import com.KacFlor.ShopSpring.controllersRequests.NewItem;
 import com.KacFlor.ShopSpring.controllersRequests.NewProduct;
 import com.KacFlor.ShopSpring.model.Product;
 import com.KacFlor.ShopSpring.model.Role;
@@ -34,9 +34,9 @@ public class ProductController{
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
-    @PostMapping("/order/{Oid}/order-item")
-    public ResponseEntity<?> addOrderItem(@RequestBody NewOrderItem newOrderItem, @PathVariable("Oid") Integer id){
-        productService.addOrderItem(newOrderItem, id);
+    @PostMapping("/{id}/order-item")
+    public ResponseEntity<?> addOrderItem(@RequestBody NewItem newItem, @PathVariable("id") Integer id, @RequestParam("Oid") Integer Oid){
+        productService.addOrderItem(newItem, id, Oid);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
@@ -112,15 +112,15 @@ public class ProductController{
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PostMapping("/{id}/cart")
-    public ResponseEntity<?> addToCartById(@PathVariable("id") Integer id, @RequestParam("Cid") Integer Cid){
-        productService.addProductToCart(id, Cid);
+    public ResponseEntity<?> addToCartById(@RequestBody NewItem newItem, @PathVariable("id") Integer id, @RequestParam("Cid") Integer Cid){
+        productService.addProductToCart(newItem ,id, Cid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @DeleteMapping("/{id}/cart")
-    public ResponseEntity<?> removeFromCartById(@PathVariable("id") Integer id, @RequestParam("Cid") Integer Cid){
-        productService.removeProductFromCart(id, Cid);
+    public ResponseEntity<?> removeFromCartById(@RequestBody NewItem newItem,@PathVariable("id") Integer id, @RequestParam("Cid") Integer Cid){
+        productService.removeProductFromCart(newItem ,id, Cid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

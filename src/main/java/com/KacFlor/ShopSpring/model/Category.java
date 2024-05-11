@@ -1,5 +1,6 @@
 package com.KacFlor.ShopSpring.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +19,7 @@ public class Category extends BaseEntity{
     private String name;
 
     @OneToMany(mappedBy = "category")
+    @JsonBackReference
     private List<Product> products;
 
     public Category(){

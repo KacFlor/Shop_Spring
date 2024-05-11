@@ -5,7 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.KacFlor.ShopSpring.controllersRequests.NewOrderItem;
+import com.KacFlor.ShopSpring.controllersRequests.NewItem;
 import com.KacFlor.ShopSpring.controllersRequests.NewProduct;
 import com.KacFlor.ShopSpring.model.Product;
 import com.KacFlor.ShopSpring.service.ProductService;
@@ -41,17 +41,17 @@ public class ProductControllerTest{
     void testAddOrderItem() throws Exception{
         Integer orderId = 1;
 
-        NewOrderItem newOrderItem = new NewOrderItem();
-        newOrderItem.setName("Test1");
-        newOrderItem.setQuantity(22.00);
-        newOrderItem.setPrice(250.0);
+        NewItem newItem = new NewItem();
+        newItem.setName("Test1");
+        newItem.setQuantity(22.00);
+        newItem.setPrice(250.0);
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
 
-        String newItemJason = objectMapper.writeValueAsString(newOrderItem);
+        String newItemJason = objectMapper.writeValueAsString(newItem);
 
-        when(productService.addOrderItem(newOrderItem, orderId)).thenReturn(true);
+        when(productService.addOrderItem(newItem, orderId)).thenReturn(true);
 
         mockMvc.perform(post("/products/order/{Oid}/order-item", orderId).contentType(MediaType.APPLICATION_JSON).content(newItemJason))
                 .andExpect(status().isAccepted());

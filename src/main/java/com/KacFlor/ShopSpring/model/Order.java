@@ -32,7 +32,7 @@ public class Order extends BaseEntity{
     @JsonManagedReference
     private Customer customer;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @JsonBackReference
     private List<OrderItem> orderItems;
 

@@ -2,7 +2,7 @@ package com.KacFlor.ShopSpring.unitTests;
 
 
 import com.KacFlor.ShopSpring.Exceptions.ExceptionsConfig;
-import com.KacFlor.ShopSpring.controllersRequests.NewOrderItem;
+import com.KacFlor.ShopSpring.controllersRequests.NewItem;
 import com.KacFlor.ShopSpring.controllersRequests.NewProduct;
 import com.KacFlor.ShopSpring.dao.*;
 import com.KacFlor.ShopSpring.model.*;
@@ -64,14 +64,14 @@ public class ProductServiceTest{
         order.setId(orderId);
         order.setOrderItems(new ArrayList<>());
 
-        NewOrderItem newOrderItem = new NewOrderItem();
-        newOrderItem.setName("Test1");
-        newOrderItem.setQuantity(22.00);
-        newOrderItem.setPrice(250.0);
+        NewItem newItem = new NewItem();
+        newItem.setName("Test1");
+        newItem.setQuantity(22.00);
+        newItem.setPrice(250.0);
 
         when(orderRepository.findById(orderId)).thenReturn(Optional.of(order));
 
-        boolean result = productService.addOrderItem(newOrderItem, orderId);
+        boolean result = productService.addOrderItem(newItem, orderId);
         assertTrue(result);
 
         verify(orderRepository, times(1)).findById(orderId);
@@ -80,7 +80,7 @@ public class ProductServiceTest{
 
         when(orderRepository.findById(orderId)).thenReturn(Optional.empty());
 
-        assertThrows(ExceptionsConfig.ResourceNotFoundException.class, () -> productService.addOrderItem(newOrderItem, orderId));
+        assertThrows(ExceptionsConfig.ResourceNotFoundException.class, () -> productService.addOrderItem(newItem, orderId));
 
         verify(orderRepository, times(2)).findById(orderId);
     }
