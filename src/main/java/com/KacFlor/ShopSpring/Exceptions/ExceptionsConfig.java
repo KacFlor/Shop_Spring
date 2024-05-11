@@ -1,4 +1,4 @@
-package com.KacFlor.ShopSpring.config;
+package com.KacFlor.ShopSpring.Exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

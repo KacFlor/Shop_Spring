@@ -1,5 +1,5 @@
 package com.KacFlor.ShopSpring.unitTests;
-import com.KacFlor.ShopSpring.config.ExceptionsConfig;
+import com.KacFlor.ShopSpring.Exceptions.ExceptionsConfig;
 import com.KacFlor.ShopSpring.dao.OrderItemRepository;
 import com.KacFlor.ShopSpring.model.OrderItem;
 import com.KacFlor.ShopSpring.service.OrderItemService;

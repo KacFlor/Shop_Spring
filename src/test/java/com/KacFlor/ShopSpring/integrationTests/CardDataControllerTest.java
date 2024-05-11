@@ -108,6 +108,4 @@ public class CardDataControllerTest{
                 .andExpect(status().isOk());
     }
 
-
-
 }

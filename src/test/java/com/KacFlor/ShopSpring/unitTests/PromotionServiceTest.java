@@ -1,5 +1,5 @@
 package com.KacFlor.ShopSpring.unitTests;
-import com.KacFlor.ShopSpring.config.ExceptionsConfig;
+import com.KacFlor.ShopSpring.Exceptions.ExceptionsConfig;
 import com.KacFlor.ShopSpring.controllersRequests.NewPromotion;
 import com.KacFlor.ShopSpring.dao.*;
 import com.KacFlor.ShopSpring.model.*;

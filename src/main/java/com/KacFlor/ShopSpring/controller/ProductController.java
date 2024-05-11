@@ -69,70 +69,70 @@ public class ProductController{
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
-    @PatchMapping("/{PTid}/promotion/{PNid}/add")
+    @PostMapping("/{PTid}/promotion/{PNid}")
     public ResponseEntity<?> addPromotionById(@PathVariable("PTid") Integer PTid, @PathVariable("PNid") Integer PNid){
         productService.addPromotion(PTid, PNid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
-    @PatchMapping("/{PTid}/promotion/{PNid}/remove")
+    @DeleteMapping("/{PTid}/promotion/{PNid}")
     public ResponseEntity<?> removePromotionById(@PathVariable("PTid") Integer PTid, @PathVariable("PNid") Integer PNid){
         productService.removePromotion(PTid, PNid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
-    @PatchMapping("/{PTid}/category/{Cid}/add")
+    @PostMapping("/{PTid}/category/{Cid}")
     public ResponseEntity<?> addCategoryById(@PathVariable("PTid") Integer PTid, @PathVariable("Cid") Integer Cid){
         productService.addCategory(PTid, Cid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
-    @PatchMapping("/{PTid}/category/{Cid}/remove")
+    @DeleteMapping("/{PTid}/category/{Cid}")
     public ResponseEntity<?> removeCategoryById(@PathVariable("PTid") Integer PTid, @PathVariable("Cid") Integer Cid){
         productService.removeCategory(PTid, Cid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
-    @PatchMapping("/{PTid}/supplier/{Sid}/add")
+    @PostMapping("/{PTid}/supplier/{Sid}")
     public ResponseEntity<?> addSupplierById(@PathVariable("PTid") Integer PTid, @PathVariable("Sid") Integer Sid){
         productService.addSupplier(PTid, Sid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
-    @PatchMapping("/{PTid}/supplier/{Sid}/remove")
+    @DeleteMapping("/{PTid}/supplier/{Sid}")
     public ResponseEntity<?> removeSupplierById(@PathVariable("PTid") Integer PTid, @PathVariable("Sid") Integer Sid){
         productService.removeSupplier(PTid, Sid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
-    @PatchMapping("/{PTid}/cart/{Cid}/add")
+    @PostMapping("/{PTid}/cart/{Cid}")
     public ResponseEntity<?> addToCartById(@PathVariable("PTid") Integer PTid, @PathVariable("Cid") Integer Cid){
         productService.addProductToCart(PTid, Cid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
-    @PatchMapping("/{PTid}/cart/{Cid}/remove")
+    @DeleteMapping("/{PTid}/cart/{Cid}")
     public ResponseEntity<?> removeFromCartById(@PathVariable("PTid") Integer PTid, @PathVariable("Cid") Integer Cid){
         productService.removeProductFromCart(PTid, Cid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
-    @PatchMapping("/{PTid}/wishlist/{Wid}/add")
+    @PostMapping("/{PTid}/wishlist/{Wid}")
     public ResponseEntity<?> addToWishlistById(@PathVariable("PTid") Integer PTid, @PathVariable("Wid") Integer Wid){
         productService.addProductToWishlist(PTid, Wid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
-    @PatchMapping("/{PTid}/wishlist/{Wid}/remove")
+    @DeleteMapping("/{PTid}/wishlist/{Wid}")
     public ResponseEntity<?> removeFromWishlistById(@PathVariable("PTid") Integer PTid, @PathVariable("Wid") Integer Wid){
         productService.removeProductFromWishlist(PTid, Wid);
         return new ResponseEntity<>(HttpStatus.OK);

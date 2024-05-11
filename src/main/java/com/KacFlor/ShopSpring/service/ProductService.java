@@ -1,6 +1,6 @@
 package com.KacFlor.ShopSpring.service;
 
-import com.KacFlor.ShopSpring.config.ExceptionsConfig;
+import com.KacFlor.ShopSpring.Exceptions.ExceptionsConfig;
 import com.KacFlor.ShopSpring.controllersRequests.NewOrderItem;
 import com.KacFlor.ShopSpring.controllersRequests.NewProduct;
 import com.KacFlor.ShopSpring.dao.*;
@@ -311,6 +311,7 @@ public class ProductService{
         Cart cart = optionalCart.get();
 
         cart.getProducts().add(product);
+        product.setCart(cart);
 
         cartRepository.save(cart);
 
@@ -335,6 +336,8 @@ public class ProductService{
         Cart cart = optionalCart.get();
         if (cart.getProducts().contains(product)) {
             cart.getProducts().remove(product);
+
+            product.setCart(null);
             cartRepository.save(cart);
             return true;
         } else {
@@ -360,6 +363,7 @@ public class ProductService{
         Wishlist wishlist = optionalWishlist.get();
 
         wishlist.getProducts().add(product);
+        product.setWishlist(null);
 
         wishlistRepository.save(wishlist);
 
@@ -384,6 +388,7 @@ public class ProductService{
         Wishlist wishlist = optionalWishlist.get();
         if (wishlist.getProducts().contains(product)) {
             wishlist.getProducts().remove(product);
+            product.setWishlist(null);
             wishlistRepository.save(wishlist);
             return true;
         } else {

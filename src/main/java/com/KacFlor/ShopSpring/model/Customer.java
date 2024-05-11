@@ -34,19 +34,19 @@ public class Customer extends BaseEntity{
     @Column(name = "phone")
     private Number phoneNumber;
 
-    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER , cascade = CascadeType.ALL)
     @JsonBackReference
     private List<Order> orders;
 
-    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER , cascade = CascadeType.ALL)
     @JsonBackReference
     private List<CardData> cardDatas;
 
-    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER , cascade = CascadeType.ALL)
     @JsonBackReference
     private List<Shipment> shipments;
 
-    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Review> reviews;
 
     @OneToOne(fetch = FetchType.EAGER)
@@ -54,12 +54,12 @@ public class Customer extends BaseEntity{
     @JsonManagedReference
     private User user;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "cart_id")
     @JsonManagedReference
     private Cart cart;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER , cascade = CascadeType.ALL)
     @JoinColumn(name = "wishlist_id")
     @JsonManagedReference
     private Wishlist wishlist;
