@@ -49,6 +49,9 @@ public class ProductServiceTest{
     @Mock
     private CartRepository cartRepository;
 
+    @Mock
+    private WishlistRepository wishlistRepository;
+
     @InjectMocks
     private ProductService productService;
 
@@ -431,6 +434,55 @@ public class ProductServiceTest{
         verify(productRepository, times(1)).findById(productId);
         verify(cartRepository, times(1)).findById(cartId);
         verify(cartRepository, times(1)).save(cart);
+    }
+
+    @Test
+    void testAddProductToWishlist() {
+        Integer productId = 1;
+        Integer wishlistId = 1;
+
+        Product product = new Product();
+        product.setId(productId);
+
+        Wishlist wishlist = new Wishlist();
+        wishlist.setId(wishlistId);
+        wishlist.setProducts(new ArrayList<>());
+
+        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+        when(wishlistRepository.findById(wishlistId)).thenReturn(Optional.of(wishlist));
+
+        boolean result = productService.addProductToWishlist(productId, wishlistId);
+
+        assertTrue(result);
+        verify(productRepository, times(1)).findById(productId);
+        verify(wishlistRepository, times(1)).findById(wishlistId);
+        verify(wishlistRepository, times(1)).save(wishlist);
+    }
+
+    @Test
+    void testRemoveProductFromWishlist() {
+        Integer productId = 1;
+        Integer wishlistId = 1;
+
+        Product product = new Product();
+        product.setId(productId);
+
+        Wishlist wishlist = new Wishlist();
+        wishlist.setId(wishlistId);
+        wishlist.setProducts(new ArrayList<>());
+
+        product.setWishlist(wishlist);
+        wishlist.getProducts().add(product);
+
+        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+        when(wishlistRepository.findById(wishlistId)).thenReturn(Optional.of(wishlist));
+
+        boolean result = productService.removeProductFromWishlist(productId, wishlistId);
+
+        assertTrue(result);
+        verify(productRepository, times(1)).findById(productId);
+        verify(wishlistRepository, times(1)).findById(wishlistId);
+        verify(wishlistRepository, times(1)).save(wishlist);
     }
 
 

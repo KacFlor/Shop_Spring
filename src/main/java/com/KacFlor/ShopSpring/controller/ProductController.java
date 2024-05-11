@@ -123,4 +123,18 @@ public class ProductController{
         productService.removeProductFromCart(PTid, Cid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
+    @PatchMapping("/{PTid}/wishlist/{Wid}/add")
+    public ResponseEntity<?> addToWishlistById(@PathVariable("PTid") Integer PTid, @PathVariable("Wid") Integer Wid){
+        productService.addProductToWishlist(PTid, Wid);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
+    @PatchMapping("/{PTid}/wishlist/{Wid}/remove")
+    public ResponseEntity<?> removeFromWishlistById(@PathVariable("PTid") Integer PTid, @PathVariable("Wid") Integer Wid){
+        productService.removeProductFromWishlist(PTid, Wid);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

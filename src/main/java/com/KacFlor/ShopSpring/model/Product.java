@@ -50,8 +50,10 @@ public class Product extends BaseEntity{
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
     private List<OrderItem> orderItems;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
-    private List<Wishlist> wishlists;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "wishlist_id")
+    @JsonBackReference
+    private Wishlist wishlist;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
     private List<Review> reviews;

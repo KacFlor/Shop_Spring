@@ -3,10 +3,8 @@ package com.KacFlor.ShopSpring.service;
 import com.KacFlor.ShopSpring.dao.CartRepository;
 import com.KacFlor.ShopSpring.dao.CustomerRepository;
 import com.KacFlor.ShopSpring.dao.UserRepository;
-import com.KacFlor.ShopSpring.model.Cart;
-import com.KacFlor.ShopSpring.model.Customer;
-import com.KacFlor.ShopSpring.model.Role;
-import com.KacFlor.ShopSpring.model.User;
+import com.KacFlor.ShopSpring.dao.WishlistRepository;
+import com.KacFlor.ShopSpring.model.*;
 import com.KacFlor.ShopSpring.security.AuthenticationRequest;
 import com.KacFlor.ShopSpring.security.AuthenticationResponse;
 import com.KacFlor.ShopSpring.security.RegisterRequest;
@@ -32,19 +30,34 @@ public class AuthenticationService{
 
     private final BCryptPasswordEncoder passwordEncoder;
 
+    private final WishlistRepository wishlistRepository;
+
     public AuthenticationResponse register(RegisterRequest request, Role role){
+
         Cart cart = new Cart();
+        Wishlist wishlist = new Wishlist();
         var customer = new Customer();
+
         cartRepository.save(cart);
+        wishlistRepository.save(wishlist);
+
         customer.setCart(cart);
+        customer.setWishlist(wishlist);
+
         String encodedPassword = passwordEncoder.encode(request.getPassword());
         var user = new User(request.getLogin(), encodedPassword, customer, role);
         userRepository.save(user);
+
         customer.setUser(user);
         customer.setFirstName(request.getLogin());
         customerRepository.save(customer);
+
         cart.setCustomer(customer);
+        wishlist.setCustomer(customer);
+
         cartRepository.save(cart);
+        wishlistRepository.save(wishlist);
+
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)

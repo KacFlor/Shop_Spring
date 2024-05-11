@@ -6,7 +6,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.KacFlor.ShopSpring.model.Cart;
+import com.KacFlor.ShopSpring.model.Wishlist;
 import com.KacFlor.ShopSpring.service.CartService;
+import com.KacFlor.ShopSpring.service.WishlistService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -16,7 +18,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -24,45 +25,41 @@ import java.util.List;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
-@DirtiesContext
-public class CartControllerTest{
+public class WishlistControllerTest{
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private CartService cartService;
+    private WishlistService wishlistService;
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
     void testGetAll() throws Exception{
-        Cart cart1 = new Cart(1);
-        Cart cart2 = new Cart(2);
-        Cart cart3 = new Cart(3);
+        Wishlist wishlist1 = new Wishlist();
+        Wishlist wishlist2 = new Wishlist();
+        Wishlist wishlist3 = new Wishlist();
 
-        when(cartService.getAll()).thenReturn(List.of(cart1, cart2, cart3));
+        when(wishlistService.getAll()).thenReturn(List.of(wishlist1, wishlist2, wishlist3));
 
-        mockMvc.perform(get("/carts"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("[{'quantity': 1 }, {'quantity': 2 }, {'quantity': 3 }]"));
+        mockMvc.perform(get("/wishlists"))
+                .andExpect(status().isOk());
+
     }
 
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
     @Test
     void testGetById() throws Exception{
-        Integer cartId = 1;
+        Integer wishlistId = 1;
 
-        Cart cart1 = new Cart(1);
+        Wishlist wishlist1 = new Wishlist();
 
-        cart1.setId(cartId);
+        wishlist1.setId(wishlistId);
 
-        when(cartService.getById(cartId)).thenReturn(cart1);
+        when(wishlistService.getById(wishlistId)).thenReturn(wishlist1);
 
-        mockMvc.perform(get("/carts/{id}", cartId))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("{'quantity': 1 }"));
+        mockMvc.perform(get("/wishlists/{id}", wishlistId))
+                .andExpect(status().isOk());
 
     }
 
@@ -70,16 +67,15 @@ public class CartControllerTest{
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
     void testGetCustomerCart() throws Exception{
 
-        Integer customerId = 2;
+        Integer wishlistId = 2;
 
-        Cart cart1 = new Cart(1);
+        Wishlist wishlist1 = new Wishlist();
 
-        when(cartService.getCartByCustomerId(customerId)).thenReturn(cart1);
+        when(wishlistService.getCartByCustomerId(wishlistId)).thenReturn(wishlist1);
 
-        mockMvc.perform(get("/carts/customer/{id}", customerId))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("{'quantity': 1 }"));
+        mockMvc.perform(get("/wishlists/customer/{id}", wishlistId))
+                .andExpect(status().isOk());
 
     }
+
 }
