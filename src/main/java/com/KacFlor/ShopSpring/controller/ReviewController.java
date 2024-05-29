@@ -3,9 +3,7 @@ package com.KacFlor.ShopSpring.controller;
 import java.util.List;
 import java.util.Optional;
 
-import com.KacFlor.ShopSpring.controllersRequests.NewPromotion;
 import com.KacFlor.ShopSpring.controllersRequests.NewReview;
-import com.KacFlor.ShopSpring.model.Promotion;
 import com.KacFlor.ShopSpring.model.Review;
 import com.KacFlor.ShopSpring.model.Role;
 import com.KacFlor.ShopSpring.service.ReviewService;

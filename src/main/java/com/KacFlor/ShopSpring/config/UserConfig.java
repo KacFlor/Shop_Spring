@@ -11,9 +11,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-
-import java.util.List;
-
 @Configuration
 public class UserConfig{
 
@@ -29,6 +26,8 @@ public class UserConfig{
             Cart cart = new Cart();
             Wishlist wishlist = new Wishlist();
 
+            cart.setCustomer(customer);
+            wishlist.setCustomer(customer);
             customer.setCart(cart);
             customer.setWishlist(wishlist);
 
@@ -39,8 +38,7 @@ public class UserConfig{
                     Role.ADMIN
             );
 
-            cart.setCustomer(customer);
-            wishlist.setCustomer(customer);
+            customer.setUser(HeadAdmin);
 
             userRepository.save(HeadAdmin);
             customerRepository.save(customer);

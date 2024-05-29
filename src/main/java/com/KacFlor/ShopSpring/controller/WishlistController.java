@@ -3,7 +3,6 @@ package com.KacFlor.ShopSpring.controller;
 import java.util.List;
 import java.util.Optional;
 
-import com.KacFlor.ShopSpring.model.Cart;
 import com.KacFlor.ShopSpring.model.Role;
 import com.KacFlor.ShopSpring.model.Wishlist;
 import com.KacFlor.ShopSpring.service.WishlistService;

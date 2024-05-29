@@ -69,7 +69,7 @@ public class OrderItemService{
         Order order = optionalOrder.get();
         Product product = optionalProduct.get();
 
-        if(orderItem.getName() != product.getName())
+        if(!orderItem.getName().equals(product.getName()))
         {
             throw new ExceptionsConfig.ResourceNotFoundException("Resource not found");
         }

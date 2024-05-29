@@ -1,6 +1,5 @@
 package com.KacFlor.ShopSpring.security;
 
-import com.KacFlor.ShopSpring.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

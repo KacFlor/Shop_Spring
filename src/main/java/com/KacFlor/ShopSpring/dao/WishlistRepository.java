@@ -1,6 +1,5 @@
 package com.KacFlor.ShopSpring.dao;
 
-import com.KacFlor.ShopSpring.model.Cart;
 import com.KacFlor.ShopSpring.model.Wishlist;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
