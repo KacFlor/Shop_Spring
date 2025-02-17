@@ -10,6 +10,8 @@ import com.KacFlor.ShopSpring.dao.PaymentRepository;
 import com.KacFlor.ShopSpring.dao.ShipmentRepository;
 import com.KacFlor.ShopSpring.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -51,8 +53,7 @@ public class ShipmentService{
 
     }
 
-    public boolean createOrder(NewOrder newOrder, Integer shipmentId){
-
+    public Integer createOrder(NewOrder newOrder, Integer shipmentId) {
         Optional<Shipment> optionalShipment = shipmentRepository.findById(shipmentId);
 
         if (optionalShipment.isEmpty()) {
@@ -67,8 +68,7 @@ public class ShipmentService{
         shipment.getOrders().add(order);
         shipmentRepository.save(shipment);
 
-        return true;
-
+        return order.getId();
     }
 
     public List<Shipment> getAllByCustomerId(Integer Id){

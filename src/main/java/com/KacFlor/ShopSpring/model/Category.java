@@ -12,20 +12,20 @@ import java.util.List;
 @Table(name = "category")
 @Getter
 @Setter
-public class Category extends BaseEntity{
+public class Category extends BaseEntity {
 
     @Column(name = "category_name")
     @NotBlank
     private String name;
 
-    @OneToMany(mappedBy = "category")
+    @ManyToMany(mappedBy = "category")
     @JsonBackReference
     private List<Product> products;
 
-    public Category(){
+    public Category() {
     }
 
-    public Category(String name){
+    public Category(String name) {
         this.name = name;
     }
 }

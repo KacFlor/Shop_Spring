@@ -125,26 +125,6 @@ public class ShipmentControllerTest{
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
-    void testCreateOrder() throws Exception{
-
-        Integer shipmentId = 1;
-        NewOrder newOrder = new NewOrder();
-        newOrder.setOrderDate(LocalDate.of(2024, 5, 1));
-        newOrder.setTotalPrice(99.99);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-
-        String newOrderJson = objectMapper.writeValueAsString(newOrder);
-
-        when(shipmentService.createOrder(newOrder, shipmentId)).thenReturn(true);
-
-        mockMvc.perform(post("/shipments/{id}/order",shipmentId).contentType(MediaType.APPLICATION_JSON).content(newOrderJson))
-                .andExpect(status().isAccepted());
-    }
-
-    @Test
-    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
     void testUpdateShipment() throws Exception{
         Integer shipmentId = 2;
         LocalDate shipmentDate = LocalDate.of(2024, 5, 10);

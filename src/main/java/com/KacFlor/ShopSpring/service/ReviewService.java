@@ -126,4 +126,32 @@ public class ReviewService{
         return true;
 
     }
+
+    public boolean checkByIds(Integer Cid, Integer Pid) {
+        Optional<Customer> optionalCustomer = customerRepository.findById(Cid);
+        Optional<Product> optionalProduct = productRepository.findById(Pid);
+
+        if (optionalCustomer.isEmpty()) {
+            throw new ExceptionsConfig.ResourceNotFoundException("Customer not found");
+        }
+
+        if (optionalProduct.isEmpty()) {
+            throw new ExceptionsConfig.ResourceNotFoundException("Product not found");
+        }
+
+        Optional<Review> review = reviewRepository.findByCustomerIdAndProductId(Cid, Pid);
+
+        return review.isPresent();
+    }
+
+    public List<Review> getReviewsByProductId(Integer Pid) {
+        Optional<Product> optionalProduct = productRepository.findById(Pid);
+
+        if (optionalProduct.isEmpty()) {
+            throw new ExceptionsConfig.ResourceNotFoundException("Product not found");
+        }
+
+        return reviewRepository.findByProductId(Pid);
+    }
+
 }

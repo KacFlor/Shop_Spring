@@ -41,6 +41,13 @@ public class ProductController{
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
+    @GetMapping("/{id}/block")
+    public ResponseEntity<Product> setIsBlocked(@PathVariable("id") Integer id) {
+        Product updatedProduct = productService.setIsBlocked(id);
+        return ResponseEntity.ok(updatedProduct);
+    }
+
+    @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @GetMapping("/{id}")
     public ResponseEntity<Optional<Product>> getById(@PathVariable("id") Integer id){
         Optional<Product> product = Optional.ofNullable(productService.getById(id));
@@ -125,17 +132,25 @@ public class ProductController{
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
+    @DeleteMapping("/allCart")
+    public ResponseEntity<?> removeAllFromCart(@RequestParam("Cid") Integer Cid){
+        productService.removeAllFromCart(Cid);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PostMapping("/{id}/wishlist")
-    public ResponseEntity<?> addToWishlistById(@PathVariable("id") Integer id, @RequestParam("Wid") Integer Wid){
-        productService.addProductToWishlist(id, Wid);
+    public ResponseEntity<?> addToWishlistById(@PathVariable("id") Integer productId, @RequestParam("Wid") Integer wishlistId) {
+        productService.addProductToWishlist(productId, wishlistId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @DeleteMapping("/{id}/wishlist")
-    public ResponseEntity<?> removeFromWishlistById(@PathVariable("id") Integer id, @RequestParam("Wid") Integer Wid) {
-        productService.removeProductFromWishlist(id, Wid);
+    public ResponseEntity<?> removeFromWishlistById(@PathVariable("id") Integer productId, @RequestParam("Wid") Integer wishlistId) {
+        productService.removeProductFromWishlist(productId, wishlistId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 
 }

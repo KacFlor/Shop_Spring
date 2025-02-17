@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Table(name = "orders")
@@ -21,6 +22,9 @@ public class Order extends BaseEntity{
     @Column(name = "totalPrice")
     private Double totalPrice;
 
+    @Column(name = "inProgress")
+    private Boolean inProgress;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "shipment_id")
     @JsonBackReference
@@ -28,7 +32,7 @@ public class Order extends BaseEntity{
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private List<OrderItem> orderItems;
+    private List<OrderItem> orderItems = new ArrayList<>();
 
 
     public Order(){

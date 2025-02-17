@@ -24,6 +24,9 @@ public class AuthenticationController{
     public ResponseEntity<AuthenticationResponse> registerUser(
             @RequestBody RegisterRequest request
     ){
+        if (service.existsByLogin(request.getLogin())) {
+            return ResponseEntity.badRequest().body(new AuthenticationResponse("Account already exists"));
+        }
         return ResponseEntity.ok(service.register(request, Role.USER));
 
     }

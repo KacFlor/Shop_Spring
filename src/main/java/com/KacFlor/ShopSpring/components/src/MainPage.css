@@ -1,0 +1,250 @@
+.main-page-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+}
+
+.sidebar-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 30px;
+    height: 100%;
+    background-color: #343a40;
+    cursor: pointer;
+}
+
+.blocked-row {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.out-of-stock {
+    background-color: #d6d6d6;
+    cursor: not-allowed;
+}
+
+button[disabled] {
+    background-color: gray;
+}
+
+.blocked-row {
+    background-color: red;
+    color: white;
+}
+
+
+.out-of-stock {
+    background-color: gray;
+    cursor: not-allowed;
+}
+
+
+button.out-of-stock {
+    background-color: #6c757d;
+    color: white;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+button.out-of-stock:hover {
+    background-color: #6c757d;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -200px;
+    width: 200px;
+    height: 100%;
+    background-color: #343a40;
+    transition: left 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+}
+
+.sidebar.open {
+    left: 0;
+}
+
+.sidebar button.main-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+    cursor: pointer;
+    width: 150px;
+    text-align: center;
+}
+
+.sidebar button.main-button:hover {
+    background-color: #0056b3;
+}
+
+.admin-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin: 20px 0;
+    transition: background-color 0.3s ease;
+}
+
+
+.admin-button:hover {
+    background-color: #218838;
+}
+
+.admin-options {
+    margin-top: auto;
+    width: 100%;
+    text-align: center;
+    padding-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.product-table-container {
+    width: 50%;
+    overflow-x: auto;
+    border: 1px solid #ddd;
+    margin-top: 20px;
+}
+
+.product-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+
+.product-table th,
+.product-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.product-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.product-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.main-button {
+    padding: 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 50px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin: 10px 0;
+    transition: background-color 0.3s ease;
+}
+
+.main-button:hover {
+    background-color: #0056b3;
+}
+
+.sidebar-container:hover .sidebar {
+    left: 0;
+}
+
+.main-content {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    width: 300px;
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal h3 {
+    margin-bottom: 10px;
+}
+
+.modal label {
+    margin-bottom: 5px;
+}
+
+.modal input {
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.modal button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modal button:hover {
+    background-color: #0056b3;
+}
+
+.main-button[data-text]:hover::after,
+.admin-button[data-text]:hover::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 100px;
+    text-align: center;
+    white-space: nowrap;
+}

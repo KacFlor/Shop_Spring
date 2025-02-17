@@ -54,6 +54,13 @@ public class OrderController{
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
+    @PatchMapping("/{id}/inProgress")
+    public ResponseEntity<?> putInProgress(@PathVariable("id") Integer id){
+        orderService.putInProgress(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteById(@PathVariable("id") Integer id){

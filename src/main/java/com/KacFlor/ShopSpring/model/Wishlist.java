@@ -19,9 +19,15 @@ public class Wishlist extends BaseEntity{
     @JsonBackReference
     private Customer customer;
 
-    @OneToMany(mappedBy = "wishlist", fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "wishlist_product",
+            joinColumns = @JoinColumn(name = "wishlist_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
     @JsonManagedReference
     private List<Product> products;
+
 
     public Wishlist(){
     }

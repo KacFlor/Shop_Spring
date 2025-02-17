@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.KacFlor.ShopSpring.controllersRequests.NewOrder;
 import com.KacFlor.ShopSpring.controllersRequests.NewPayment;
 import com.KacFlor.ShopSpring.controllersRequests.NewShipment;
+import com.KacFlor.ShopSpring.model.Customer;
 import com.KacFlor.ShopSpring.model.Order;
 import com.KacFlor.ShopSpring.model.Role;
 import com.KacFlor.ShopSpring.model.Shipment;
@@ -39,8 +40,8 @@ public class ShipmentController{
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PostMapping("/{id}/order")
     public ResponseEntity<?> createNewOrder(@RequestBody NewOrder updatedOrder, @PathVariable("id") Integer id){
-        shipmentService.createOrder(updatedOrder,id);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        Integer orderId = shipmentService.createOrder(updatedOrder, id);
+        return new ResponseEntity<>(orderId, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
@@ -50,7 +51,7 @@ public class ShipmentController{
         return ResponseEntity.ok(orders);
     }
 
-    @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
+    @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @GetMapping("/customer")
     public ResponseEntity<List<Shipment>> getCustomerById(@RequestParam("id") Integer id){
         List<Shipment> shipments = shipmentService.getAllByCustomerId(id);

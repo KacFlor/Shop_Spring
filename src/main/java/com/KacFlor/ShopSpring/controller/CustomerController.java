@@ -58,9 +58,9 @@ public class CustomerController{
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PostMapping("/me/shipment")
-    public ResponseEntity<?> createShipment(@RequestBody NewShipment newShipment){
-        customerService.createShipment(newShipment);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    public ResponseEntity<?> createShipment(@RequestBody NewShipment newShipment) {
+        Integer shipmentId = customerService.createShipment(newShipment);
+        return new ResponseEntity<>(shipmentId, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")

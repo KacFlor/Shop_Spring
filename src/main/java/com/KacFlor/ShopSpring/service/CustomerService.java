@@ -45,25 +45,25 @@ public class CustomerService{
         this.reviewRepository = reviewRepository;
     }
 
-    public boolean createShipment(NewShipment newShipment){
-
+    public Integer createShipment(NewShipment newShipment) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         String username = authentication.getName();
-
         User user = userRepository.findByLogin(username);
-
         Customer customer = user.getCustomer();
 
-        Shipment shipment = new Shipment(newShipment.getShipmentDate(), newShipment.getAddress(), newShipment.getCity(), newShipment.getState(), newShipment.getCountry(), newShipment.getZipcode());
-
-        customer.getShipments().add(shipment);
-        customerRepository.save(customer);
+        Shipment shipment = new Shipment(newShipment.getShipmentDate(), newShipment.getAddress(),
+                newShipment.getCity(), newShipment.getState(), newShipment.getCountry(), newShipment.getZipcode());
 
         shipment.setCustomer(customer);
+
+        customer.getShipments().add(shipment);
+
         shipmentRepository.save(shipment);
-        return true;
+
+        return shipment.getId();
     }
+
+
 
     public boolean createCardData(NewCardData newCardData){
 

@@ -69,6 +69,24 @@ public class OrderService{
 
     }
 
+    public boolean putInProgress(Integer id){
+
+        Optional<Order> optionalOrder = orderRepository.findById(id);
+
+        if (optionalOrder.isEmpty()) {
+            throw new ExceptionsConfig.ResourceNotFoundException("Order not found");
+        }
+
+        Order order = optionalOrder.get();
+
+        order.setInProgress(true);
+
+        orderRepository.save(order);
+
+        return true;
+
+    }
+
     public boolean deleteById(Integer Id){
 
         Optional<Order> optionalOrder = orderRepository.findById(Id);

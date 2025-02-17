@@ -19,23 +19,18 @@ public class Shipment extends BaseEntity{
     private LocalDate shipmentDate;
 
     @Column(name = "address")
-    @NotBlank
     private String address;
 
     @Column(name = "city")
-    @NotBlank
     private String city;
 
     @Column(name = "state")
-    @NotBlank
     private String state;
 
     @Column(name = "country")
-    @NotBlank
     private String country;
 
     @Column(name = "zipcode")
-    @NotBlank
     private String zipcode;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

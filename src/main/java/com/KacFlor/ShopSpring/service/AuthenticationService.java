@@ -32,6 +32,15 @@ public class AuthenticationService{
 
     private final WishlistRepository wishlistRepository;
 
+    public boolean existsByLogin(String login){
+        if(userRepository.findByLogin(login) == null){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
     public AuthenticationResponse register(RegisterRequest request, Role role){
 
         Cart cart = new Cart();

@@ -12,24 +12,35 @@ import java.util.List;
 @Table
 @Getter
 @Setter
-public class Cart extends BaseEntity{
+public class Cart extends BaseEntity {
 
-    @OneToMany(mappedBy = "cart", fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "cart_product",
+            joinColumns = @JoinColumn(name = "cart_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
     @JsonManagedReference
     private List<Product> products;
 
+    @ElementCollection
+    @CollectionTable(
+            name = "cart_product_quantity",
+            joinColumns = @JoinColumn(name = "cart_id")
+    )
     @Column(name = "quantity")
-    private Double quantity;
+    private List<Integer> quantities;
 
     @OneToOne(mappedBy = "cart", fetch = FetchType.EAGER)
     @JsonBackReference
     private Customer customer;
 
+    @Column(name = "price")
+    private Double price = 0.0;
 
-    public Cart(){
-    }
+    public Cart() {}
 
-    public Cart(Double quantity){
-        this.quantity = quantity;
+    public Cart(Double price) {
+        this.price = price;
     }
 }

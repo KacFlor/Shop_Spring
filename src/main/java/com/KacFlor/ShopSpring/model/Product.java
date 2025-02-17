@@ -1,21 +1,22 @@
 package com.KacFlor.ShopSpring.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table
 @Getter
 @Setter
-public class Product extends BaseEntity{
-
-    @Column(name = "sku")
-    private String sku;
+@JsonIgnoreProperties({"cart", "orderItems", "wishlists", "reviews"})
+public class Product extends BaseEntity {
 
     @Column(name = "name")
     private String name;
@@ -29,47 +30,55 @@ public class Product extends BaseEntity{
     @Column(name = "stock")
     private Double stock;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "category_id")
-    @JsonManagedReference
-    private Category category;
+    @Column(name = "isBlocked")
+    private Boolean isBlocked = false;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "supplier_id")
     @JsonManagedReference
     private Supplier supplier;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "cart_id")
+    @ManyToMany(mappedBy = "products", fetch = FetchType.LAZY)
     @JsonBackReference
-    private Cart cart;
+    private List<Cart> carts;
 
-    @ManyToMany(mappedBy = "products", fetch = FetchType.EAGER)
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Category> category;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "product_promotion",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "promotion_id")
+    )
     @JsonManagedReference
     private List<Promotion> promotions;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
-    @JsonManagedReference
-    private List<OrderItem> orderItems;
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<OrderItem> orderItems = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "wishlist_id")
-    @JsonBackReference
-    private Wishlist wishlist;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "wishlist_product",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "wishlist_id")
+    )
+    @JsonIgnore
+    private List<Wishlist> wishlists;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
-    @JsonBackReference
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Review> reviews;
 
-    public Product(){
-    }
+    public Product() {}
 
-    public Product(String sku, String name, String description, Double price, Double stock){
-        this.sku = sku;
+    public Product(String name, String description, Double price, Double stock) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.stock = stock;
-
     }
 }

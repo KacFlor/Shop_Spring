@@ -8,6 +8,7 @@ import com.KacFlor.ShopSpring.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,11 +43,12 @@ public class ProductService{
         this.wishlistRepository = wishlistRepository;
     }
 
-    public List<Product> getAll(){
-        return productRepository.findAll();
+    public List<Product> getAll() {
+        List<Product> products = productRepository.findAllProducts();
+        return products;
     }
 
-    public boolean addOrderItem(NewItem newItem, Integer Pid, Integer Oid){
+    public boolean addOrderItem(NewItem newItem, Integer Pid, Integer Oid) {
         Optional<Order> optionalOrder = orderRepository.findById(Oid);
         Optional<Product> optionalProduct = productRepository.findById(Pid);
 
@@ -60,21 +62,45 @@ public class ProductService{
 
         Order order = optionalOrder.get();
         Product product = optionalProduct.get();
+
+        if (product.getOrderItems() == null) {
+            product.setOrderItems(new ArrayList<>());
+        }
+
         OrderItem orderItem = new OrderItem(product.getName(), newItem.getQuantity(), product.getPrice());
+        orderItem.setProduct(product);
 
         product.setStock(product.getStock() - orderItem.getQuantity());
+
         product.getOrderItems().add(orderItem);
+
         productRepository.save(product);
 
         orderItem.setOrder(order);
         orderItemRepository.save(orderItem);
 
         order.getOrderItems().add(orderItem);
+        order.setInProgress(false);
         order.setTotalPrice(order.getTotalPrice() + orderItem.getQuantity() * orderItem.getPrice());
         orderRepository.save(order);
 
         return true;
+    }
 
+    public Product setIsBlocked(Integer id) {
+        Optional<Product> optionalProduct = productRepository.findById(id);
+
+        if (optionalProduct.isEmpty()) {
+            throw new ExceptionsConfig.ResourceNotFoundException("Product not found");
+        }
+
+        Product product = optionalProduct.get();
+
+        product.setIsBlocked(!product.getIsBlocked());
+
+        productRepository.save(product);
+
+        return product;
     }
 
     public Product getById(Integer Id){
@@ -113,7 +139,6 @@ public class ProductService{
         }
 
         Product product = optionalProduct.get();
-        product.setSku(newProduct.getSku());
         product.setName(newProduct.getName());
         product.setDescription(newProduct.getDescription());
         product.setPrice(newProduct.getPrice());
@@ -128,8 +153,6 @@ public class ProductService{
     public boolean addNewProduct(NewProduct newProduct){
 
         Product product = new Product();
-
-        product.setSku(newProduct.getSku());
         product.setName(newProduct.getName());
         product.setDescription(newProduct.getDescription());
         product.setPrice(newProduct.getPrice());
@@ -193,10 +216,10 @@ public class ProductService{
 
     }
 
-    public boolean addCategory(Integer PTid, Integer Cid) {
+    public boolean addCategory(Integer productId, Integer categoryId) {
 
-        Optional<Product> optionalProduct = productRepository.findById(PTid);
-        Optional<Category> optionalCategory = categoryRepository.findById(Cid);
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        Optional<Category> optionalCategory = categoryRepository.findById(categoryId);
 
         if (optionalProduct.isEmpty()) {
             throw new ExceptionsConfig.ResourceNotFoundException("Product not found");
@@ -206,22 +229,20 @@ public class ProductService{
             throw new ExceptionsConfig.ResourceNotFoundException("Category not found");
         }
 
-
         Product product = optionalProduct.get();
         Category category = optionalCategory.get();
 
-        if (product.getCategory() != null) {
-            throw new IllegalStateException("Product already has a category assigned.");
+        if (product.getCategory().contains(category)) {
+            throw new IllegalStateException("Product is already assigned to this category.");
         }
 
-        product.setCategory(category);
+        product.getCategory().add(category);
         category.getProducts().add(product);
 
-        categoryRepository.save(category);
         productRepository.save(product);
+        categoryRepository.save(category);
 
         return true;
-
     }
 
     public boolean removeCategory(Integer PTid, Integer Cid){
@@ -239,7 +260,7 @@ public class ProductService{
         Product product = optionalProduct.get();
         Category category = optionalCategory.get();
 
-        product.setCategory(null);
+        product.getCategory().remove(category);
         category.getProducts().remove(product);
 
         productRepository.save(product);
@@ -295,7 +316,7 @@ public class ProductService{
         Product product = optionalProduct.get();
         Supplier supplier = optionalSupplier.get();
 
-        product.setCategory(null);
+        product.setSupplier(null);
         supplier.getProducts().remove(product);
 
         productRepository.save(product);
@@ -305,8 +326,7 @@ public class ProductService{
 
     }
 
-    public boolean addProductToCart(NewItem newItem ,Integer PTid, Integer Cid) {
-
+    public boolean addProductToCart(NewItem newItem, Integer PTid, Integer Cid) {
         Optional<Product> optionalProduct = productRepository.findById(PTid);
         Optional<Cart> optionalCart = cartRepository.findById(Cid);
 
@@ -321,17 +341,30 @@ public class ProductService{
         Product product = optionalProduct.get();
         Cart cart = optionalCart.get();
 
-        cart.setQuantity(cart.getQuantity() + newItem.getQuantity());
-        cart.getProducts().add(product);
-        product.setCart(cart);
+        if (!cart.getProducts().contains(product)) {
+            cart.getProducts().add(product);
+            cart.getQuantities().add(newItem.getQuantity().intValue());
+        } else {
+            int index = cart.getProducts().indexOf(product);
+            int existingQuantity = cart.getQuantities().get(index);
+            cart.getQuantities().set(index, existingQuantity + newItem.getQuantity().intValue());
+        }
+
+        Double totalPrice = 0.0;
+        for (int i = 0; i < cart.getProducts().size(); i++) {
+            Product p = cart.getProducts().get(i);
+            Integer quantity = cart.getQuantities().get(i);
+            totalPrice += p.getPrice() * quantity;
+        }
+
+        cart.setPrice(totalPrice);
 
         cartRepository.save(cart);
 
         return true;
-
     }
 
-    public boolean removeProductFromCart(NewItem newItem ,Integer PTid, Integer Cid){
+    public boolean removeProductFromCart(NewItem newItem, Integer PTid, Integer Cid) {
         Optional<Product> optionalProduct = productRepository.findById(PTid);
         Optional<Cart> optionalCart = cartRepository.findById(Cid);
 
@@ -343,52 +376,71 @@ public class ProductService{
             throw new ExceptionsConfig.ResourceNotFoundException("Cart not found");
         }
 
-
         Product product = optionalProduct.get();
         Cart cart = optionalCart.get();
-        cart.setQuantity(cart.getQuantity() - newItem.getQuantity());
-        if (cart.getProducts().contains(product)) {
-            if(cart.getQuantity() <= 0){
-                cart.getProducts().remove(product);
 
-                product.setCart(null);
-                cartRepository.save(cart);
-                return true;
-            }
-            else
-            {
-                return true;
-            }
-        } else {
-            throw new ExceptionsConfig.ResourceNotFoundException("Resource not found");
+        if (!cart.getProducts().contains(product)) {
+            throw new ExceptionsConfig.ResourceNotFoundException("Product not in cart");
         }
 
-    }
+        int index = cart.getProducts().indexOf(product);
+        int existingQuantity = cart.getQuantities().get(index);
 
-    public boolean addProductToWishlist(Integer PTid, Integer Wid) {
-
-        Optional<Product> optionalProduct = productRepository.findById(PTid);
-        Optional<Wishlist> optionalWishlist = wishlistRepository.findById(Wid);
-
-        if (optionalProduct.isEmpty()) {
-            throw new ExceptionsConfig.ResourceNotFoundException("Product not found");
+        if (existingQuantity < newItem.getQuantity().intValue()) {
+            throw new ExceptionsConfig.ResourceNotFoundException("Not enough product quantity in cart");
         }
 
-        if (optionalWishlist.isEmpty()) {
-            throw new ExceptionsConfig.ResourceNotFoundException("Wishlist not found");
+        cart.getQuantities().set(index, existingQuantity - newItem.getQuantity().intValue());
+
+        if (cart.getQuantities().get(index) == 0) {
+            cart.getProducts().remove(product);
+            cart.getQuantities().remove(index);
         }
 
-        Product product = optionalProduct.get();
-        Wishlist wishlist = optionalWishlist.get();
+        Double currentPrice = cart.getPrice() == null ? 0.0 : cart.getPrice();
+        double priceChange = newItem.getQuantity() * product.getPrice();
+        cart.setPrice(currentPrice - priceChange);
 
-        wishlist.getProducts().add(product);
-        product.setWishlist(null);
-
-        wishlistRepository.save(wishlist);
+        cartRepository.save(cart);
 
         return true;
-
     }
+
+    public boolean removeAllFromCart(Integer Cid) {
+        Optional<Cart> optionalCart = cartRepository.findById(Cid);
+
+        if (optionalCart.isEmpty()) {
+            throw new ExceptionsConfig.ResourceNotFoundException("Cart not found");
+        }
+
+        Cart cart = optionalCart.get();
+
+        cart.getProducts().clear();
+        cart.getQuantities().clear();
+        cart.setPrice(0.0);
+
+        cartRepository.save(cart);
+
+        return true;
+    }
+
+    public boolean addProductToWishlist(Integer productId, Integer wishlistId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ExceptionsConfig.ResourceNotFoundException("Product not found"));
+        Wishlist wishlist = wishlistRepository.findById(wishlistId)
+                .orElseThrow(() -> new ExceptionsConfig.ResourceNotFoundException("Wishlist not found"));
+
+        if (!wishlist.getProducts().contains(product)) {
+            wishlist.getProducts().add(product);
+
+            wishlistRepository.save(wishlist);
+            productRepository.save(product);
+            return true;
+        } else {
+            throw new ExceptionsConfig.ResourceNotFoundException("Product already in");
+        }
+    }
+
 
     public boolean removeProductFromWishlist(Integer PTid, Integer Wid){
         Optional<Product> optionalProduct = productRepository.findById(PTid);
@@ -407,8 +459,9 @@ public class ProductService{
         Wishlist wishlist = optionalWishlist.get();
         if (wishlist.getProducts().contains(product)) {
             wishlist.getProducts().remove(product);
-            product.setWishlist(null);
+            product.getWishlists().remove(wishlist);
             wishlistRepository.save(wishlist);
+            productRepository.save(product);
             return true;
         } else {
             throw new ExceptionsConfig.ResourceNotFoundException("Resource not found");

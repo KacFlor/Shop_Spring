@@ -39,7 +39,31 @@ public class ReviewController{
         return ResponseEntity.ok(review);
     }
 
-    @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
+    @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
+    @PostMapping("/check")
+    public ResponseEntity<?> getByCustomerAndProductIds(@RequestParam("Cid") Integer Cid, @RequestParam("Pid") Integer Pid) {
+        boolean hasReviewed = reviewService.checkByIds(Cid, Pid);
+
+        if (hasReviewed) {
+            return new ResponseEntity<>("You have already reviewed this product.", HttpStatus.ACCEPTED);
+        } else {
+            return new ResponseEntity<>("You have not reviewed this product yet.", HttpStatus.OK);
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
+    @PostMapping("/product")
+    public ResponseEntity<List<Review>> getAllByProductId(@RequestParam("Pid") Integer Pid) {
+        List<Review> reviews = reviewService.getReviewsByProductId(Pid);
+
+        if (reviews.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(reviews, HttpStatus.OK);
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteById(@PathVariable("id") Integer id, @RequestParam("Cid") Integer Cid, @RequestParam("Pid") Integer Pid){
         reviewService.deleteById(id, Cid, Pid);
@@ -53,7 +77,7 @@ public class ReviewController{
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('" + Role.Fields.ADMIN + "')")
+    @PreAuthorize("hasAnyAuthority('" + Role.Fields.USER + "', '" + Role.Fields.ADMIN + "')")
     @PostMapping("/new")
     public ResponseEntity<?> create(@RequestBody NewReview updatedReview, @RequestParam("Cid") Integer Cid, @RequestParam("Pid") Integer Pid){
         reviewService.addNewReview(updatedReview, Cid, Pid);

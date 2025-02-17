@@ -13,14 +13,13 @@ import java.util.List;
 @Table
 @Getter
 @Setter
-public class Promotion extends BaseEntity{
+public class Promotion extends BaseEntity {
 
     @Column(name = "name")
     @NotBlank
     private String name;
 
     @Column(name = "description")
-    @NotBlank
     private String description;
 
     @Column(name = "startDate")
@@ -32,14 +31,14 @@ public class Promotion extends BaseEntity{
     @Column(name = "discount")
     private Double discount;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "promotions")
     @JsonBackReference
     private List<Product> products;
 
-    public Promotion(){
+    public Promotion() {
     }
 
-    public Promotion(String name, String description, LocalDate startDate, LocalDate endDate, Double discount){
+    public Promotion(String name, String description, LocalDate startDate, LocalDate endDate, Double discount) {
         this.name = name;
         this.description = description;
         this.startDate = startDate;
